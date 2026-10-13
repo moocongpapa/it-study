@@ -99,7 +99,7 @@ export async function submitQuizAnswer(
       (answer.shortAnswer !== null && (typeof answer.shortAnswer !== "string" || answer.shortAnswer.length > 500))) {
     throw new Error("답안 형식이 올바르지 않습니다.");
   }
-  if (!isSupabaseConfigured) {
+  if (!isSupabaseConfigured || !uuidPattern.test(topicId)) {
     const quiz = demoQuizBank.find((item) => item.id === quizId && item.topic_id === topicId);
     const feedback = quiz ? checkDemoQuizAnswer(quizId, answer.choiceIndex, answer.shortAnswer) : null;
     if (!feedback) throw new Error("문제를 찾지 못했습니다.");

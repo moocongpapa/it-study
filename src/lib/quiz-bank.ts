@@ -1,4 +1,5 @@
 import "server-only";
+import starterContent from "../../content/starter-content.json";
 import type { Quiz, QuizFeedback } from "@/types/roadmap";
 
 interface DemoQuiz extends Quiz {
@@ -10,6 +11,17 @@ interface DemoQuiz extends Quiz {
 const topicId = "processes-threads";
 
 export const demoQuizBank: DemoQuiz[] = [
+  ...starterContent.flatMap((content) => content.quizzes.map((quiz): DemoQuiz => ({
+    id: `${content.slug}-l${quiz.level}-choice`,
+    topic_id: content.slug,
+    level: quiz.level as 1 | 2 | 3 | 4,
+    question_type: "multiple_choice",
+    question: quiz.question,
+    choices: quiz.choices,
+    answerIndex: quiz.answer_index,
+    acceptedAnswers: [],
+    explanation: quiz.explanation,
+  }))),
   {
     id: "process-l1-choice", topic_id: topicId, level: 1, question_type: "multiple_choice",
     question: "프로세스와 스레드의 경계를 가장 정확히 설명한 것은?",

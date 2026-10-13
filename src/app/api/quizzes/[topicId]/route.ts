@@ -8,12 +8,11 @@ const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{1
 
 export async function GET(_request: Request, { params }: { params: Promise<{ topicId: string }> }) {
   const { topicId } = await params;
-  if (!isSupabaseConfigured) {
+  if (!isSupabaseConfigured || !uuidPattern.test(topicId)) {
     return NextResponse.json({ quizzes: getPublicDemoQuizzes(topicId), passedQuizIds: [] }, {
       headers: { "Cache-Control": "no-store" },
     });
   }
-  if (!uuidPattern.test(topicId)) return NextResponse.json({ error: "잘못된 토픽 ID입니다." }, { status: 400 });
   const supabase = await createClient();
   const { data: claimsData } = await supabase.auth.getClaims();
   const userId = claimsData?.claims?.sub ?? null;

@@ -213,6 +213,15 @@ function RoadmapCanvasInner({
 
   return (
     <div className="px-4 py-7 md:px-7 md:py-9">
+      {isDemo && !domain ? (
+        <div role="status" className="mb-7 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-cyan-300/20 bg-cyan-300/7 px-5 py-4">
+          <div>
+            <p className="text-sm font-bold text-cyan-100">첫 수업부터 시작해 보세요</p>
+            <p className="mt-1 text-xs leading-5 text-slate-300">현재 지도는 체험 데이터입니다. 트랜지스터와 논리회로, 프로세스와 스레드의 4단계 학습 글을 읽을 수 있습니다.</p>
+          </div>
+          <Button onClick={() => openTopic(allTopics.find((topic) => topic.slug === "logic-gates")?.id ?? "logic-gates")}>트랜지스터와 논리회로 열기 <ArrowRight className="ml-2 size-4" /></Button>
+        </div>
+      ) : null}
       <section className="mb-7 flex flex-wrap items-end justify-between gap-5">
         <div className="max-w-2xl">
           <div className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[.2em] text-cyan-300"><Compass className="size-3.5" /> {domain ? "DOMAIN ROADMAP" : "THE COMPLETE MAP"}</div>
