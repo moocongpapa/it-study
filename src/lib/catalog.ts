@@ -1,4 +1,5 @@
 import { cache } from "react";
+import { unstable_rethrow } from "next/navigation";
 import demoCatalog from "@/lib/demo-catalog.json";
 import starterContent from "../../content/starter-content.json";
 import { isSupabaseConfigured } from "@/lib/env";
@@ -85,6 +86,7 @@ export const getCatalog = cache(async (): Promise<Catalog> => {
       isDemo: false,
     };
   } catch (error) {
+    unstable_rethrow(error);
     console.error("[catalog] 학습 DB 조회 실패, 데모 데이터 표시:", error);
     return demoCatalogResult();
   }
@@ -112,6 +114,7 @@ export async function getArticle(topicSlug: string): Promise<Article | null> {
     if (articleResult.error) throw new Error(articleResult.error.message);
     return (articleResult.data as Article | null) ?? demoArticle(topicSlug);
   } catch (error) {
+    unstable_rethrow(error);
     console.error(`[catalog] ${topicSlug} 아티클 조회 실패, 데모 데이터 표시:`, error);
     return demoArticle(topicSlug);
   }
