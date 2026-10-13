@@ -18,7 +18,7 @@ try {
   await db.exec(`
     create role anon;
     create role authenticated;
-    create role service_role;
+    create role service_role bypassrls;
     create schema auth;
     create table auth.users (id uuid primary key);
     create function auth.uid() returns uuid language sql stable as $$
@@ -30,6 +30,7 @@ try {
     "supabase/migrations/20261013000000_init_schema.sql",
     "supabase/migrations/20261013060132_interactive_learning.sql",
     "supabase/migrations/20261013062613_content_batch_atomic_write.sql",
+    "supabase/migrations/20261014000000_content_batch_guarded_write.sql",
     "supabase/seed.sql",
     "supabase/quiz_seed.sql",
   ]) {
@@ -37,7 +38,7 @@ try {
   }
   for (const path of [
     "supabase/migrations/20261013060132_interactive_learning.sql",
-    "supabase/migrations/20261013062613_content_batch_atomic_write.sql",
+    "supabase/migrations/20261014000000_content_batch_guarded_write.sql",
     "supabase/seed.sql",
     "supabase/quiz_seed.sql",
   ]) {
@@ -121,12 +122,18 @@ try {
   assert(Number(await scalar("select count(*) from public.user_learning_days")) === 0,
     "Another user can read learning days");
 
-  // Test upsert_topic_content RPC function
+  // Test guarded insert RPC function
   await db.exec(`set role service_role;`);
   const testTopic = topics.find((item) => item.slug === "tcp-udp-handshake");
   assert(testTopic, "Topic tcp-udp-handshake missing");
-  await db.query(`
-    select public.upsert_topic_content(
+  const originalPayload = JSON.stringify([
+    { level: 1, question: "Test Question 1 for TCP?", choices: ["A", "B", "C", "D"], answer_index: 0, explanation: "Exp 1" },
+    { level: 2, question: "Test Question 2 for TCP?", choices: ["A", "B", "C", "D"], answer_index: 1, explanation: "Exp 2" },
+    { level: 3, question: "Test Question 3 for TCP?", choices: ["A", "B", "C", "D"], answer_index: 2, explanation: "Exp 3" },
+    { level: 4, question: "Test Question 4 for TCP?", choices: ["A", "B", "C", "D"], answer_index: 3, explanation: "Exp 4" }
+  ]);
+  const insertResult = await db.query(`
+    select public.insert_generated_topic_content(
       $1,
       'Level 1 mental model test text with enough length to simulate real data.',
       'Level 2 core engineering test text with enough length to simulate real data.',
@@ -135,21 +142,32 @@ try {
       true,
       $2::jsonb
     )
-  `, [
-    testTopic.id,
-    JSON.stringify([
-      { level: 1, question: "Test Question 1 for TCP?", choices: ["A", "B", "C", "D"], answer_index: 0, explanation: "Exp 1" },
-      { level: 2, question: "Test Question 2 for TCP?", choices: ["A", "B", "C", "D"], answer_index: 1, explanation: "Exp 2" },
-      { level: 3, question: "Test Question 3 for TCP?", choices: ["A", "B", "C", "D"], answer_index: 2, explanation: "Exp 3" },
-      { level: 4, question: "Test Question 4 for TCP?", choices: ["A", "B", "C", "D"], answer_index: 3, explanation: "Exp 4" }
-    ])
-  ]);
+  `, [testTopic.id, originalPayload]);
+  assert(insertResult.rows[0].insert_generated_topic_content === "inserted", "Fresh topic was not inserted");
   const articleRow = await db.query("select is_published from public.articles where topic_id = $1", [testTopic.id]);
-  assert(articleRow.rows[0]?.is_published === true, "upsert_topic_content did not insert article");
+  assert(articleRow.rows[0]?.is_published === true, "insert_generated_topic_content did not insert article");
   const quizRows = await db.query("select count(*)::int as count from public.quizzes where topic_id = $1", [testTopic.id]);
-  assert(quizRows.rows[0]?.count === 4, "upsert_topic_content did not insert quizzes");
+  assert(quizRows.rows[0]?.count === 4, "insert_generated_topic_content did not insert quizzes");
 
-  console.log(`SQL verified: ${count.domains} domains, ${count.topics} topics, ${count.edges} edges, ${count.quizzes} quizzes; RLS, mastery guard, and atomic content upsert passed.`);
+  const repeat = await db.query(`select public.insert_generated_topic_content($1, 'OVERWRITE', 'OVERWRITE', 'OVERWRITE', 'OVERWRITE', false, $2::jsonb)`,
+    [testTopic.id, originalPayload]);
+  assert(repeat.rows[0].insert_generated_topic_content === "skipped_existing", "Existing content was not skipped");
+  assert(await scalar("select level_1_mental_model from public.articles where topic_id = $1", [testTopic.id]) !== "OVERWRITE",
+    "Existing article was overwritten");
+  assert(Number(await scalar("select count(*) from public.quizzes where topic_id = $1", [testTopic.id])) === 4,
+    "Existing quizzes were modified");
+
+  const invalidTopic = topics.find((item) => item.id !== goldenId && item.id !== testTopic.id);
+  let invalidRejected = false;
+  try {
+    await db.query(`select public.insert_generated_topic_content($1, 'one', 'two', 'three', 'four', false, $2::jsonb)`,
+      [invalidTopic.id, JSON.stringify([{ level: 1, question: "Only one", choices: ["A", "B", "C", "D"], answer_index: 0, explanation: "Explanation" }])]);
+  } catch { invalidRejected = true; }
+  assert(invalidRejected, "Malformed content was accepted");
+  assert(Number(await scalar("select count(*) from public.articles where topic_id = $1", [invalidTopic.id])) === 0,
+    "Rejected content left a partial article");
+
+  console.log(`SQL verified: ${count.domains} domains, ${count.topics} topics, ${count.edges} edges, ${count.quizzes} quizzes; RLS, mastery guard, and guarded atomic content insert passed.`);
 } finally {
   await db.close();
 }

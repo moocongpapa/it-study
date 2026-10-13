@@ -34,6 +34,13 @@ function plainText(children: ReactNode): string {
   return "";
 }
 
+function markdownNodeText(node: unknown): string {
+  if (!node || typeof node !== "object") return "";
+  if ("type" in node && node.type === "text" && "value" in node && typeof node.value === "string") return node.value;
+  if ("children" in node && Array.isArray(node.children)) return node.children.map(markdownNodeText).join("");
+  return "";
+}
+
 function renderWithGlossary(children: ReactNode): ReactNode {
   if (typeof children === "string") {
     return annotateGlossaryTerms(children);
@@ -198,22 +205,18 @@ export function ArticleReaderSheet({
                             components={{
                               p: ({ children }) => <p>{renderWithGlossary(children)}</p>,
                               li: ({ children }) => <li>{renderWithGlossary(children)}</li>,
-                              pre: ({ children }) => {
-                                if (
-                                  isValidElement<{ className?: string }>(children) &&
-                                  typeof children.props?.className === "string" &&
-                                  children.props.className.includes("language-mermaid")
-                                ) {
-                                  return <>{children}</>;
+                              pre: ({ node, children }) => {
+                                const codeNode = node?.children.find((child) => child.type === "element" && child.tagName === "code");
+                                if (codeNode?.type === "element") {
+                                  const classes = codeNode.properties.className;
+                                  const classNames = Array.isArray(classes) ? classes : [];
+                                  if (classNames.includes("language-mermaid")) {
+                                    return <MermaidRenderer chart={markdownNodeText(codeNode).trim()} />;
+                                  }
                                 }
                                 return <CodeBlock>{children}</CodeBlock>;
                               },
                               code: ({ className, children, ...props }) => {
-                                const isMermaid = typeof className === "string" && className.includes("language-mermaid");
-                                if (isMermaid) {
-                                  const chart = plainText(children).trim();
-                                  return <MermaidRenderer chart={chart} />;
-                                }
                                 return (
                                   <code className={className} {...props}>
                                     {children}

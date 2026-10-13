@@ -7,6 +7,8 @@ Supabase의 지식 분류와 선수 학습 DAG를 보여 주는 Next.js 학습 �
 ```bash
 npm install @xyflow/react dagre react-markdown remark-gfm rehype-highlight @supabase/ssr @supabase/supabase-js lucide-react @radix-ui/react-dialog @radix-ui/react-tabs @radix-ui/react-progress @radix-ui/react-slot class-variance-authority clsx tailwind-merge
 npm install ai
+npm install mermaid dompurify zod p-limit commander chalk openai dotenv @supabase/supabase-js
+npm install -D tsx
 npm install -D @types/dagre tailwindcss @tailwindcss/postcss @tailwindcss/typography typescript eslint eslint-config-next
 npm run dev
 ```
@@ -15,13 +17,31 @@ npm run dev
 
 ## Supabase 연결
 
-1. Supabase 프로젝트에 두 마이그레이션을 파일명 순서로 적용한 뒤 `supabase/seed.sql`, `supabase/quiz_seed.sql`을 순서대로 실행합니다. Supabase CLI가 설정된 경우 `supabase db reset`으로 로컬 DB를 다시 만들 수 있습니다. `quiz_seed.sql`은 프로세스·스레드에 객관식 및 단답형 8개를 추가합니다. 기존 시드의 4개 객관식과 합쳐 총 12개입니다.
+1. Supabase 프로젝트에 `supabase/migrations/`의 마이그레이션을 파일명 순서로 적용한 뒤 `supabase/seed.sql`, `supabase/quiz_seed.sql`을 순서대로 실행합니다. Supabase CLI가 설정된 경우 `supabase db reset`으로 로컬 DB를 다시 만들 수 있습니다. `quiz_seed.sql`은 프로세스·스레드에 객관식 및 단답형 8개를 추가합니다. 기존 시드의 4개 객관식과 합쳐 총 12개입니다.
 2. `.env.example`을 `.env.local`로 복사하고 프로젝트 URL과 **publishable key**를 입력합니다. 서비스 역할 키는 프론트엔드에 넣지 않습니다.
 3. Supabase Auth의 URL Configuration에서 앱 주소를 Site URL로, `http://localhost:3000/auth/callback`을 Redirect URL로 추가합니다. 다른 포트로 실행하면 그 포트의 콜백도 추가합니다. Email OTP 로그인을 활성화합니다.
 4. AI 튜터를 쓰려면 `.env.local`에 `AI_GATEWAY_API_KEY`를 추가합니다. Vercel 환경에서는 OIDC 인증을 사용할 수도 있습니다. 기본 모델은 `AI_TUTOR_MODEL=openai/gpt-5.4-mini`이며 Vercel AI Gateway 모델 ID로 바꿀 수 있습니다.
 5. 개발 서버를 재시작합니다. 로그인한 사용자의 진도는 `user_node_progress`, 퀴즈 통과는 `user_quiz_passes`, 학습 일수는 `user_learning_days`에 저장됩니다. 정답 컬럼은 Data API에서 직접 읽을 수 없고, 채점 RPC가 사용자 ID와 선수 조건을 확인합니다.
 
 현재 시드에는 공개 아티클 한 편만 들어 있습니다. 나머지 토픽의 리더에는 준비 중 안내가 표시됩니다. 새 아티클은 4개 레벨을 모두 채워 `is_published = true`로 게시할 수 있습니다.
+
+## 콘텐츠 배치 생성
+
+`.env.local`에 `NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `OPENAI_API_KEY`를 설정합니다. 서비스 역할 키는 로컬 CLI 환경에서만 사용하고 브라우저 번들에 넣지 않습니다. OpenAI 생성기는 Responses API Structured Outputs로 4단계 글과 레벨별 퀴즈 4개를 생성하고 Zod로 검증합니다. 다른 제공자를 붙일 때는 `scripts/providers/content-generator.ts` 인터페이스를 구현하면 됩니다.
+
+```bash
+npm run content:generate -- --domain operating-systems  # 대상 목록만 조회, API 비용 없음
+npm run content:generate -- --topic virtual-memory --provider mock --generate-only
+npm run content:generate -- --limit 5 --generate-only  # 실제 모델 결과 검증, DB 저장 없음
+npm run content:generate -- --limit 5 --concurrency 2 --apply  # 초안으로 저장
+npm run content:generate -- --limit 5 --apply --publish  # 즉시 공개
+```
+
+`--dry-run`은 `--generate-only`와 같으며 모델 API 호출 비용이 발생합니다. CLI는 아티클 또는 퀴즈가 한 건이라도 있는 토픽을 건너뜁니다. 저장 RPC는 토픽별 잠금 안에서 아티클과 퀴즈를 한 트랜잭션으로 삽입하고, 다른 작업이 먼저 저장했다면 `skipped_existing`을 반환합니다. 기존 콘텐츠를 수정·삭제하지 않습니다. `20261014000000_content_batch_guarded_write.sql` 마이그레이션 적용이 필수입니다. LLM 생성 결과는 정확성 검수를 거쳐 공개하는 것을 권장합니다.
+
+## Mermaid 다이어그램
+
+아티클의 `mermaid` 코드 펜스는 리더에서 브라우저 마운트 후 SVG로 렌더링합니다. 루트 `dark`/`light` 클래스와 시스템 색상 설정에 맞춰 테마가 바뀝니다. 원본 코드 복사, SVG 복사, 확대 모달을 제공하고, 문법 오류가 있으면 원본 코드와 오류 메시지를 표시합니다. Mermaid의 `loose` 모드 출력은 DOMPurify로 정화한 후 화면에 삽입합니다.
 
 ## 데이터 흐름
 

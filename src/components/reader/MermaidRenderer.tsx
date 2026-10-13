@@ -22,6 +22,14 @@ interface MermaidRendererProps {
 }
 
 const emptySubscribe = () => () => {};
+let renderQueue: Promise<unknown> = Promise.resolve();
+let renderSerial = 0;
+
+function serializeRender<T>(work: () => Promise<T>): Promise<T> {
+  const result = renderQueue.then(work, work);
+  renderQueue = result.catch(() => undefined);
+  return result;
+}
 
 function useIsMounted(): boolean {
   return useSyncExternalStore(
@@ -45,9 +53,9 @@ function useIsDarkMode(): boolean {
     },
     () => {
       if (typeof document === "undefined") return true;
-      const hasDarkClass = document.documentElement.classList.contains("dark");
-      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      return hasDarkClass || prefersDark || true;
+      if (document.documentElement.classList.contains("light")) return false;
+      if (document.documentElement.classList.contains("dark")) return true;
+      return window.matchMedia("(prefers-color-scheme: dark)").matches;
     },
     () => true
   );
@@ -78,36 +86,32 @@ export function MermaidRenderer({ chart, className = "" }: MermaidRendererProps)
 
     async function renderChart() {
       try {
-        const mermaid = (await import("mermaid")).default;
-
-        mermaid.initialize({
-          startOnLoad: false,
-          theme: isDarkMode ? "dark" : "neutral",
-          securityLevel: "loose",
-          fontFamily: "inherit",
-          suppressErrorRendering: true,
-          themeVariables: isDarkMode
-            ? {
-                darkMode: true,
-                background: "#0a131f",
-                primaryColor: "#0284c7",
-                primaryTextColor: "#f0f9ff",
-                primaryBorderColor: "#38bdf8",
-                lineColor: "#38bdf8",
-                secondaryColor: "#1e293b",
-                tertiaryColor: "#0f172a",
-                noteBkgColor: "#1e293b",
-                noteTextColor: "#e2e8f0",
-              }
-            : undefined,
+        const [{ default: mermaid }, { default: DOMPurify }] = await Promise.all([
+          import("mermaid"), import("dompurify"),
+        ]);
+        const uniqueRenderId = `${diagramId}_${++renderSerial}`;
+        const svg = await serializeRender(async () => {
+          if (isCancelled) return null;
+          // Mermaid uses global configuration; keep initialize and render together.
+          mermaid.initialize({
+            startOnLoad: false,
+            theme: isDarkMode ? "dark" : "neutral",
+            securityLevel: "loose",
+            fontFamily: "inherit",
+            suppressErrorRendering: true,
+            flowchart: { htmlLabels: false },
+          });
+          await mermaid.parse(chart.trim());
+          return (await mermaid.render(uniqueRenderId, chart.trim())).svg;
         });
 
-        // Ensure unique render ID per execution to prevent collisions
-        const uniqueRenderId = `${diagramId}_${Date.now()}`;
-        const { svg } = await mermaid.render(uniqueRenderId, chart.trim());
-
-        if (!isCancelled) {
-          setSvgContent(svg);
+        if (!isCancelled && svg) {
+          // Loose Mermaid mode permits links and markup. Never insert its raw SVG.
+          const safeSvg = DOMPurify.sanitize(svg, {
+            USE_PROFILES: { svg: true, svgFilters: true },
+          });
+          if (!safeSvg.includes("<svg")) throw new Error("유효한 SVG가 생성되지 않았습니다.");
+          setSvgContent(safeSvg);
           setRenderError(null);
         }
       } catch (err: unknown) {
@@ -170,13 +174,13 @@ export function MermaidRenderer({ chart, className = "" }: MermaidRendererProps)
   }
 
   // Graceful Fallback on Syntax Error
-  if (renderError) {
+  if (renderError || !chart.trim()) {
     return (
       <div className={`my-6 overflow-hidden rounded-2xl border border-amber-500/25 bg-[#0f1722] shadow-xl ${className}`}>
         <div className="flex items-center justify-between border-b border-amber-500/20 bg-amber-500/10 px-4 py-2.5">
           <div className="flex items-center gap-2 text-xs font-semibold text-amber-300">
             <AlertCircle className="size-4 text-amber-400" />
-            <span>다이어그램 렌더링 실패 (Mermaid 구문 오류)</span>
+            <span>다이어그램 렌더링 실패</span>
           </div>
           <button
             type="button"
@@ -199,7 +203,7 @@ export function MermaidRenderer({ chart, className = "" }: MermaidRendererProps)
           <details className="mt-3 text-[11px] text-slate-500">
             <summary className="cursor-pointer hover:text-slate-400">오류 세부 정보 확인</summary>
             <p className="mt-1 whitespace-pre-wrap rounded bg-black/40 p-2 font-mono text-rose-300/80">
-              {renderError}
+              {renderError || "Mermaid 코드가 비어 있습니다."}
             </p>
           </details>
         </div>
@@ -250,8 +254,10 @@ export function MermaidRenderer({ chart, className = "" }: MermaidRendererProps)
           <button
             type="button"
             onClick={() => setIsFullscreen(true)}
+            disabled={!svgContent}
             className="flex items-center gap-1 rounded-lg px-2 py-1 text-slate-400 transition-colors hover:bg-white/8 hover:text-white"
             title="전체화면 확대 보기"
+            aria-label="다이어그램 전체화면 확대 보기"
           >
             <Maximize2 className="size-3.5" />
             <span className="hidden sm:inline">확대</span>
@@ -354,15 +360,11 @@ export function MermaidRenderer({ chart, className = "" }: MermaidRendererProps)
             </div>
 
             {/* Modal Zoom & Pan Canvas */}
-            <div className="relative flex flex-1 items-center justify-center overflow-auto p-8 bg-[radial-gradient(#1e3a5f15_1px,transparent_1px)] [background-size:20px_20px]">
+            <div className="relative flex-1 overflow-auto p-8 bg-[radial-gradient(#1e3a5f15_1px,transparent_1px)] [background-size:20px_20px]">
               {svgContent ? (
                 <div
-                  style={{
-                    transform: `scale(${zoomScale})`,
-                    transformOrigin: "center center",
-                    transition: "transform 0.15s ease-out",
-                  }}
-                  className="flex items-center justify-center [&_svg]:max-w-none"
+                  style={{ zoom: zoomScale }}
+                  className="mx-auto w-max [&_svg]:max-w-none"
                   dangerouslySetInnerHTML={{ __html: svgContent }}
                 />
               ) : null}
