@@ -1,11 +1,11 @@
 {
-  "checkedAt": "2026-10-14T04:57:16.968Z",
+  "checkedAt": "2026-10-14T11:50:57.036Z",
   "origin": "https://it-study-two.vercel.app",
   "mode": "read-only GET",
   "articles": 50,
   "levels": 200,
   "quizzes": 208,
-  "sourceMatchedArticles": 48,
+  "sourceMatchedArticles": 50,
   "domains": [
     {
       "slug": "hardware",
@@ -55,7 +55,7 @@
       "articleId": "5b76fd2a-ad46-4af9-8f54-525a0fabdcd4",
       "levels": 4,
       "quizzes": 4,
-      "sourceMatched": false
+      "sourceMatched": true
     },
     {
       "slug": "binary-representation",
@@ -95,7 +95,7 @@
       "articleId": "a150e720-5c48-44e3-ae8d-bcefa62b56be",
       "levels": 4,
       "quizzes": 12,
-      "sourceMatched": false
+      "sourceMatched": true
     },
     {
       "slug": "virtual-memory",

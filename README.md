@@ -35,6 +35,14 @@ npm run content:verify-live -- --base-url https://it-study-two.vercel.app
 
 저장 CLI는 `.env.local`의 프로젝트 URL과 service role 키를 사용합니다. `--project-ref`와 URL이 일치해야 저장하며 기본 실행은 검증만 합니다. 원자적 RPC가 기존 글이나 퀴즈가 있는 토픽을 보존하므로 재실행이 안전합니다. 관리자 SQL 방식은 `npm run content:seed-library -- --export-sql /tmp/it-study-content-sql`로 도메인별 한 문장 SQL을 만들 수 있습니다. SQL에는 키가 없으며 slug로 실제 topic UUID를 조회합니다. 작성 범위·검토 기준은 `CONTENT_COMPLETION_PLAN.md`, 구조·예제·링크 검증은 `content/verification-report.json`, 공개 사이트 본문·퀴즈의 원고 일치 검사 결과는 `content/live-verification-report.json`에 기록합니다. 운영 검사기는 GET 요청만 사용합니다.
 
+## 비전공자용 원고 편집
+
+운영 원고 50개는 한 문장 요약, 필요한 이유, 일상 비유, 단계별 흐름, 작은 예, 용어 풀이, 답이 있는 확인 질문으로 구성합니다. 2~4단계에는 예제와 장애·설계 비교를 읽기 위한 길잡이가 있습니다. 편집 자료는 `content/readability-guides/*.json`, 기존 샘플 두 편의 수정 원고는 `content/foundations/*.md`, 전체 수정 본문은 `content/readable-library.json`으로 관리합니다.
+
+원고 재작성은 `npm run content:rewrite-readable` 다음에 `npm run content:build`를 실행합니다. 기존 본문을 편집할 때는 운영 DB에서 slug와 본문 해시를 JSON으로 저장하고 `npm run content:export-revisions -- --baseline-file <snapshot.json> --out-dir <sql-directory>`를 실행합니다. 생성 SQL은 해당 DB의 관리자 권한으로 실행합니다. 예상한 본문 해시 또는 이미 수정된 해시와 일치할 때만 변경하며, 동시 편집이 발견되면 도메인 묶음 전체를 중단합니다.
+
+계획은 `CONTENT_READABILITY_PLAN.md`, 50개 입문 도표·용어·본문 수정 SQL 검증은 `content/readability-verification-report.json`, 실제 운영 본문의 일치 검사는 `content/live-verification-report.json`에 기록합니다.
+
 ## 콘텐츠 배치 생성
 
 `.env.local`에 `NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `OPENAI_API_KEY`를 설정합니다. 서비스 역할 키는 로컬 CLI 환경에서만 사용하고 브라우저 번들에 넣지 않습니다. OpenAI 생성기는 Responses API Structured Outputs로 4단계 글과 레벨별 퀴즈 4개를 생성하고 Zod로 검증합니다. 다른 제공자를 붙일 때는 `scripts/providers/content-generator.ts` 인터페이스를 구현하면 됩니다.

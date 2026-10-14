@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-10-14T11:47:41.046Z",
+  "articles": 50,
+  "levels": 200,
+  "beginnerDiagrams": 50,
+  "termDefinitions": 507,
+  "originalTechnicalCode": "unchanged",
+  "quizzes": "unchanged",
+  "revisionSql": {
+    "updatedAll": 50,
+    "idempotentReplay": true,
+    "concurrentEditAbortsWholeDomain": true
+  },
+  "minIntroCharacters": 1068
+}

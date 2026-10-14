@@ -22,6 +22,13 @@ async function main() {
     throw new Error("Provide an HTTPS origin without credentials, path, or query");
   const catalog = JSON.parse(await readFile("src/lib/demo-catalog.json", "utf8")) as { topics: { slug: string }[]; domains: { slug: string; title: string }[] };
   const library = new Map((await readLibrary()).map((row) => [row.slug, row]));
+  const readable = new Map<string, Pick<z.infer<typeof ArticleSchema>, typeof keys[number]>>();
+  try {
+    const rows = JSON.parse(await readFile("content/readable-library.json", "utf8")) as Array<{ slug: string } & Pick<z.infer<typeof ArticleSchema>, typeof keys[number]>>;
+    for (const row of rows) readable.set(row.slug, row);
+  } catch (error) {
+    if (!(error instanceof Error && "code" in error && error.code === "ENOENT")) throw error;
+  }
   const limit = pLimit(5);
   async function get(path: string) {
     const response = await fetch(new URL(path, base), { cache: "no-store", signal: AbortSignal.timeout(30000) });
@@ -31,7 +38,8 @@ async function main() {
   const topics = await Promise.all(catalog.topics.map((topic) => limit(async () => {
     const article = ArticleSchema.parse((await (await get(`/api/articles/${topic.slug}`)).json()).article);
     const source = library.get(topic.slug);
-    if (source && keys.some((key) => article[key] !== source[key])) throw new Error(`${topic.slug}: published body differs from source`);
+    const bodySource = readable.get(topic.slug) ?? source;
+    if (bodySource && keys.some((key) => article[key] !== bodySource[key])) throw new Error(`${topic.slug}: published body differs from source`);
     const payload = await (await get(`/api/quizzes/${article.topic_id}`)).json();
     const quizzes = z.array(QuizSchema).parse(payload.quizzes);
     if (new Set(quizzes.map((q) => q.level)).size !== 4 || quizzes.some((q) => q.topic_id !== article.topic_id))
@@ -41,7 +49,7 @@ async function main() {
     if (source && (quizzes.length !== 4 || source.quizzes.some((q) => !quizzes.some((live) => live.level === q.level && live.question === q.question && JSON.stringify(live.choices) === JSON.stringify(q.choices)))))
       throw new Error(`${topic.slug}: published quizzes differ from source`);
     console.log(`${topic.slug}: 4 levels / ${quizzes.length} quizzes OK`);
-    return { slug: topic.slug, topicId: article.topic_id, articleId: article.id, levels: 4, quizzes: quizzes.length, sourceMatched: Boolean(source) };
+    return { slug: topic.slug, topicId: article.topic_id, articleId: article.id, levels: 4, quizzes: quizzes.length, sourceMatched: Boolean(bodySource) };
   })));
   const domains = await Promise.all(catalog.domains.map((domain) => limit(async () => {
     const html = await (await get(`/roadmap/${domain.slug}`)).text();

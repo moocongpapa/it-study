@@ -21,10 +21,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Article, Topic, TopicProgressResult, TopicStatus } from "@/types/roadmap";
 
 const levels = [
-  { value: "1", short: "멘탈 모델", title: "Level 1 · 멘탈 모델 & 비유", description: "일상적 비유로 개념이 필요한 이유를 먼저 이해합니다.", field: "level_1_mental_model" },
-  { value: "2", short: "코어 원리", title: "Level 2 · 코어 엔지니어링", description: "메모리·CPU·네트워크 흐름과 코드로 내부 원리를 추적합니다.", field: "level_2_core_engineering" },
-  { value: "3", short: "실전 문제", title: "Level 3 · 실무 트러블슈팅", description: "병목과 동시성 문제를 재현하고 디버깅하는 방법을 봅니다.", field: "level_3_troubleshooting" },
-  { value: "4", short: "설계 선택", title: "Level 4 · 아키텍처 트레이드오프", description: "규모와 실패 조건에 따라 설계 대안을 비교합니다.", field: "level_4_architecture_tradeoffs" },
+  { value: "1", short: "쉽게 이해", title: "1단계 · 비유로 이해하기", description: "필요한 이유와 일상 비유를 읽고 작은 예로 확인합니다.", field: "level_1_mental_model" },
+  { value: "2", short: "원리 따라가기", title: "2단계 · 작동 원리 따라가기", description: "용어 풀이와 길잡이를 읽고 예제의 입력과 결과를 따라갑니다.", field: "level_2_core_engineering" },
+  { value: "3", short: "문제 해결", title: "3단계 · 문제 원인 찾기", description: "어떤 증상이 생겼는지 살펴보고 원인 확인과 해결 순서를 배웁니다.", field: "level_3_troubleshooting" },
+  { value: "4", short: "설계 비교", title: "4단계 · 설계 선택 비교하기", description: "각 방법의 이득과 부담을 비교해 상황에 맞는 선택을 생각합니다.", field: "level_4_architecture_tradeoffs" },
 ] as const;
 
 function plainText(children: ReactNode): string {
@@ -64,7 +64,7 @@ function CodeBlock({ children }: { children: ReactNode }) {
   return (
     <div className="group my-5 overflow-hidden rounded-xl border border-slate-200 bg-white">
       <div className="flex items-center justify-between border-b border-slate-200 px-4 py-2 text-[10px] font-bold uppercase tracking-[.15em] text-slate-500">
-        <span>CODE EXAMPLE</span>
+        <span>코드 예제</span>
         <button type="button" onClick={copy} className="flex items-center gap-1 rounded-md px-2 py-1 text-slate-500 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/30" aria-label="코드 복사">
           {copied ? <Check className="size-3" /> : <Copy className="size-3" />}{copied ? "복사됨" : "복사"}
         </button>
@@ -121,6 +121,7 @@ export function ArticleReaderSheet({
 
   const active = levels.find((item) => item.value === level) ?? levels[0];
   const body = result?.article?.[active.field] ?? null;
+  const easySummary = result?.article?.level_1_mental_model?.match(/^> \*\*한 문장으로:\*\* (.+)$/m)?.[1];
   const missing = prerequisites.filter((item) => !completedIds.has(item.id));
   const isCompleted = status === "completed";
   const isLocked = status === "locked";
@@ -132,12 +133,12 @@ export function ArticleReaderSheet({
           <>
             <div className="shrink-0 border-b border-slate-200 px-5 pb-5 pt-7 sm:px-8">
               <div className="mb-4 flex items-center gap-2">
-                <Badge className="border-blue-200 bg-blue-50 text-blue-700">LEARNING NODE</Badge>
+                <Badge className="border-blue-200 bg-blue-50 text-blue-700">학습 주제</Badge>
                 <span className="text-xs text-slate-500">·</span>
                 <span className="flex items-center gap-1 text-xs text-slate-500"><Clock3 className="size-3" /> {topic.estimated_minutes}분</span>
               </div>
               <SheetTitle className="max-w-[90%] text-2xl font-bold tracking-tight text-slate-900 sm:text-[29px]">{topic.title}</SheetTitle>
-              <SheetDescription className="mt-2 max-w-xl text-sm leading-6 text-slate-500">{topic.summary}</SheetDescription>
+              <SheetDescription className="mt-2 max-w-xl text-sm leading-6 text-slate-500">{easySummary ?? topic.summary}</SheetDescription>
               <div className="mt-4 flex flex-wrap items-center gap-2 text-xs">
                 {isCompleted ? <Badge className="border-emerald-200 bg-emerald-50 text-emerald-700"><Check className="mr-1 size-3" /> 완료한 토픽</Badge> : isLocked ? <Badge className="border-amber-200 bg-amber-50 text-amber-700"><LockKeyhole className="mr-1 size-3" /> 선수 토픽 {missing.length}개 필요</Badge> : <Badge className="border-blue-200 bg-blue-50 text-blue-700"><Sparkles className="mr-1 size-3" /> 지금 학습 가능</Badge>}
                 <div className="ml-auto flex items-center gap-1.5">
@@ -174,6 +175,7 @@ export function ArticleReaderSheet({
                 <InteractivePlayground topicSlug={topic.slug} />
               </div>
 
+              <p className="mb-4 text-xs leading-6 text-slate-500">처음이라면 ‘쉽게 이해’부터 읽고 스스로 확인 질문에 답해 보세요. 다음 단계는 용어 풀이와 길잡이를 따라 읽으면 됩니다.</p>
               <Tabs value={level} onValueChange={(value) => { setLevel(value); setSelectedText(""); }}>
                 <TabsList className="mb-6 w-full overflow-x-auto">
                   {levels.map((item) => <TabsTrigger key={item.value} value={item.value} className="min-w-[112px] flex-1 whitespace-nowrap"><span className="mr-1.5 text-blue-600">0{item.value}</span>{item.short}</TabsTrigger>)}
@@ -245,7 +247,7 @@ export function ArticleReaderSheet({
                               }}
                               className="gap-1.5"
                             >
-                              <span>Level 0{Number(level) + 1} ({levels[Number(level)]?.short}) 읽기</span>
+                              <span>{Number(level) + 1}단계 · {levels[Number(level)]?.short} 읽기</span>
                               <ArrowRight className="size-3.5" />
                             </Button>
                           </div>
@@ -280,7 +282,7 @@ export function ArticleReaderSheet({
               {saveError ? <p role="alert" className="mb-2 text-xs text-rose-700">{saveError}</p> : null}
               <div className="flex flex-wrap gap-2">
                 {quizBacked === null ? <Button variant="secondary" disabled>퀴즈 확인 중...</Button>
-                  : quizBacked ? isCompleted ? <Button variant="secondary" disabled><Trophy className="size-4 text-amber-700" /> Node Mastered</Button> : <span className="self-center text-xs text-blue-700">4개 레벨의 퀴즈를 통과하면 노드가 완료됩니다.</span>
+                  : quizBacked ? isCompleted ? <Button variant="secondary" disabled><Trophy className="size-4 text-amber-700" /> 학습 완료</Button> : <span className="self-center text-xs text-blue-700">4개 단계의 퀴즈를 통과하면 이 주제의 학습이 완료됩니다.</span>
                   : isCompleted ? <Button variant="secondary" disabled><CheckCheck className="size-4 text-emerald-700" /> 이해도 완료</Button>
                   : <Button onClick={() => onComplete(topic, selfAssessment)} disabled={isLocked || saving}><Check className="size-4" /> {saving ? "저장 중..." : "이해도 완료 체크"}</Button>}
                 {nextTopic && isCompleted ? <Button variant="ghost" onClick={() => onNext(nextTopic)} className="ml-auto">다음 학습: {nextTopic.title}<ArrowRight className="size-4" /></Button> : null}
