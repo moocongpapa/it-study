@@ -202,6 +202,7 @@ export function ArticleReaderSheet({
                           }}
                         >
                           <ReactMarkdown
+                            skipHtml
                             remarkPlugins={[remarkGfm]}
                             rehypePlugins={[rehypeHighlight]}
                             components={{
