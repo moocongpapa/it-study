@@ -7,7 +7,7 @@ export default async function CompleteRoadmapPage() {
   const catalog = await getCatalog();
   const graph = buildRoadmapGraph(catalog.topics, catalog.prerequisites, catalog.progress);
   return (
-    <Suspense fallback={<div className="p-8 text-sm text-slate-400">지식 지도를 준비하고 있습니다...</div>}>
+    <Suspense fallback={<div className="p-8 text-sm text-slate-500">지식 지도를 준비하고 있습니다...</div>}>
       <RoadmapCanvas
         domain={null}
         allDomains={catalog.domains}

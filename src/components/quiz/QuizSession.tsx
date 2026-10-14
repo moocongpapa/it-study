@@ -91,27 +91,27 @@ export function QuizSession({ topic, level, locked, isDemo, onAvailability, onPr
     setSelectedChoice(null);
   }
 
-  if (error && !quizzes) return <p role="alert" className="mt-7 rounded-xl border border-rose-400/20 bg-rose-400/5 p-4 text-xs text-rose-200">{error}</p>;
-  if (!quizzes) return <div className="mt-8 h-28 animate-pulse rounded-2xl border border-white/8 bg-white/4" aria-label="퀴즈 불러오는 중" />;
-  if (!quizzes.length) return <div className="mt-9 rounded-2xl border border-dashed border-white/10 p-5 text-center text-xs text-slate-500"><CircleHelp className="mx-auto mb-2 size-5" />이 레벨의 퀴즈를 준비하고 있어요.</div>;
+  if (error && !quizzes) return <p role="alert" className="mt-7 rounded-xl border border-rose-200 bg-rose-50 p-4 text-xs text-rose-700">{error}</p>;
+  if (!quizzes) return <div className="mt-8 h-28 animate-pulse rounded-xl border border-slate-200 bg-slate-50" aria-label="퀴즈 불러오는 중" />;
+  if (!quizzes.length) return <div className="mt-9 rounded-xl border border-dashed border-slate-200 p-5 text-center text-xs text-slate-500"><CircleHelp className="mx-auto mb-2 size-5" />이 레벨의 퀴즈를 준비하고 있어요.</div>;
 
   return (
-    <section className="mt-10 rounded-2xl border border-cyan-300/14 bg-[#102333] p-5" aria-label={`레벨 ${level} 인출 퀴즈`}>
+    <section className="mt-10 rounded-xl border border-blue-200 bg-white p-5" aria-label={`레벨 ${level} 인출 퀴즈`}>
       <div className="mb-5 flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2 text-xs font-bold text-cyan-200"><Sparkles className="size-4" /> LEVEL {level} · 인출 퀴즈</div>
-        <span className="text-[11px] tabular-nums text-slate-400">{passedIds.filter((id) => quizzes.some((item) => item.id === id)).length}/{quizzes.length} 통과</span>
+        <div className="flex items-center gap-2 text-xs font-bold text-blue-700"><Sparkles className="size-4" /> LEVEL {level} · 인출 퀴즈</div>
+        <span className="text-[11px] tabular-nums text-slate-500">{passedIds.filter((id) => quizzes.some((item) => item.id === id)).length}/{quizzes.length} 통과</span>
       </div>
-      {locked ? <p className="mb-4 flex items-center gap-2 rounded-lg border border-amber-400/15 bg-amber-400/5 p-3 text-xs text-amber-200"><LockKeyhole className="size-4 shrink-0" />선수 토픽을 완료하면 답안을 제출할 수 있습니다.</p> : null}
+      {locked ? <p className="mb-4 flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-700"><LockKeyhole className="size-4 shrink-0" />선수 토픽을 완료하면 답안을 제출할 수 있습니다.</p> : null}
       {levelComplete ? (
-        <div className="rounded-2xl border border-emerald-400/30 bg-gradient-to-br from-emerald-400/10 to-cyan-400/5 p-6 text-center shadow-xl">
-          <div className="mx-auto mb-3 grid size-12 place-items-center rounded-2xl bg-emerald-400/20 text-emerald-300 shadow-[0_0_20px_rgba(52,211,153,0.3)]">
+        <div className="rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-blue-50 p-6 text-center shadow-sm">
+          <div className="mx-auto mb-3 grid size-12 place-items-center rounded-xl bg-emerald-50 text-emerald-700 shadow-sm">
             <Check className="size-6" strokeWidth={2.5} />
           </div>
-          <p className="text-base font-bold text-emerald-200">Level {level} 인출 퀴즈 마스터!</p>
-          <p className="mt-1.5 text-xs text-slate-300">핵심 개념을 완벽하게 검증했습니다. 다음 레벨에서 더 깊은 판단을 연습하세요.</p>
+          <p className="text-base font-bold text-emerald-700">Level {level} 인출 퀴즈 마스터!</p>
+          <p className="mt-1.5 text-xs text-slate-500">핵심 개념을 완벽하게 검증했습니다. 다음 레벨에서 더 깊은 판단을 연습하세요.</p>
           {feedback?.passed ? (
-            <div className="mt-4 rounded-xl border border-emerald-400/15 bg-black/30 p-3.5 text-left text-xs leading-6 text-slate-300">
-              <span className="font-semibold text-emerald-300">해설: </span>
+            <div className="mt-4 rounded-xl border border-emerald-200 bg-slate-900/30 p-3.5 text-left text-xs leading-6 text-slate-500">
+              <span className="font-semibold text-emerald-700">해설: </span>
               {feedback.explanation}
             </div>
           ) : null}
@@ -123,7 +123,7 @@ export function QuizSession({ topic, level, locked, isDemo, onAvailability, onPr
               QUESTION {index + 1} · {quiz.question_type === "multiple_choice" ? "4지선다 객관식" : "단답형"}
             </p>
           </div>
-          <h4 className="mb-5 text-sm font-bold leading-6 text-white">{quiz.question}</h4>
+          <h4 className="mb-5 text-sm font-bold leading-6 text-slate-900">{quiz.question}</h4>
           {quiz.question_type === "multiple_choice" ? (
             <div className="space-y-2.5">
               {quiz.choices.map((choice, choiceIndex) => {
@@ -136,15 +136,15 @@ export function QuizSession({ topic, level, locked, isDemo, onAvailability, onPr
                     disabled={locked || loading || Boolean(feedback)}
                     onClick={() => submit(choiceIndex, null)}
                     className={cn(
-                      "group flex w-full items-start gap-3 rounded-xl border p-3.5 text-left text-xs leading-5 transition-all active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300",
+                      "group flex w-full items-start gap-3 rounded-xl border p-3.5 text-left text-xs leading-5 transition-all active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/30",
                       chosen && feedback?.passed
-                        ? "border-emerald-400/70 bg-emerald-400/15 text-emerald-100 shadow-[0_0_20px_rgba(52,211,153,0.2)]"
+                        ? "border-emerald-200 bg-emerald-50 text-emerald-700 shadow-sm"
                         : chosen && feedback && !feedback.passed
-                        ? "quiz-wrong border-rose-400/70 bg-rose-400/15 text-rose-100 shadow-[0_0_20px_rgba(244,63,94,0.2)]"
-                        : "border-white/10 bg-white/4 text-slate-300 hover:border-cyan-300/40 hover:bg-cyan-300/6 hover:text-white",
+                        ? "quiz-wrong border-rose-200 bg-rose-50 text-rose-700 shadow-sm"
+                        : "border-slate-200 bg-slate-50 text-slate-500 hover:border-blue-300 hover:bg-blue-50 hover:text-slate-900",
                     )}
                   >
-                    <span className="flex size-5 shrink-0 items-center justify-center rounded-md border border-white/15 bg-white/5 font-mono text-[10px] font-bold text-slate-400 group-hover:border-cyan-400/40 group-hover:text-cyan-200">
+                    <span className="flex size-5 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-slate-50 font-mono text-[10px] font-bold text-slate-500 group-hover:border-blue-300 group-hover:text-blue-700">
                       {letter}
                     </span>
                     <span className="flex-1">{choice}</span>
@@ -154,32 +154,32 @@ export function QuizSession({ topic, level, locked, isDemo, onAvailability, onPr
             </div>
           ) : (
             <form onSubmit={(event) => { event.preventDefault(); void submit(null, shortAnswer.trim()); }} className="flex gap-2">
-              <input value={shortAnswer} onChange={(event) => setShortAnswer(event.target.value)} maxLength={500} disabled={locked || loading || Boolean(feedback)} placeholder="핵심 용어를 입력해 보세요" aria-label="단답형 답안" className="min-w-0 flex-1 rounded-xl border border-white/10 bg-[#0a1927] px-3.5 py-2.5 text-xs text-white outline-none placeholder:text-slate-500 focus:border-cyan-300 focus:ring-2 focus:ring-cyan-300/20" />
-              <button type="submit" disabled={locked || loading || Boolean(feedback) || !shortAnswer.trim()} className="rounded-xl bg-cyan-300 px-5 text-xs font-bold text-slate-950 transition hover:bg-cyan-200 disabled:opacity-40">채점</button>
+              <input value={shortAnswer} onChange={(event) => setShortAnswer(event.target.value)} maxLength={500} disabled={locked || loading || Boolean(feedback)} placeholder="핵심 용어를 입력해 보세요" aria-label="단답형 답안" className="min-w-0 flex-1 rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-xs text-slate-900 outline-none placeholder:text-slate-500 focus:border-blue-200 focus:ring-2 focus:ring-blue-500/30" />
+              <button type="submit" disabled={locked || loading || Boolean(feedback) || !shortAnswer.trim()} className="rounded-xl bg-blue-600 px-5 text-xs font-bold text-white transition hover:bg-blue-700 disabled:opacity-40">채점</button>
             </form>
           )}
           {loading ? (
-            <div role="status" className="mt-4 flex items-center gap-2 text-xs text-cyan-200">
-              <div className="size-3.5 animate-spin rounded-full border-2 border-cyan-400 border-t-transparent" />
+            <div role="status" className="mt-4 flex items-center gap-2 text-xs text-blue-700">
+              <div className="size-3.5 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
               <span>답안을 검토하고 있습니다...</span>
             </div>
           ) : null}
-          {error ? <p role="alert" className="mt-3 text-xs text-rose-300">{error} {error.includes("로그인") ? <Link href={`/login?next=${encodeURIComponent(`/roadmap?topic=${topic.slug}`)}`} className="underline font-semibold">로그인하기</Link> : null}</p> : null}
+          {error ? <p role="alert" className="mt-3 text-xs text-rose-700">{error} {error.includes("로그인") ? <Link href={`/login?next=${encodeURIComponent(`/roadmap?topic=${topic.slug}`)}`} className="underline font-semibold">로그인하기</Link> : null}</p> : null}
           {feedback ? (
-            <div className={cn("mt-5 rounded-2xl border p-4.5 shadow-xl transition-all", feedback.passed ? "border-emerald-400/30 bg-emerald-400/10" : "border-rose-400/30 bg-rose-400/10")} role="status">
-              <p className={cn("flex items-center gap-2 text-xs font-bold", feedback.passed ? "text-emerald-300" : "text-rose-300")}>
+            <div className={cn("mt-5 rounded-xl border p-4.5 shadow-sm transition-all", feedback.passed ? "border-emerald-200 bg-emerald-50" : "border-rose-200 bg-rose-50")} role="status">
+              <p className={cn("flex items-center gap-2 text-xs font-bold", feedback.passed ? "text-emerald-700" : "text-rose-700")}>
                 {feedback.passed ? <Check className="size-4" strokeWidth={2.5} /> : <X className="size-4" strokeWidth={2.5} />}
                 {feedback.passed ? "정확합니다! 정답입니다." : "오답입니다. 다시 한 번 생각해 봅시다."}
               </p>
-              {!feedback.passed ? <p className="mt-2 text-xs font-medium text-slate-200">정답: <span className="text-cyan-300">{feedback.correctAnswer}</span></p> : null}
-              <p className="mt-2 text-xs leading-6 text-slate-300">{feedback.explanation}</p>
+              {!feedback.passed ? <p className="mt-2 text-xs font-medium text-slate-800">정답: <span className="text-blue-700">{feedback.correctAnswer}</span></p> : null}
+              <p className="mt-2 text-xs leading-6 text-slate-500">{feedback.explanation}</p>
               {feedback.passed ? (
-                <button type="button" onClick={nextQuestion} className="mt-4 flex items-center gap-1.5 rounded-lg border border-cyan-400/30 bg-cyan-400/10 px-3 py-1.5 text-xs font-bold text-cyan-200 transition hover:bg-cyan-400/20">
+                <button type="button" onClick={nextQuestion} className="mt-4 flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-bold text-blue-700 transition hover:bg-blue-50">
                   <span>다음 문제</span>
                   <ArrowRight className="size-3" />
                 </button>
               ) : (
-                <button type="button" onClick={() => { setFeedback(null); setSelectedChoice(null); }} className="mt-4 flex items-center gap-1.5 rounded-lg border border-rose-400/30 bg-rose-400/10 px-3 py-1.5 text-xs font-bold text-rose-200 transition hover:bg-rose-400/20">
+                <button type="button" onClick={() => { setFeedback(null); setSelectedChoice(null); }} className="mt-4 flex items-center gap-1.5 rounded-lg border border-rose-200 bg-rose-50 px-3 py-1.5 text-xs font-bold text-rose-700 transition hover:bg-rose-50">
                   <RotateCcw className="size-3" />
                   <span>다시 시도</span>
                 </button>

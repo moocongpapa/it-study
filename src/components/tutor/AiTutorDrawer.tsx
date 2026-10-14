@@ -31,8 +31,8 @@ function TutorCode({ children }: { children: ReactNode }) {
     setCopied(true);
     window.setTimeout(() => setCopied(false), 1600);
   }
-  return <div className="my-3 overflow-hidden rounded-xl border border-white/10 bg-[#07121e]">
-    <div className="flex justify-end border-b border-white/8 px-2 py-1"><button type="button" onClick={copy} aria-label="튜터 코드 복사" className="flex items-center gap-1 rounded px-2 py-1 text-[10px] text-slate-400 hover:text-white">{copied ? <Check className="size-3" /> : <Copy className="size-3" />}{copied ? "복사됨" : "복사"}</button></div>
+  return <div className="my-3 overflow-hidden rounded-xl border border-slate-200 bg-white">
+    <div className="flex justify-end border-b border-slate-200 px-2 py-1"><button type="button" onClick={copy} aria-label="튜터 코드 복사" className="flex items-center gap-1 rounded px-2 py-1 text-[10px] text-slate-500 hover:text-slate-900">{copied ? <Check className="size-3" /> : <Copy className="size-3" />}{copied ? "복사됨" : "복사"}</button></div>
     <pre className="overflow-x-auto p-3 text-[11px] leading-5">{children}</pre>
   </div>;
 }
@@ -111,27 +111,27 @@ export function AiTutorDrawer({ open, onOpenChange, topic, level, articleContext
 
   return <Sheet open={open} onOpenChange={(value) => { if (!value) stop(); onOpenChange(value); }}>
     <SheetContent className="max-w-[540px]">
-      <div className="shrink-0 border-b border-white/8 px-5 pb-5 pt-7 sm:px-7">
-        <div className="mb-3 flex items-center gap-2 text-[10px] font-bold tracking-[.16em] text-cyan-300"><Bot className="size-4" /> SOCRATIC TUTOR · LEVEL {level}</div>
-        <SheetTitle className="text-xl font-black text-white">생각을 한 단계 더</SheetTitle>
-        <SheetDescription className="mt-1.5 text-xs leading-5 text-slate-400">{topic.title} · 바로 답을 주기보다, 스스로 원리를 찾도록 질문합니다.</SheetDescription>
-        {articleContext ? <div className="mt-4 rounded-lg border-l-2 border-cyan-300/70 bg-white/4 px-3 py-2 text-[11px] leading-5 text-slate-400 line-clamp-3">선택한 맥락: {articleContext.slice(0, 240)}</div> : null}
+      <div className="shrink-0 border-b border-slate-200 px-5 pb-5 pt-7 sm:px-7">
+        <div className="mb-3 flex items-center gap-2 text-[10px] font-bold tracking-[.16em] text-blue-700"><Bot className="size-4" /> SOCRATIC TUTOR · LEVEL {level}</div>
+        <SheetTitle className="text-xl font-bold text-slate-900">생각을 한 단계 더</SheetTitle>
+        <SheetDescription className="mt-1.5 text-xs leading-5 text-slate-500">{topic.title} · 바로 답을 주기보다, 스스로 원리를 찾도록 질문합니다.</SheetDescription>
+        {articleContext ? <div className="mt-4 rounded-lg border-l-2 border-blue-600 bg-slate-50 px-3 py-2 text-[11px] leading-5 text-slate-500 line-clamp-3">선택한 맥락: {articleContext.slice(0, 240)}</div> : null}
       </div>
 
       <div className="min-h-0 flex-1 space-y-5 overflow-y-auto px-5 py-6 sm:px-7" aria-live="polite">
-        {!messages.length ? <div className="rounded-2xl border border-cyan-300/10 bg-cyan-300/5 p-5"><Sparkles className="mb-3 size-5 text-cyan-300" /><p className="text-sm font-bold text-white">어디서 막혔나요?</p><p className="mt-2 text-xs leading-6 text-slate-400">개념을 자신의 말로 설명해 보세요. 필요한 단서부터 함께 찾아갑니다.</p><div className="mt-5 flex flex-wrap gap-2">{suggestions.map((item) => <button key={item} type="button" onClick={() => void send(item)} className="rounded-full border border-cyan-300/20 bg-[#132b3b] px-3 py-2 text-left text-[11px] text-cyan-100 hover:bg-cyan-300/12">{item}</button>)}</div></div> : null}
+        {!messages.length ? <div className="rounded-xl border border-blue-200 bg-blue-50 p-5"><Sparkles className="mb-3 size-5 text-blue-700" /><p className="text-sm font-bold text-slate-900">어디서 막혔나요?</p><p className="mt-2 text-xs leading-6 text-slate-500">개념을 자신의 말로 설명해 보세요. 필요한 단서부터 함께 찾아갑니다.</p><div className="mt-5 flex flex-wrap gap-2">{suggestions.map((item) => <button key={item} type="button" onClick={() => void send(item)} className="rounded-full border border-blue-200 bg-white px-3 py-2 text-left text-[11px] text-blue-700 hover:bg-blue-50">{item}</button>)}</div></div> : null}
         {messages.map((message, index) => <div key={index} className={`flex gap-3 ${message.role === "user" ? "justify-end" : "justify-start"}`}>
-          {message.role === "assistant" ? <span className="grid size-7 shrink-0 place-items-center rounded-lg bg-cyan-300/12 text-cyan-300"><Bot className="size-4" /></span> : null}
-          <div className={`max-w-[88%] rounded-2xl px-4 py-3 text-xs leading-6 ${message.role === "user" ? "bg-cyan-300 text-slate-950" : "border border-white/8 bg-white/5 text-slate-200"}`}>
-            {message.role === "assistant" ? message.content ? <div className="reader-prose prose prose-invert prose-sm max-w-none prose-p:my-2 prose-p:text-slate-200 prose-li:text-slate-200"><ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]} components={{ pre: ({ children }) => <TutorCode>{children}</TutorCode> }}>{message.content}</ReactMarkdown></div> : <span className="animate-pulse text-slate-400">생각을 정리하고 있어요...</span> : message.content}
+          {message.role === "assistant" ? <span className="grid size-7 shrink-0 place-items-center rounded-lg bg-blue-50 text-blue-700"><Bot className="size-4" /></span> : null}
+          <div className={`max-w-[88%] rounded-xl px-4 py-3 text-xs leading-6 ${message.role === "user" ? "bg-blue-600 text-white" : "border border-slate-200 bg-slate-50 text-slate-800"}`}>
+            {message.role === "assistant" ? message.content ? <div className="reader-prose prose prose-invert prose-sm max-w-none prose-p:my-2 prose-p:text-slate-800 prose-li:text-slate-800"><ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]} components={{ pre: ({ children }) => <TutorCode>{children}</TutorCode> }}>{message.content}</ReactMarkdown></div> : <span className="animate-pulse text-slate-500">생각을 정리하고 있어요...</span> : message.content}
           </div>
-          {message.role === "user" ? <span className="grid size-7 shrink-0 place-items-center rounded-lg bg-white/8 text-slate-400"><UserRound className="size-4" /></span> : null}
+          {message.role === "user" ? <span className="grid size-7 shrink-0 place-items-center rounded-lg bg-slate-100 text-slate-500"><UserRound className="size-4" /></span> : null}
         </div>)}
         <div ref={bottom} />
       </div>
 
-      <div className="shrink-0 border-t border-white/10 bg-[#0c1723] p-5 sm:px-7">
-        {error ? <p role="alert" className="mb-3 text-xs leading-5 text-rose-300">{error} {error.includes("로그인") ? <Link href="/login" className="underline font-semibold">로그인하기</Link> : null}</p> : null}
+      <div className="shrink-0 border-t border-slate-200 bg-white p-5 sm:px-7">
+        {error ? <p role="alert" className="mb-3 text-xs leading-5 text-rose-700">{error} {error.includes("로그인") ? <Link href="/login" className="underline font-semibold">로그인하기</Link> : null}</p> : null}
 
         {/* Quick Suggestion Chips */}
         {!streaming && (
@@ -142,7 +142,7 @@ export function AiTutorDrawer({ open, onOpenChange, topic, level, articleContext
                 key={item}
                 type="button"
                 onClick={() => void send(item)}
-                className="shrink-0 rounded-lg border border-white/8 bg-white/4 px-2.5 py-1 text-slate-300 transition-colors hover:border-cyan-400/40 hover:bg-cyan-400/10 hover:text-cyan-200"
+                className="shrink-0 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-slate-500 transition-colors hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700"
               >
                 {item}
               </button>
@@ -165,7 +165,7 @@ export function AiTutorDrawer({ open, onOpenChange, topic, level, articleContext
               maxLength={2500}
               rows={2}
               placeholder="이 부분을 제 말로 설명하면..."
-              className="min-h-12 w-full resize-none rounded-xl border border-white/10 bg-[#172a3a] px-3.5 py-2.5 text-xs leading-5 text-white outline-none transition-colors placeholder:text-slate-500 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20"
+              className="min-h-12 w-full resize-none rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-xs leading-5 text-slate-900 outline-none transition-colors placeholder:text-slate-500 focus:border-blue-200 focus:ring-2 focus:ring-blue-500/30"
             />
           </label>
           {streaming ? (
@@ -173,7 +173,7 @@ export function AiTutorDrawer({ open, onOpenChange, topic, level, articleContext
               type="button"
               onClick={stop}
               aria-label="응답 중단"
-              className="grid size-11 place-items-center rounded-xl bg-white/10 text-white transition hover:bg-rose-500/20 hover:text-rose-300"
+              className="grid size-11 place-items-center rounded-xl bg-slate-100 text-slate-900 transition hover:bg-rose-50 hover:text-rose-700"
             >
               <Square className="size-4" />
             </button>
@@ -182,7 +182,7 @@ export function AiTutorDrawer({ open, onOpenChange, topic, level, articleContext
               type="submit"
               disabled={!draft.trim()}
               aria-label="질문 보내기"
-              className="grid size-11 place-items-center rounded-xl bg-cyan-300 text-slate-950 transition hover:bg-cyan-200 disabled:opacity-40"
+              className="grid size-11 place-items-center rounded-xl bg-blue-600 text-white transition hover:bg-blue-700 disabled:opacity-40"
             >
               <ArrowUp className="size-5" />
             </button>

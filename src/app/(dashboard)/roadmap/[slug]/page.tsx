@@ -14,7 +14,7 @@ export default async function DomainRoadmapPage({ params }: { params: Promise<{ 
   const graph = buildRoadmapGraph(topics, catalog.prerequisites, catalog.progress);
 
   return (
-    <Suspense fallback={<div className="p-8 text-sm text-slate-400">도메인 지도를 준비하고 있습니다...</div>}>
+    <Suspense fallback={<div className="p-8 text-sm text-slate-500">도메인 지도를 준비하고 있습니다...</div>}>
       <RoadmapCanvas
         domain={domain}
         allDomains={catalog.domains}

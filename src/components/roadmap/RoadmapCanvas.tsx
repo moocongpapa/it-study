@@ -136,7 +136,7 @@ function RoadmapCanvasInner({
     const doneIds = new Set(progress.filter((item) => item.is_completed).map((item) => item.topic_id));
     const edges = initialEdges
       .filter((edge) => visibleIds.has(edge.source) && visibleIds.has(edge.target))
-      .map((edge) => ({ ...edge, animated: doneIds.has(edge.source), style: { stroke: doneIds.has(edge.source) ? "#4ade80" : "#405368", strokeWidth: 2 } }));
+      .map((edge) => ({ ...edge, animated: doneIds.has(edge.source), style: { stroke: doneIds.has(edge.source) ? "#10b981" : "#cbd5e1", strokeWidth: 2 } }));
     const currentNodes = buildRoadmapGraph(visibleTopics, allPrerequisites, progress).nodes;
     return { nodes: layoutGraph(currentNodes.map((node) => ({ ...node, data: { ...node.data, onOpen: openTopic } })), edges), edges };
   }, [visibleTopics, allPrerequisites, progress, initialEdges, openTopic]);
@@ -214,36 +214,35 @@ function RoadmapCanvasInner({
   return (
     <div className="px-4 py-7 md:px-7 md:py-9">
       {isDemo && !domain ? (
-        <div role="status" className="mb-7 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-cyan-300/20 bg-cyan-300/7 px-5 py-4">
+        <div role="status" className="mb-7 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-blue-200 bg-blue-50 px-5 py-4">
           <div>
-            <p className="text-sm font-bold text-cyan-100">첫 수업부터 시작해 보세요</p>
-            <p className="mt-1 text-xs leading-5 text-slate-300">현재 지도는 체험 데이터입니다. 트랜지스터와 논리회로, 프로세스와 스레드의 4단계 학습 글을 읽을 수 있습니다.</p>
+            <p className="text-sm font-bold text-blue-700">첫 수업부터 시작해 보세요</p>
+            <p className="mt-1 text-xs leading-5 text-slate-500">현재 지도는 체험 데이터입니다. 트랜지스터와 논리회로, 프로세스와 스레드의 4단계 학습 글을 읽을 수 있습니다.</p>
           </div>
           <Button onClick={() => openTopic(allTopics.find((topic) => topic.slug === "logic-gates")?.id ?? "logic-gates")}>트랜지스터와 논리회로 열기 <ArrowRight className="ml-2 size-4" /></Button>
         </div>
       ) : null}
       <section className="mb-7 flex flex-wrap items-end justify-between gap-5">
         <div className="max-w-2xl">
-          <div className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[.2em] text-cyan-300"><Compass className="size-3.5" /> {domain ? "DOMAIN ROADMAP" : "THE COMPLETE MAP"}</div>
-          <h2 className="text-3xl font-black tracking-[-.04em] text-white md:text-[38px]">{domain?.title ?? "IT 지식의 전체 풍경"}</h2>
-          <p className="mt-3 text-sm leading-7 text-slate-400">{domain?.description ?? "하드웨어에서 AI 인프라까지. 개념이 어떻게 연결되는지 한눈에 살펴보고, 나만의 속도로 한 단계씩 깊이 들어가세요."}</p>
+          <div className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[.2em] text-blue-700"><Compass className="size-3.5" /> {domain ? "DOMAIN ROADMAP" : "THE COMPLETE MAP"}</div>
+          <h2 className="text-3xl font-bold tracking-tight text-slate-900 md:text-[38px]">{domain?.title ?? "IT 지식의 전체 풍경"}</h2>
+          <p className="mt-3 text-sm leading-7 text-slate-500">{domain?.description ?? "하드웨어에서 AI 인프라까지. 개념이 어떻게 연결되는지 한눈에 살펴보고, 나만의 속도로 한 단계씩 깊이 들어가세요."}</p>
         </div>
         <div className="flex gap-3">
-          <Card className="min-w-24 p-3 text-center"><span className="block text-xl font-black text-white">{visibleTopics.length}</span><span className="text-[10px] text-slate-400">보이는 토픽</span></Card>
-          <Card className="min-w-24 p-3 text-center"><span className="block text-xl font-black text-emerald-300">{completedVisible}</span><span className="text-[10px] text-slate-400">완료</span></Card>
-          <Card className="min-w-24 p-3 text-center"><span className="block text-xl font-black text-cyan-300">{edges.length}</span><span className="text-[10px] text-slate-400">연결</span></Card>
+          <Card className="min-w-24 p-3 text-center"><span className="block text-xl font-bold text-slate-900">{visibleTopics.length}</span><span className="text-[10px] text-slate-500">보이는 토픽</span></Card>
+          <Card className="min-w-24 p-3 text-center"><span className="block text-xl font-bold text-emerald-700">{completedVisible}</span><span className="text-[10px] text-slate-500">완료</span></Card>
+          <Card className="min-w-24 p-3 text-center"><span className="block text-xl font-bold text-blue-700">{edges.length}</span><span className="text-[10px] text-slate-500">연결</span></Card>
         </div>
       </section>
 
       <div className="mb-4 flex flex-wrap items-center gap-2">
-        <Badge className="border-emerald-400/25 bg-emerald-400/10 text-emerald-300">● 완료</Badge>
-        <Badge className="border-cyan-400/25 bg-cyan-400/10 text-cyan-300">● 학습 가능</Badge>
-        <Badge className="border-slate-400/20 bg-slate-400/8 text-slate-400"><LockKeyhole className="mr-1 size-3" /> 선수 필요</Badge>
+        <Badge className="border-emerald-200 bg-emerald-50 text-emerald-700">● 완료</Badge>
+        <Badge className="border-blue-200 bg-blue-50 text-blue-700">● 학습 가능</Badge>
+        <Badge className="border-slate-400/20 bg-slate-400/8 text-slate-500"><LockKeyhole className="mr-1 size-3" /> 선수 필요</Badge>
         <span className="ml-auto flex items-center gap-1.5 text-[11px] text-slate-500"><MousePointer2 className="size-3.5" /> 드래그로 이동 · 스크롤로 확대 · 노드를 눌러 학습</span>
       </div>
 
-      <div className="roadmap-flow app-grid relative h-[680px] overflow-hidden rounded-[24px] border border-white/10 bg-[#0d1a27] shadow-[inset_0_1px_0_#ffffff0a,0_24px_70px_#02081255]">
-        <div className="pointer-events-none absolute left-1/2 top-0 z-10 h-72 w-[600px] -translate-x-1/2 rounded-full bg-cyan-400/5 blur-3xl" />
+      <div className="roadmap-flow app-grid relative h-[680px] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
         {nodes.length ? (
           <ReactFlow
             nodes={nodes}
@@ -256,18 +255,18 @@ function RoadmapCanvasInner({
             nodesDraggable={false}
             nodesConnectable={false}
           >
-            <Background variant={BackgroundVariant.Dots} color="#31516b" gap={24} size={1} />
+            <Background variant={BackgroundVariant.Dots} color="#cbd5e1" gap={24} size={1} />
             <Controls showInteractive={false} position="bottom-left" />
-            <MiniMap pannable zoomable maskColor="#07111bbb" nodeColor={(node) => node.data.status === "completed" ? "#34d399" : node.data.status === "locked" ? "#536579" : "#67e8f9"} />
+            <MiniMap pannable zoomable maskColor="#f1f5f9aa" nodeColor={(node) => node.data.status === "completed" ? "#10b981" : node.data.status === "locked" ? "#e2e8f0" : "#2563eb"} />
             <FitViewport layoutKey={layoutKey} />
           </ReactFlow>
         ) : (
           <div className="flex h-full flex-col items-center justify-center p-6 text-center">
-            <div className="rounded-2xl border border-white/10 bg-white/4 p-4 shadow-2xl backdrop-blur-sm">
-              <Layers3 className="size-10 text-cyan-400/60" />
+            <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 shadow-sm ">
+              <Layers3 className="size-10 text-blue-600" />
             </div>
-            <p className="mt-4 text-sm font-bold text-slate-200">조건에 맞는 토픽이 없습니다</p>
-            <p className="mt-1 text-xs text-slate-400">검색어, 난이도, 또는 상단 큐레이션 트랙을 조정해 보세요.</p>
+            <p className="mt-4 text-sm font-bold text-slate-800">조건에 맞는 토픽이 없습니다</p>
+            <p className="mt-1 text-xs text-slate-500">검색어, 난이도, 또는 상단 큐레이션 트랙을 조정해 보세요.</p>
             <Button
               variant="secondary"
               size="sm"
@@ -279,7 +278,7 @@ function RoadmapCanvasInner({
             </Button>
           </div>
         )}
-        <div className="pointer-events-none absolute bottom-5 right-5 z-10 hidden items-center gap-2 rounded-lg border border-white/8 bg-[#101e2c]/90 px-3 py-2 text-[10px] text-slate-400 sm:flex"><ArrowRight className="size-3 text-cyan-300" /> 화살표 방향으로 학습이 이어집니다</div>
+        <div className="pointer-events-none absolute bottom-5 right-5 z-10 hidden items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-[10px] text-slate-500 sm:flex"><ArrowRight className="size-3 text-blue-700" /> 화살표 방향으로 학습이 이어집니다</div>
       </div>
 
       <ArticleReaderSheet

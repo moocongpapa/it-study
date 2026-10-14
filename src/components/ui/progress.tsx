@@ -8,10 +8,10 @@ export function Progress({ value = 0, className }: { value?: number; className?:
   return (
     <ProgressPrimitive.Root
       value={safeValue}
-      className={cn("relative h-1.5 w-full overflow-hidden rounded-full bg-white/10", className)}
+      className={cn("relative h-1.5 w-full overflow-hidden rounded-full bg-slate-100", className)}
     >
       <ProgressPrimitive.Indicator
-        className="block h-full rounded-full bg-gradient-to-r from-cyan-400 to-emerald-400 transition-transform duration-500"
+        className="block h-full rounded-full bg-blue-600 transition-transform duration-500"
         style={{ transform: `translateX(-${100 - safeValue}%)` }}
       />
     </ProgressPrimitive.Root>
