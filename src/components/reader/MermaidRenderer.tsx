@@ -96,10 +96,16 @@ export function MermaidRenderer({ chart, className = "" }: MermaidRendererProps)
           mermaid.initialize({
             startOnLoad: false,
             theme: isDarkMode ? "dark" : "neutral",
+            look: "classic",
             securityLevel: "loose",
             fontFamily: "inherit",
+            // Mermaid 12 prioritizes root htmlLabels over flowchart.htmlLabels.
+            // Native SVG text survives our SVG-only sanitizer.
+            htmlLabels: false,
             suppressErrorRendering: true,
-            flowchart: { htmlLabels: false },
+            // Keep intrinsic dimensions for the fullscreen canvas. The inline
+            // container already scales large SVGs with CSS max-width.
+            flowchart: { useMaxWidth: false },
           });
           await mermaid.parse(chart.trim());
           return (await mermaid.render(uniqueRenderId, chart.trim())).svg;

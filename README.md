@@ -23,7 +23,17 @@ npm run dev
 4. AI 튜터를 쓰려면 `.env.local`에 `AI_GATEWAY_API_KEY`를 추가합니다. Vercel 환경에서는 OIDC 인증을 사용할 수도 있습니다. 기본 모델은 `AI_TUTOR_MODEL=openai/gpt-5.4-mini`이며 Vercel AI Gateway 모델 ID로 바꿀 수 있습니다.
 5. 개발 서버를 재시작합니다. 로그인한 사용자의 진도는 `user_node_progress`, 퀴즈 통과는 `user_quiz_passes`, 학습 일수는 `user_learning_days`에 저장됩니다. 정답 컬럼은 Data API에서 직접 읽을 수 없고, 채점 RPC가 사용자 ID와 선수 조건을 확인합니다.
 
-기본 SQL 시드에는 공개 아티클 한 편(프로세스와 스레드)이 들어 있습니다. 체험 모드에는 첫 학습 노드(트랜지스터와 논리회로)의 4단계 글과 퀴즈도 포함됩니다. 실제 DB에 이 입문 글을 추가하려면 스키마와 토픽 시드를 적용한 후 `npm run content:seed-starter -- --apply`를 실행합니다. 기존 글이나 퀴즈가 있으면 건너뜁니다. 나머지 토픽의 리더에는 준비 중 안내가 표시되며, 아래 배치 생성기로 점진적으로 채울 수 있습니다.
+기본 SQL 시드에는 프로세스와 스레드 글이, `content/starter-content.json`에는 트랜지스터와 논리회로 글이 있습니다. 나머지 48개 토픽의 4단계 원고와 레벨별 퀴즈는 `content/topics/*.md`와 빌드 결과 `content/library.json`으로 관리합니다. 전체 라이브러리를 적용하면 공개 글 50개·퀴즈 208개가 됩니다. 체험 모드는 샘플 두 편을 표시하고, 운영 학습은 Supabase의 공개 글을 읽습니다.
+
+```bash
+npm run content:build
+npm run content:verify -- --links
+npm run content:seed-starter -- --apply
+npm run content:seed-library -- --apply --project-ref ofylxwqyahqghvhphdos
+npm run content:verify-live -- --base-url https://it-study-two.vercel.app
+```
+
+저장 CLI는 `.env.local`의 프로젝트 URL과 service role 키를 사용합니다. `--project-ref`와 URL이 일치해야 저장하며 기본 실행은 검증만 합니다. 원자적 RPC가 기존 글이나 퀴즈가 있는 토픽을 보존하므로 재실행이 안전합니다. 관리자 SQL 방식은 `npm run content:seed-library -- --export-sql /tmp/it-study-content-sql`로 도메인별 한 문장 SQL을 만들 수 있습니다. SQL에는 키가 없으며 slug로 실제 topic UUID를 조회합니다. 작성 범위·검토 기준은 `CONTENT_COMPLETION_PLAN.md`, 구조·예제·링크 검증은 `content/verification-report.json`, 공개 사이트 본문·퀴즈의 원고 일치 검사 결과는 `content/live-verification-report.json`에 기록합니다. 운영 검사기는 GET 요청만 사용합니다.
 
 ## 콘텐츠 배치 생성
 
@@ -42,6 +52,8 @@ npm run content:generate -- --limit 5 --apply --publish  # 즉시 공개
 ## Mermaid 다이어그램
 
 아티클의 `mermaid` 코드 펜스는 리더에서 브라우저 마운트 후 SVG로 렌더링합니다. 루트 `dark`/`light` 클래스와 시스템 색상 설정에 맞춰 테마가 바뀝니다. 원본 코드 복사, SVG 복사, 확대 모달을 제공하고, 문법 오류가 있으면 원본 코드와 오류 메시지를 표시합니다. Mermaid의 `loose` 모드 출력은 DOMPurify로 정화한 후 화면에 삽입합니다.
+
+Mermaid 12에서는 루트 `htmlLabels: false`를 사용해 라벨을 SVG 텍스트로 생성합니다. 도표별 `flowchart.htmlLabels`는 사용하지 않습니다. `useMaxWidth: false`로 SVG 고유 크기를 유지하고 본문에서는 CSS로 축소하므로 확대 모달의 글자와 배율도 유지됩니다.
 
 ## 데이터 흐름
 

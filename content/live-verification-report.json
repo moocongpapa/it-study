@@ -1,0 +1,453 @@
+{
+  "checkedAt": "2026-10-14T04:57:16.968Z",
+  "origin": "https://it-study-two.vercel.app",
+  "mode": "read-only GET",
+  "articles": 50,
+  "levels": 200,
+  "quizzes": 208,
+  "sourceMatchedArticles": 48,
+  "domains": [
+    {
+      "slug": "hardware",
+      "status": 200
+    },
+    {
+      "slug": "operating-systems",
+      "status": 200
+    },
+    {
+      "slug": "networks",
+      "status": 200
+    },
+    {
+      "slug": "algorithms",
+      "status": 200
+    },
+    {
+      "slug": "languages",
+      "status": 200
+    },
+    {
+      "slug": "engineering",
+      "status": 200
+    },
+    {
+      "slug": "databases",
+      "status": 200
+    },
+    {
+      "slug": "distributed-systems",
+      "status": 200
+    },
+    {
+      "slug": "cloud-devops",
+      "status": 200
+    },
+    {
+      "slug": "web-security-ai",
+      "status": 200
+    }
+  ],
+  "topics": [
+    {
+      "slug": "logic-gates",
+      "topicId": "614e76d1-ed5c-416b-ac04-df25fb4eb9d6",
+      "articleId": "5b76fd2a-ad46-4af9-8f54-525a0fabdcd4",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": false
+    },
+    {
+      "slug": "binary-representation",
+      "topicId": "c88cc76f-54f1-4997-b4af-47392671e1cb",
+      "articleId": "74c0dbe8-6557-4343-8db2-a8afb4f3a4e6",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "binary-arithmetic",
+      "topicId": "dade6de1-47b4-4816-bfab-a649c933822f",
+      "articleId": "30d7c2bd-7145-4113-9eac-c3f8ff88e495",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "von-neumann-cpu",
+      "topicId": "605a4d75-052a-4cd4-a848-970d2151c629",
+      "articleId": "72b39803-3cd0-4700-818b-332ff0a69e3c",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "memory-hierarchy",
+      "topicId": "f31be73f-bb02-4933-a0da-ee04fdf3bfdf",
+      "articleId": "e29bae55-db47-41b7-89b2-8ba73efe27da",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "processes-threads",
+      "topicId": "2d755137-2bbc-46bd-b2cb-83e579e95854",
+      "articleId": "a150e720-5c48-44e3-ae8d-bcefa62b56be",
+      "levels": 4,
+      "quizzes": 12,
+      "sourceMatched": false
+    },
+    {
+      "slug": "virtual-memory",
+      "topicId": "0b996fc0-80e8-448a-95d0-c6716a01f263",
+      "articleId": "5e1371df-a2cb-45cb-bbb2-fe703c5e795b",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "context-switching",
+      "topicId": "39a5c1e6-65c0-414d-b1f4-75117fd914a1",
+      "articleId": "d20192f5-4e8e-44cd-94d9-95bad7c2f77f",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "synchronization-deadlocks",
+      "topicId": "5fad298f-191d-4ec1-8124-afa695a29ca7",
+      "articleId": "4688860b-ac2b-4ff1-aa69-010a9bbe1eaa",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "syscalls-io",
+      "topicId": "6144e580-34ec-47d9-bca8-66f5429f5878",
+      "articleId": "5030e582-9e8f-4ccb-9b3e-7bb7a8513c22",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "osi-encapsulation",
+      "topicId": "9cdb6cba-fd5b-4ac4-9151-be6b69d7750f",
+      "articleId": "7869160f-9f3e-41df-b5d7-90ffbf66bb12",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "tcp-udp-handshake",
+      "topicId": "78d78427-e7c1-414c-834c-e5e44a9d222b",
+      "articleId": "0f81a65b-fc4b-465e-bf6e-67ea38954aa3",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "dns-resolution",
+      "topicId": "6f12acc3-0866-4155-a6b0-1d727d7098f4",
+      "articleId": "9c9e0278-9ce2-44d0-9b6a-0fc32124a5c2",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "http-versions",
+      "topicId": "94e4d7c2-3be7-44b9-a49f-b4f445eb71fb",
+      "articleId": "d15df3f5-65a5-48eb-9340-cdf6679c2b85",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "load-balancing",
+      "topicId": "7d12a9e6-5d69-4610-8348-1f6aa11111aa",
+      "articleId": "14b2dbb7-0493-4575-bbfb-bf62de9a8258",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "big-o",
+      "topicId": "e67d1f0d-487c-49cc-8b58-a6b81f59617a",
+      "articleId": "cfb95a4e-c584-432d-b582-f2e123510117",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "arrays-linked-lists",
+      "topicId": "3f15a7df-b3df-4e21-b4b3-1b2632f65929",
+      "articleId": "32d3e212-a57a-4ee1-b73e-231e949d8d5f",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "hash-tables",
+      "topicId": "0a77f569-68ad-44c4-9985-d33a9e732840",
+      "articleId": "78261dc3-f2bc-4cac-bdd6-79e0ffa70b65",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "trees-bst",
+      "topicId": "1b136d84-684c-4ff2-b627-3de7f3b8bce4",
+      "articleId": "79361b40-f657-4361-9fdd-4bb743feebb5",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "graph-search",
+      "topicId": "6c25c200-42ae-4fd1-82c1-e24fecbdc696",
+      "articleId": "6b59dcb2-97de-446b-a62f-6d6470277252",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "compiler-interpreter",
+      "topicId": "2e788ac0-0e4f-4086-9366-bfd468164bc2",
+      "articleId": "25e0e4e4-64a9-4058-93ab-fdc48b448f0f",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "stack-heap-gc",
+      "topicId": "f23e618d-faa3-4fda-a3c6-196f24c57da7",
+      "articleId": "7d08619b-00af-484d-ba08-57f0ada19cba",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "oop-principles",
+      "topicId": "925c1e55-c548-4f62-9d9b-eaa91e10f12a",
+      "articleId": "675794b0-4fe3-4046-9d58-b269d9f0c6a1",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "functional-programming",
+      "topicId": "5e1c6f17-8f19-4710-b8dd-24b9a8b67fb3",
+      "articleId": "a5e56965-8cac-4eac-8b62-45ef0d403878",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "type-systems",
+      "topicId": "553567a7-c700-452b-bedc-98e660ceb5df",
+      "articleId": "f9312f98-2e3b-4fef-85a4-36038e3b1516",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "solid",
+      "topicId": "278cdd96-76a3-4de5-867c-cf7712436e75",
+      "articleId": "a0f3cde1-a34c-481a-aba0-117151bbf152",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "design-patterns",
+      "topicId": "8f8f77e5-38cf-4452-95d5-fd11b79a2d8d",
+      "articleId": "ce521601-99ce-46a0-bc13-4b6dc8990212",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "clean-code-refactoring",
+      "topicId": "4aa85f44-f161-48f0-9878-3689a9433db5",
+      "articleId": "bfda1205-2444-4a6f-9e94-a1c1e6acb1be",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "testing-pyramid",
+      "topicId": "fd904d1c-144b-4d79-9bf8-aa6e0fd54019",
+      "articleId": "e82c22a5-d137-4bc0-a04d-c25bb10527af",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "architecture-decisions",
+      "topicId": "cfabbea2-6f39-4569-b0e0-52619f76434c",
+      "articleId": "5d3eacf5-a044-4a68-b094-64234bca218a",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "relational-normalization",
+      "topicId": "62e93134-d886-4ce5-b00e-a9e4a1e7c486",
+      "articleId": "8d774bc8-9337-442f-97b4-c7d32c678f41",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "btree-indexes",
+      "topicId": "e50556f0-c622-43de-8f12-65b7b51711ed",
+      "articleId": "f77436ec-edf8-4933-b82f-7eea982df12f",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "transactions-isolation",
+      "topicId": "131b4c93-60a0-412d-b579-3e0be07269e6",
+      "articleId": "04ba4e09-6e7f-4d71-addc-c8ea20b2010b",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "nosql-cap",
+      "topicId": "1c589c53-186a-4393-b843-bb9de45dec7f",
+      "articleId": "cff006f2-7772-44d3-84b4-b31aa05daf0f",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "replication-sharding",
+      "topicId": "d39ce8c8-fbf1-4d0c-ab1b-401a5da0946e",
+      "articleId": "8c692435-736b-4fb1-bf1c-04486443055d",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "rest-api",
+      "topicId": "1651c302-bfdc-4bd1-a574-fe255e3f08f5",
+      "articleId": "1550eaff-3e25-48e7-96e5-e38d96a8d02b",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "caching-strategies",
+      "topicId": "0abfac7b-87f7-4ff0-b68b-1780f59a31b0",
+      "articleId": "7b3e248f-1851-4b25-a448-33930cd2aa6b",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "message-queues",
+      "topicId": "d339d53a-bbc3-42fd-9846-05f847c0b075",
+      "articleId": "953fdae6-b45c-4b6b-b00b-4b955bea04be",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "monolith-vs-msa",
+      "topicId": "73990d10-6756-475c-8dd3-0f2706babf82",
+      "articleId": "a617c1fc-48b8-40a7-9c7f-4914273ccd69",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "saga-transactions",
+      "topicId": "18281f9a-6416-4d33-acfc-63048105a00a",
+      "articleId": "cdfcec3a-5129-4300-acc5-79ff84ad9d0b",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "vm-vs-containers",
+      "topicId": "ea7a4611-2ea8-4fea-a0ce-62db5a97c304",
+      "articleId": "7dde3c15-61bf-4cf2-bd22-c4a74ded0f28",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "kubernetes-basics",
+      "topicId": "5bcce69e-32be-43cb-8c96-f2dfd766cca6",
+      "articleId": "c2f2a307-5288-46ee-9d96-212423676bfe",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "cicd-pipelines",
+      "topicId": "a7de8a7e-2320-4237-af4e-32af06b00c21",
+      "articleId": "12934f09-e5b0-4cfb-8e27-c4a6f92ea165",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "iac",
+      "topicId": "7bcb7331-9ad7-43af-9bed-92b496e0beae",
+      "articleId": "89c7a86d-2114-4aab-afbb-58af14e14c6f",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "observability",
+      "topicId": "e3b2b4b2-0468-48e3-9eb2-c48159e1a2d7",
+      "articleId": "7486337b-592a-4d46-ae95-295cd1690a73",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "browser-rendering",
+      "topicId": "2352dc42-889a-47f4-aa00-0fef4ea6c2a3",
+      "articleId": "ddef7f10-e7b5-4ef0-a1c4-113745fc0340",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "web-auth",
+      "topicId": "9cc3c722-e832-4a07-8782-b69b9163379c",
+      "articleId": "ec15894f-15e9-40b3-a6aa-ef64bfcb138b",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "web-security",
+      "topicId": "1374b258-1818-45c0-8d34-3b08a2e24d26",
+      "articleId": "0bcfd3f1-8617-4340-ab71-545e6c92d3bb",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "web-performance",
+      "topicId": "139c0b51-70bc-4b9b-9ba9-907347e3d7b4",
+      "articleId": "bc2c799c-428b-4c46-a6b3-50cb88e73cbd",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "llm-vector-infra",
+      "topicId": "c6bca72e-1f67-4cb4-8afa-b031ed02b78d",
+      "articleId": "5639bc3d-6518-4f6d-937e-e1cc7822848a",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    }
+  ]
+}
