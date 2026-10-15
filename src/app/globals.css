@@ -15,10 +15,45 @@ html {
   scrollbar-color: #cbd5e1 transparent;
   scrollbar-width: thin;
 }
-body { min-height: 100vh; margin: 0; }
-button, input, select, textarea { font: inherit; }
+body {
+  min-height: 100vh;
+  margin: 0;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
 button { cursor: pointer; }
 ::selection { background: #bfdbfe; color: #0f172a; }
+
+.sheet-viewport {
+  height: 100dvh;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Reading uses one scroll area; only the compact toolbar and stage tabs stay put. */
+.reader-article {
+  --tw-prose-body: #334155;
+  --tw-prose-headings: #0f172a;
+  --tw-prose-bold: #0f172a;
+  --tw-prose-quotes: #334155;
+  font-size: 1rem;
+  line-height: 1.85;
+  overflow-wrap: anywhere;
+}
+.reader-article-large { font-size: 1.125rem; }
+.reader-article :where(h1) {
+  font-size: 1.375em;
+  line-height: 1.4;
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+.reader-article :where(h2) { font-size: 1.125em; line-height: 1.5; }
+.reader-article :where(h3, h4) { font-size: 1em; line-height: 1.5; }
+.reader-article :where(h1, h2, h3, h4) { word-break: keep-all; letter-spacing: -.025em; }
+.reader-article :where(p, li) { line-height: 1.85; }
+.reader-playground:empty { display: none; }
+.reader-playground:not(:empty) { margin-top: 1.5rem; }
 
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -89,11 +124,14 @@ kbd {
   border-left: 3px solid #2563eb;
   background: #eff6ff;
   border-radius: 0 10px 10px 0;
-  padding: 0.75rem 1.25rem;
+  padding: 0.75rem 1rem;
   margin: 1.25rem 0;
   color: #334155;
   font-style: normal;
+  quotes: none;
 }
+.reader-prose :where(blockquote p:first-child) { margin-top: 0; }
+.reader-prose :where(blockquote p:last-child) { margin-bottom: 0; }
 .reader-prose :where(hr) {
   border-color: #e2e8f0;
   margin: 2rem 0;
@@ -119,3 +157,13 @@ kbd {
   50% { opacity: 0.6; }
 }
 .animate-subtle-pulse { animation: subtle-pulse 2s infinite ease-in-out; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}

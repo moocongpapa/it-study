@@ -5,8 +5,8 @@ import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
-import { ArrowUp, Bot, Check, Copy, MessageCircle, Sparkles, Square, UserRound } from "lucide-react";
-import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
+import { ArrowUp, Bot, Check, Copy, Sparkles, Square, UserRound, X } from "lucide-react";
+import { Sheet, SheetClose, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
 import type { Topic } from "@/types/roadmap";
 
 interface TutorMessage { role: "user" | "assistant"; content: string }
@@ -32,8 +32,8 @@ function TutorCode({ children }: { children: ReactNode }) {
     window.setTimeout(() => setCopied(false), 1600);
   }
   return <div className="my-3 overflow-hidden rounded-xl border border-slate-200 bg-white">
-    <div className="flex justify-end border-b border-slate-200 px-2 py-1"><button type="button" onClick={copy} aria-label="튜터 코드 복사" className="flex items-center gap-1 rounded px-2 py-1 text-[10px] text-slate-500 hover:text-slate-900">{copied ? <Check className="size-3" /> : <Copy className="size-3" />}{copied ? "복사됨" : "복사"}</button></div>
-    <pre className="overflow-x-auto p-3 text-[11px] leading-5">{children}</pre>
+    <div className="flex justify-end border-b border-slate-200 px-2"><button type="button" onClick={copy} aria-label="튜터 코드 복사" className="flex min-h-11 items-center gap-1 rounded px-2 text-xs text-slate-500 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">{copied ? <Check className="size-3" /> : <Copy className="size-3" />}{copied ? "복사됨" : "복사"}</button></div>
+    <pre className="overflow-x-auto p-3 text-[13px] leading-6">{children}</pre>
   </div>;
 }
 
@@ -110,88 +110,44 @@ export function AiTutorDrawer({ open, onOpenChange, topic, level, articleContext
   function submit(event: FormEvent<HTMLFormElement>) { event.preventDefault(); void send(draft); }
 
   return <Sheet open={open} onOpenChange={(value) => { if (!value) stop(); onOpenChange(value); }}>
-    <SheetContent className="max-w-[540px]">
-      <div className="shrink-0 border-b border-slate-200 px-5 pb-5 pt-7 sm:px-7">
-        <div className="mb-3 flex items-center gap-2 text-[10px] font-bold tracking-[.16em] text-blue-700"><Bot className="size-4" /> SOCRATIC TUTOR · LEVEL {level}</div>
-        <SheetTitle className="text-xl font-bold text-slate-900">생각을 한 단계 더</SheetTitle>
-        <SheetDescription className="mt-1.5 text-xs leading-5 text-slate-500">{topic.title} · 바로 답을 주기보다, 스스로 원리를 찾도록 질문합니다.</SheetDescription>
-        {articleContext ? <div className="mt-4 rounded-lg border-l-2 border-blue-600 bg-slate-50 px-3 py-2 text-[11px] leading-5 text-slate-500 line-clamp-3">선택한 맥락: {articleContext.slice(0, 240)}</div> : null}
-      </div>
+    <SheetContent className="max-w-[540px]" showCloseButton={false}>
+      <header className="flex min-h-14 shrink-0 items-center gap-2 border-b border-slate-200 px-4">
+        <Bot className="size-4 shrink-0 text-blue-700" />
+        <SheetTitle className="min-w-0 flex-1 text-sm font-semibold text-slate-900">AI 튜터 <span className="ml-1 font-normal text-slate-500">· {level}단계</span></SheetTitle>
+        <SheetDescription className="sr-only">정답을 바로 알려주기보다 질문으로 생각을 돕는 학습 튜터</SheetDescription>
+        <SheetClose asChild><button type="button" className="grid size-11 shrink-0 place-items-center rounded-lg text-slate-500 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500" aria-label="튜터 닫기"><X className="size-5" /></button></SheetClose>
+      </header>
 
-      <div className="min-h-0 flex-1 space-y-5 overflow-y-auto px-5 py-6 sm:px-7" aria-live="polite">
-        {!messages.length ? <div className="rounded-xl border border-blue-200 bg-blue-50 p-5"><Sparkles className="mb-3 size-5 text-blue-700" /><p className="text-sm font-bold text-slate-900">어디서 막혔나요?</p><p className="mt-2 text-xs leading-6 text-slate-500">개념을 자신의 말로 설명해 보세요. 필요한 단서부터 함께 찾아갑니다.</p><div className="mt-5 flex flex-wrap gap-2">{suggestions.map((item) => <button key={item} type="button" onClick={() => void send(item)} className="rounded-full border border-blue-200 bg-white px-3 py-2 text-left text-[11px] text-blue-700 hover:bg-blue-50">{item}</button>)}</div></div> : null}
-        {messages.map((message, index) => <div key={index} className={`flex gap-3 ${message.role === "user" ? "justify-end" : "justify-start"}`}>
-          {message.role === "assistant" ? <span className="grid size-7 shrink-0 place-items-center rounded-lg bg-blue-50 text-blue-700"><Bot className="size-4" /></span> : null}
-          <div className={`max-w-[88%] rounded-xl px-4 py-3 text-xs leading-6 ${message.role === "user" ? "bg-blue-600 text-white" : "border border-slate-200 bg-slate-50 text-slate-800"}`}>
-            {message.role === "assistant" ? message.content ? <div className="reader-prose prose prose-invert prose-sm max-w-none prose-p:my-2 prose-p:text-slate-800 prose-li:text-slate-800"><ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]} components={{ pre: ({ children }) => <TutorCode>{children}</TutorCode> }}>{message.content}</ReactMarkdown></div> : <span className="animate-pulse text-slate-500">생각을 정리하고 있어요...</span> : message.content}
+      <div className="min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain px-4 py-4 sm:px-6" role="log" aria-label="튜터 대화" aria-live="polite">
+        <p className="text-xs leading-6 text-slate-500">{topic.title}</p>
+        {articleContext ? <details className="rounded-lg border border-slate-200 bg-slate-50 text-xs text-slate-600"><summary className="min-h-11 cursor-pointer px-3 py-3">선택한 문장 보기</summary><p className="border-t border-slate-200 px-3 py-2 leading-6">{articleContext}</p></details> : null}
+        {!messages.length ? <div className="rounded-xl bg-blue-50 p-4"><Sparkles className="mb-2 size-5 text-blue-700" /><p className="text-base font-semibold text-slate-900">어디서 막혔나요?</p><p className="mt-2 text-sm leading-7 text-slate-600">이해한 내용을 자신의 말로 설명해 보세요. 필요한 단서부터 함께 찾아갑니다.</p><div className="mt-3 space-y-2">{suggestions.map((item) => <button key={item} type="button" onClick={() => void send(item)} className="block min-h-11 w-full rounded-lg border border-blue-100 bg-white px-3 py-2.5 text-left text-xs leading-5 text-blue-700 hover:border-blue-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">{item}</button>)}</div></div> : null}
+        {messages.map((message, index) => <div key={index} className={`flex gap-2 ${message.role === "user" ? "justify-end" : "justify-start"}`}>
+          {message.role === "assistant" ? <span aria-hidden="true" className="grid size-7 shrink-0 place-items-center rounded-lg bg-blue-50 text-blue-700"><Bot className="size-4" /></span> : null}
+          <div className={`min-w-0 max-w-[88%] rounded-xl px-3 py-3 text-sm leading-7 ${message.role === "user" ? "bg-blue-600 text-white" : "border border-slate-200 bg-slate-50 text-slate-800"}`}>
+            {message.role === "assistant" ? message.content ? <div className="reader-prose prose prose-sm max-w-none break-words prose-p:my-2 prose-p:text-slate-800 prose-li:text-slate-800"><ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]} components={{ pre: ({ children }) => <TutorCode>{children}</TutorCode> }}>{message.content}</ReactMarkdown></div> : <span className="animate-pulse text-slate-500">생각을 정리하고 있어요...</span> : message.content}
           </div>
-          {message.role === "user" ? <span className="grid size-7 shrink-0 place-items-center rounded-lg bg-slate-100 text-slate-500"><UserRound className="size-4" /></span> : null}
+          {message.role === "user" ? <span aria-hidden="true" className="grid size-7 shrink-0 place-items-center rounded-lg bg-slate-100 text-slate-500"><UserRound className="size-4" /></span> : null}
         </div>)}
         <div ref={bottom} />
       </div>
 
-      <div className="shrink-0 border-t border-slate-200 bg-white p-5 sm:px-7">
-        {error ? <p role="alert" className="mb-3 text-xs leading-5 text-rose-700">{error} {error.includes("로그인") ? <Link href="/login" className="underline font-semibold">로그인하기</Link> : null}</p> : null}
-
-        {/* Quick Suggestion Chips */}
-        {!streaming && (
-          <div className="mb-3 flex items-center gap-1.5 overflow-x-auto pb-1 text-[11px] scrollbar-none">
-            <span className="shrink-0 text-slate-500 font-semibold">추천:</span>
-            {suggestions.map((item) => (
-              <button
-                key={item}
-                type="button"
-                onClick={() => void send(item)}
-                className="shrink-0 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-slate-500 transition-colors hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700"
-              >
-                {item}
-              </button>
-            ))}
-          </div>
-        )}
-
+      <div className="shrink-0 border-t border-slate-200 bg-white px-4 py-3 sm:px-6">
+        {error ? <p role="alert" className="mb-2 text-xs leading-5 text-rose-700">{error} {error.includes("로그인") ? <Link href="/login" className="font-semibold underline">로그인하기</Link> : null}</p> : null}
         <form onSubmit={submit} className="flex items-end gap-2">
-          <label className="flex-1">
+          <label className="min-w-0 flex-1">
             <span className="sr-only">튜터에게 질문</span>
-            <textarea
-              value={draft}
-              onChange={(event) => setDraft(event.target.value)}
-              onKeyDown={(event) => {
-                if (event.key === "Enter" && !event.shiftKey) {
-                  event.preventDefault();
-                  void send(draft);
-                }
-              }}
-              maxLength={2500}
-              rows={2}
-              placeholder="이 부분을 제 말로 설명하면..."
-              className="min-h-12 w-full resize-none rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-xs leading-5 text-slate-900 outline-none transition-colors placeholder:text-slate-500 focus:border-blue-200 focus:ring-2 focus:ring-blue-500/30"
-            />
+            <textarea value={draft} onChange={(event) => setDraft(event.target.value)} onKeyDown={(event) => {
+              if (event.nativeEvent.isComposing || event.keyCode === 229) return;
+              if (event.key === "Enter" && !event.shiftKey && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+                event.preventDefault();
+                void send(draft);
+              }
+            }} maxLength={2500} rows={2} placeholder="어떤 부분이 궁금한가요?" className="block min-h-14 w-full resize-none rounded-xl border border-slate-200 bg-white px-3 py-2 text-base leading-6 text-slate-900 outline-none placeholder:text-slate-400 focus:border-blue-400 focus:ring-2 focus:ring-blue-100" />
           </label>
-          {streaming ? (
-            <button
-              type="button"
-              onClick={stop}
-              aria-label="응답 중단"
-              className="grid size-11 place-items-center rounded-xl bg-slate-100 text-slate-900 transition hover:bg-rose-50 hover:text-rose-700"
-            >
-              <Square className="size-4" />
-            </button>
-          ) : (
-            <button
-              type="submit"
-              disabled={!draft.trim()}
-              aria-label="질문 보내기"
-              className="grid size-11 place-items-center rounded-xl bg-blue-600 text-white transition hover:bg-blue-700 disabled:opacity-40"
-            >
-              <ArrowUp className="size-5" />
-            </button>
-          )}
+          {streaming ? <button type="button" onClick={stop} aria-label="응답 중단" className="grid size-11 shrink-0 place-items-center rounded-xl bg-slate-100 text-slate-900 hover:bg-rose-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"><Square className="size-4" /></button>
+            : <button type="submit" disabled={!draft.trim()} aria-label="질문 보내기" className="grid size-11 shrink-0 place-items-center rounded-xl bg-blue-600 text-white hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 disabled:opacity-40"><ArrowUp className="size-5" /></button>}
         </form>
-        <div className="mt-2.5 flex items-center justify-between text-[10px] text-slate-500">
-          <span className="flex items-center gap-1"><MessageCircle className="size-3" /> 소크라테스식 학습 코칭</span>
-          <span><kbd className="text-[9px]">Enter</kbd> 전송 · <kbd className="text-[9px]">Shift+Enter</kbd> 줄바꿈</span>
-        </div>
       </div>
     </SheetContent>
   </Sheet>;

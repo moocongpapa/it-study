@@ -13,7 +13,6 @@ import {
   Code2,
   Eye,
   X,
-  Sparkles,
 } from "lucide-react";
 
 interface MermaidRendererProps {
@@ -77,6 +76,24 @@ export function MermaidRenderer({ chart, className = "" }: MermaidRendererProps)
   const [zoomScale, setZoomScale] = useState(1);
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const fullscreenCanvasRef = useRef<HTMLDivElement | null>(null);
+  const fitToCanvas = useCallback((canvas: HTMLDivElement) => {
+    const svg = canvas.querySelector("svg");
+    const viewBox = svg?.viewBox.baseVal;
+    if (!viewBox?.width || !viewBox.height) return;
+    const padding = parseFloat(getComputedStyle(canvas).paddingLeft) * 2;
+    const scale = Math.min(1, (canvas.clientWidth - padding) / viewBox.width, (canvas.clientHeight - padding) / viewBox.height);
+    setZoomScale(Math.max(.05, scale));
+    canvas.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }, []);
+  const attachFullscreenCanvas = useCallback((canvas: HTMLDivElement | null) => {
+    fullscreenCanvasRef.current = canvas;
+    if (!canvas) return;
+    const observer = new ResizeObserver(() => fitToCanvas(canvas));
+    observer.observe(canvas);
+    fitToCanvas(canvas);
+    return () => { observer.disconnect(); fullscreenCanvasRef.current = null; };
+  }, [fitToCanvas]);
 
   // 2. Render Mermaid diagram safely on client
   useEffect(() => {
@@ -166,9 +183,9 @@ export function MermaidRenderer({ chart, className = "" }: MermaidRendererProps)
   }, [svgContent]);
 
   // Zoom controls for fullscreen modal
-  const handleZoomIn = () => setZoomScale((prev) => Math.min(prev + 0.25, 3));
-  const handleZoomOut = () => setZoomScale((prev) => Math.max(prev - 0.25, 0.5));
-  const handleResetZoom = () => setZoomScale(1);
+  const handleZoomIn = () => setZoomScale((prev) => Math.min(prev * 1.25, 3));
+  const handleZoomOut = () => setZoomScale((prev) => Math.max(prev / 1.25, .05));
+  const handleResetZoom = () => { if (fullscreenCanvasRef.current) fitToCanvas(fullscreenCanvasRef.current); };
 
   // SSR Loading Placeholder
   if (!isMounted) {
@@ -218,39 +235,35 @@ export function MermaidRenderer({ chart, className = "" }: MermaidRendererProps)
   }
 
   return (
-    <div className={`group my-6 overflow-hidden rounded-2xl border border-blue-200 bg-white shadow-sm transition-all hover:border-blue-200 ${className}`}>
+    <div className={`not-prose group my-5 overflow-hidden rounded-xl border border-slate-200 bg-white ${className}`}>
       {/* Diagram Action Toolbar */}
-      <div className="flex items-center justify-between border-b border-slate-200 bg-white px-4 py-2.5 text-[11px]">
-        <div className="flex items-center gap-2">
-          <span className="flex items-center gap-1 rounded-md bg-blue-50 px-2 py-0.5 font-bold tracking-wider text-blue-700">
-            <Sparkles className="size-3" />
-            MERMAID
-          </span>
-          <span className="text-slate-500">인터랙티브 다이어그램</span>
-        </div>
+      <div className="flex min-h-12 items-center justify-between gap-1 border-b border-slate-200 px-2 text-xs">
+        <span className="pl-1 font-medium text-slate-600">다이어그램</span>
 
         <div className="flex items-center gap-1.5">
           {/* Toggle raw code */}
           <button
             type="button"
             onClick={() => setShowRawCode((prev) => !prev)}
-            className={`flex items-center gap-1 rounded-lg px-2 py-1 transition-colors ${
+            className={`flex min-h-11 min-w-11 items-center justify-center gap-1 rounded-lg px-2 transition-colors ${
               showRawCode
                 ? "bg-blue-50 text-blue-700"
                 : "text-slate-500 hover:bg-slate-100 hover:text-slate-900"
             }`}
             title="원본 코드 보기 토글"
+            aria-pressed={showRawCode}
           >
             {showRawCode ? <Eye className="size-3.5" /> : <Code2 className="size-3.5" />}
-            <span>{showRawCode ? "다이어그램" : "코드 보기"}</span>
+            <span>{showRawCode ? "그림" : "코드"}</span>
           </button>
 
           {/* Copy Code */}
           <button
             type="button"
             onClick={handleCopyCode}
-            className="flex items-center gap-1 rounded-lg px-2 py-1 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"
+            className="flex min-h-11 min-w-11 items-center justify-center gap-1 rounded-lg px-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"
             title="Mermaid 원본 코드 복사"
+            aria-label={copiedCode ? "Mermaid 코드 복사됨" : "Mermaid 원본 코드 복사"}
           >
             {copiedCode ? <Check className="size-3.5 text-emerald-700" /> : <Copy className="size-3.5" />}
             <span className="hidden sm:inline">{copiedCode ? "복사됨" : "코드 복사"}</span>
@@ -261,7 +274,7 @@ export function MermaidRenderer({ chart, className = "" }: MermaidRendererProps)
             type="button"
             onClick={() => setIsFullscreen(true)}
             disabled={!svgContent}
-            className="flex items-center gap-1 rounded-lg px-2 py-1 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"
+            className="flex min-h-11 min-w-11 items-center justify-center gap-1 rounded-lg px-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"
             title="전체화면 확대 보기"
             aria-label="다이어그램 전체화면 확대 보기"
           >
@@ -272,7 +285,7 @@ export function MermaidRenderer({ chart, className = "" }: MermaidRendererProps)
       </div>
 
       {/* Main Diagram Display Area */}
-      <div className="relative min-h-[160px] p-5">
+      <div className="relative min-h-[120px] p-3 sm:p-5">
         {showRawCode ? (
           <pre className="overflow-x-auto rounded-xl border border-slate-200 bg-white p-4 text-xs font-mono leading-5 text-slate-500">
             <code>{chart.trim()}</code>
@@ -295,13 +308,12 @@ export function MermaidRenderer({ chart, className = "" }: MermaidRendererProps)
       <DialogPrimitive.Root open={isFullscreen} onOpenChange={setIsFullscreen}>
         <DialogPrimitive.Portal>
           <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-slate-900/30  animate-in fade-in" />
-          <DialogPrimitive.Content className="fixed inset-4 z-50 flex flex-col overflow-hidden rounded-2xl border border-blue-200 bg-white shadow-sm focus:outline-none sm:inset-8">
+          <DialogPrimitive.Content className="fixed inset-x-2 bottom-[max(.5rem,env(safe-area-inset-bottom))] top-[max(.5rem,env(safe-area-inset-top))] z-50 flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm focus:outline-none sm:inset-8">
             {/* Modal Header */}
-            <div className="flex shrink-0 items-center justify-between border-b border-slate-200 bg-white px-6 py-4">
-              <div className="flex items-center gap-3">
-                <DialogPrimitive.Title className="text-base font-bold text-slate-900 flex items-center gap-2">
-                  <Sparkles className="size-4 text-blue-700" />
-                  아키텍처 다이어그램 확대 보기
+            <div className="relative flex shrink-0 flex-wrap items-center gap-1 border-b border-slate-200 bg-white px-2 py-1 sm:gap-3 sm:px-4">
+              <div className="flex min-h-11 w-full items-center pr-12 sm:w-auto sm:flex-1 sm:pr-0">
+                <DialogPrimitive.Title className="pl-2 text-sm font-semibold text-slate-900">
+                  다이어그램 확대
                 </DialogPrimitive.Title>
                 <DialogPrimitive.Description className="sr-only">
                   전체화면에서 다이어그램을 확대 및 축소하여 상세히 확인합니다.
@@ -309,14 +321,15 @@ export function MermaidRenderer({ chart, className = "" }: MermaidRendererProps)
               </div>
 
               {/* Modal Controls */}
-              <div className="flex items-center gap-2">
+              <div className="flex w-full items-center gap-2 sm:w-auto sm:pr-12">
                 {/* Zoom Controls */}
                 <div className="flex items-center gap-1 rounded-xl border border-slate-200 bg-slate-50 px-1 py-0.5">
                   <button
                     type="button"
                     onClick={handleZoomOut}
-                    className="rounded-lg p-1.5 text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
+                    className="grid size-11 place-items-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
                     title="축소"
+                    aria-label="다이어그램 축소"
                   >
                     <ZoomOut className="size-4" />
                   </button>
@@ -326,16 +339,18 @@ export function MermaidRenderer({ chart, className = "" }: MermaidRendererProps)
                   <button
                     type="button"
                     onClick={handleZoomIn}
-                    className="rounded-lg p-1.5 text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
+                    className="grid size-11 place-items-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
                     title="확대"
+                    aria-label="다이어그램 확대"
                   >
                     <ZoomIn className="size-4" />
                   </button>
                   <button
                     type="button"
                     onClick={handleResetZoom}
-                    className="rounded-lg p-1.5 text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
-                    title="배율 초기화"
+                    className="grid size-11 place-items-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
+                    title="화면에 맞추기"
+                    aria-label="다이어그램 화면에 맞추기"
                   >
                     <RotateCcw className="size-3.5" />
                   </button>
@@ -345,7 +360,7 @@ export function MermaidRenderer({ chart, className = "" }: MermaidRendererProps)
                 <button
                   type="button"
                   onClick={handleCopySvg}
-                  className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs text-slate-800 transition hover:bg-slate-100 hover:text-slate-900"
+                  className="ml-auto flex min-h-11 items-center gap-1.5 rounded-lg px-3 text-xs text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
                   title="SVG 마크업 복사"
                 >
                   {copiedSvg ? <Check className="size-3.5 text-emerald-700" /> : <Copy className="size-3.5" />}
@@ -356,7 +371,7 @@ export function MermaidRenderer({ chart, className = "" }: MermaidRendererProps)
                 <DialogPrimitive.Close asChild>
                   <button
                     type="button"
-                    className="rounded-xl border border-slate-200 bg-slate-50 p-2 text-slate-500 transition hover:bg-rose-50 hover:text-rose-700"
+                    className="absolute right-2 top-1 grid size-11 place-items-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
                     aria-label="닫기"
                   >
                     <X className="size-4" />
@@ -366,7 +381,7 @@ export function MermaidRenderer({ chart, className = "" }: MermaidRendererProps)
             </div>
 
             {/* Modal Zoom & Pan Canvas */}
-            <div className="relative flex-1 overflow-auto p-8 bg-[radial-gradient(#1e3a5f15_1px,transparent_1px)] [background-size:20px_20px]">
+            <div ref={attachFullscreenCanvas} className="relative min-h-0 flex-1 overflow-auto overscroll-contain bg-slate-50 p-3 sm:p-6">
               {svgContent ? (
                 <div
                   style={{ zoom: zoomScale }}

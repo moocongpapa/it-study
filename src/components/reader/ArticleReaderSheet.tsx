@@ -1,78 +1,22 @@
 "use client";
 
-import { useEffect, useState, type ReactNode, isValidElement } from "react";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import rehypeHighlight from "rehype-highlight";
-import {
-  ArrowRight, BookOpen, Check, CheckCheck, Clock3, Copy, LockKeyhole,
-  Sparkles, Trophy, Bot, Type,
-} from "lucide-react";
+import { useEffect, useId, useRef, useState } from "react";
+import { ArrowDown, ArrowLeft, ArrowRight, BookOpen, Bot, Check, CheckCheck, ChevronDown, Clock3, Trophy, X } from "lucide-react";
+import { ArticleMarkdown } from "@/components/reader/ArticleMarkdown";
 import { QuizSession } from "@/components/quiz/QuizSession";
 import { AiTutorDrawer } from "@/components/tutor/AiTutorDrawer";
-import { MermaidRenderer } from "@/components/reader/MermaidRenderer";
 import { InteractivePlayground } from "@/components/widgets/InteractivePlayground";
-import { annotateGlossaryTerms } from "@/lib/render-glossary";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetClose, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Article, Topic, TopicProgressResult, TopicStatus } from "@/types/roadmap";
 
 const levels = [
-  { value: "1", short: "쉽게 이해", title: "1단계 · 비유로 이해하기", description: "필요한 이유와 일상 비유를 읽고 작은 예로 확인합니다.", field: "level_1_mental_model" },
-  { value: "2", short: "원리 따라가기", title: "2단계 · 작동 원리 따라가기", description: "용어 풀이와 길잡이를 읽고 예제의 입력과 결과를 따라갑니다.", field: "level_2_core_engineering" },
-  { value: "3", short: "문제 해결", title: "3단계 · 문제 원인 찾기", description: "어떤 증상이 생겼는지 살펴보고 원인 확인과 해결 순서를 배웁니다.", field: "level_3_troubleshooting" },
-  { value: "4", short: "설계 비교", title: "4단계 · 설계 선택 비교하기", description: "각 방법의 이득과 부담을 비교해 상황에 맞는 선택을 생각합니다.", field: "level_4_architecture_tradeoffs" },
+  { value: "1", short: "쉽게 이해", title: "비유로 이해하기", description: "필요한 이유와 일상 비유를 읽고 작은 예로 확인합니다.", field: "level_1_mental_model" },
+  { value: "2", short: "작동 원리", title: "작동 원리 따라가기", description: "용어 풀이와 길잡이를 읽고 예제의 입력과 결과를 따라갑니다.", field: "level_2_core_engineering" },
+  { value: "3", short: "문제 해결", title: "문제 원인 찾기", description: "증상을 살펴보고 원인 확인과 해결 순서를 배웁니다.", field: "level_3_troubleshooting" },
+  { value: "4", short: "설계 비교", title: "설계 선택 비교하기", description: "각 방법의 이득과 부담을 비교해 상황에 맞는 선택을 생각합니다.", field: "level_4_architecture_tradeoffs" },
 ] as const;
-
-function plainText(children: ReactNode): string {
-  if (typeof children === "string" || typeof children === "number") return String(children);
-  if (Array.isArray(children)) return children.map(plainText).join("");
-  if (isValidElement<{ children?: ReactNode }>(children)) return plainText(children.props.children);
-  return "";
-}
-
-function markdownNodeText(node: unknown): string {
-  if (!node || typeof node !== "object") return "";
-  if ("type" in node && node.type === "text" && "value" in node && typeof node.value === "string") return node.value;
-  if ("children" in node && Array.isArray(node.children)) return node.children.map(markdownNodeText).join("");
-  return "";
-}
-
-function renderWithGlossary(children: ReactNode): ReactNode {
-  if (typeof children === "string") {
-    return annotateGlossaryTerms(children);
-  }
-  if (Array.isArray(children)) {
-    return children.map((child, index) => (
-      <span key={index}>{renderWithGlossary(child)}</span>
-    ));
-  }
-  return children;
-}
-
-function CodeBlock({ children }: { children: ReactNode }) {
-  const [copied, setCopied] = useState(false);
-  const code = plainText(children).replace(/\n$/, "");
-  async function copy() {
-    await navigator.clipboard.writeText(code);
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 1800);
-  }
-  return (
-    <div className="group my-5 overflow-hidden rounded-xl border border-slate-200 bg-white">
-      <div className="flex items-center justify-between border-b border-slate-200 px-4 py-2 text-[10px] font-bold uppercase tracking-[.15em] text-slate-500">
-        <span>코드 예제</span>
-        <button type="button" onClick={copy} className="flex items-center gap-1 rounded-md px-2 py-1 text-slate-500 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/30" aria-label="코드 복사">
-          {copied ? <Check className="size-3" /> : <Copy className="size-3" />}{copied ? "복사됨" : "복사"}
-        </button>
-      </div>
-      <pre className="overflow-x-auto p-4 text-[12px] leading-6 text-slate-800">{children}</pre>
-    </div>
-  );
-}
 
 interface ArticleReaderSheetProps {
   open: boolean;
@@ -90,11 +34,7 @@ interface ArticleReaderSheetProps {
   isDemo: boolean;
 }
 
-export function ArticleReaderSheet({
-  open, onOpenChange, topic, status, prerequisites, completedIds, nextTopic,
-  onComplete, onNext, saving, saveError, isDemo,
-  onQuizProgress,
-}: ArticleReaderSheetProps) {
+export function ArticleReaderSheet({ open, onOpenChange, topic, status, prerequisites, completedIds, nextTopic, onComplete, onNext, saving, saveError, isDemo, onQuizProgress }: ArticleReaderSheetProps) {
   const [level, setLevel] = useState("1");
   const [result, setResult] = useState<{ article: Article | null; error: string | null } | null>(null);
   const [selfAssessment, setSelfAssessment] = useState(4);
@@ -102,6 +42,10 @@ export function ArticleReaderSheet({
   const [tutorOpen, setTutorOpen] = useState(false);
   const [selectedText, setSelectedText] = useState("");
   const [isLargeFont, setIsLargeFont] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const quizRef = useRef<HTMLDivElement>(null);
+  const understandingId = useId();
 
   useEffect(() => {
     if (!open || !topic) return;
@@ -113,192 +57,110 @@ export function ArticleReaderSheet({
       })
       .then((data) => setResult({ article: data.article, error: null }))
       .catch((error: unknown) => {
-        if (error instanceof DOMException && error.name === "AbortError") return;
+        if (controller.signal.aborted) return;
         setResult({ article: null, error: error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다." });
       });
     return () => controller.abort();
   }, [open, topic]);
 
+  function changeLevel(value: string) {
+    if (value === level) return;
+    setLevel(value);
+    setSelectedText("");
+    setQuizBacked(null);
+    scrollRef.current?.scrollTo({ top: 0, behavior: "instant" });
+  }
+
+  function navigateLevel(value: string) {
+    changeLevel(value);
+    tabsRef.current?.querySelector<HTMLButtonElement>(`[data-level="${value}"]`)?.focus({ preventScroll: true });
+  }
+
+  function jumpToQuiz() {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    quizRef.current?.scrollIntoView({ block: "start", behavior: reducedMotion ? "instant" : "smooth" });
+    quizRef.current?.focus({ preventScroll: true });
+  }
+
   const active = levels.find((item) => item.value === level) ?? levels[0];
   const body = result?.article?.[active.field] ?? null;
-  const easySummary = result?.article?.level_1_mental_model?.match(/^> \*\*한 문장으로:\*\* (.+)$/m)?.[1];
   const missing = prerequisites.filter((item) => !completedIds.has(item.id));
   const isCompleted = status === "completed";
   const isLocked = status === "locked";
 
-  return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="max-w-[650px]">
-        {topic ? (
-          <>
-            <div className="shrink-0 border-b border-slate-200 px-5 pb-5 pt-7 sm:px-8">
-              <div className="mb-4 flex items-center gap-2">
-                <Badge className="border-blue-200 bg-blue-50 text-blue-700">학습 주제</Badge>
-                <span className="text-xs text-slate-500">·</span>
-                <span className="flex items-center gap-1 text-xs text-slate-500"><Clock3 className="size-3" /> {topic.estimated_minutes}분</span>
-              </div>
-              <SheetTitle className="max-w-[90%] text-2xl font-bold tracking-tight text-slate-900 sm:text-[29px]">{topic.title}</SheetTitle>
-              <SheetDescription className="mt-2 max-w-xl text-sm leading-6 text-slate-500">{easySummary ?? topic.summary}</SheetDescription>
-              <div className="mt-4 flex flex-wrap items-center gap-2 text-xs">
-                {isCompleted ? <Badge className="border-emerald-200 bg-emerald-50 text-emerald-700"><Check className="mr-1 size-3" /> 완료한 토픽</Badge> : isLocked ? <Badge className="border-amber-200 bg-amber-50 text-amber-700"><LockKeyhole className="mr-1 size-3" /> 선수 토픽 {missing.length}개 필요</Badge> : <Badge className="border-blue-200 bg-blue-50 text-blue-700"><Sparkles className="mr-1 size-3" /> 지금 학습 가능</Badge>}
-                <div className="ml-auto flex items-center gap-1.5">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setIsLargeFont((prev) => !prev)}
-                    className="h-8 px-2 text-xs text-slate-500 hover:text-slate-900"
-                    title={isLargeFont ? "기본 글자 크기로 변경" : "큰 글자 크기로 변경"}
-                  >
-                    <Type className="size-3.5" />
-                    <span>{isLargeFont ? "A-" : "A+"}</span>
-                  </Button>
-                  <Button variant="secondary" size="sm" onClick={() => { setSelectedText(""); setTutorOpen(true); }} className="h-8 gap-1.5"><Bot className="size-3.5" /> AI 튜터</Button>
-                </div>
-              </div>
+  return <Sheet open={open} onOpenChange={onOpenChange}>
+    <SheetContent className="max-w-[720px]" showCloseButton={false}>
+      {topic ? <>
+        <header data-testid="reader-toolbar" className="flex min-h-14 shrink-0 items-center gap-1 border-b border-slate-200 px-3">
+          <SheetTitle className="sr-only">{topic.title}</SheetTitle>
+          <SheetDescription className="sr-only">4단계로 읽고 퀴즈로 확인하는 학습 글. {topic.summary}</SheetDescription>
+          <span aria-hidden="true" className="min-w-0 flex-1 truncate pl-1 text-sm font-semibold text-slate-800">{topic.title}</span>
+          <Button variant="ghost" size="icon" className="size-11 shrink-0 text-sm" aria-label={isLargeFont ? "기본 글씨로 읽기" : "큰 글씨로 읽기"} aria-pressed={isLargeFont} title={isLargeFont ? "기본 글씨" : "큰 글씨"} onClick={() => setIsLargeFont((value) => !value)}>A{isLargeFont ? "−" : "+"}</Button>
+          <Button variant="ghost" className="h-11 shrink-0 gap-1 px-2 text-xs sm:px-3" aria-label="AI 튜터 열기" onClick={() => { setSelectedText(""); setTutorOpen(true); }}><Bot className="size-4" /><span className="sm:hidden">AI</span><span className="hidden sm:inline">AI 튜터</span></Button>
+          <SheetClose asChild><Button variant="ghost" size="icon" className="size-11 shrink-0" aria-label="학습 글 닫기"><X className="size-5" /></Button></SheetClose>
+        </header>
+
+        <Tabs value={level} onValueChange={changeLevel} className="flex min-h-0 flex-1 flex-col">
+          <TabsList ref={tabsRef} aria-label="학습 단계" className="grid shrink-0 grid-cols-4 gap-0 rounded-none border-b border-slate-200 bg-white px-2 py-1">
+            {levels.map((item) => <TabsTrigger key={item.value} value={item.value} data-level={item.value} className="flex min-h-11 min-w-0 items-center justify-center gap-1 rounded-md px-1 py-2 text-[13px] font-medium data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 data-[state=active]:shadow-none"><span className="text-[10px] opacity-70">{item.value}</span>{item.short}</TabsTrigger>)}
+          </TabsList>
+
+          <div ref={scrollRef} data-testid="reader-scroll" className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 pb-6 pt-3 [overflow-anchor:none] sm:px-8 sm:pt-4">
+            <div className="mb-2 flex min-h-11 flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-500">
+              <span className="inline-flex items-center gap-1"><Clock3 className="size-3.5" />{topic.estimated_minutes}분</span>
+              {isCompleted ? <span className="inline-flex items-center gap-1 text-emerald-700"><Check className="size-3.5" />학습 완료</span> : null}
+              <button type="button" className="ml-auto inline-flex min-h-11 items-center gap-1 rounded px-1 text-blue-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500" onClick={jumpToQuiz}>퀴즈로 이동<ArrowDown className="size-3.5" /></button>
             </div>
 
-            <div className="min-h-0 flex-1 overflow-y-auto px-5 pb-9 pt-6 sm:px-8">
-              {prerequisites.length ? (
-                <div className="mb-7 rounded-xl border border-slate-200 bg-slate-50 p-3">
-                  <p className="mb-2 flex items-center gap-1.5 text-[11px] font-bold text-slate-500"><LayersIcon /> 먼저 알면 좋은 개념</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {prerequisites.map((item) => (
-                      <span key={item.id} className={`rounded-md border px-2 py-1 text-[11px] ${completedIds.has(item.id) ? "border-emerald-200 bg-emerald-50 text-emerald-700" : "border-slate-200 bg-slate-50 text-slate-500"}`}>
-                        {completedIds.has(item.id) ? "✓ " : "○ "}{item.title}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ) : null}
-
-              <div className="mb-6">
-                <InteractivePlayground topicSlug={topic.slug} />
+            <details className="group mb-5 rounded-lg border border-slate-200 bg-slate-50 text-xs text-slate-600">
+              <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2 rounded-lg px-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 [&::-webkit-details-marker]:hidden"><BookOpen className="size-3.5 shrink-0" /><span className="flex-1">읽기 안내{prerequisites.length ? " · 먼저 알면 좋은 개념" : ""}</span><ChevronDown className="size-3.5 shrink-0 transition-transform group-open:rotate-180" /></summary>
+              <div className="border-t border-slate-200 px-3 pb-3 pt-2 leading-6">
+                <p>처음이라면 1단계부터 읽어보세요. {active.description}</p>
+                {prerequisites.length ? <>
+                  <p className="mt-2 font-medium">먼저 알면 좋은 개념</p>
+                  <ul className="mt-1 space-y-1">{prerequisites.map((item) => <li key={item.id}><button type="button" onClick={() => onNext(item)} className="flex min-h-11 w-full items-center gap-2 rounded px-2 text-left hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"><span className={completedIds.has(item.id) ? "text-emerald-700" : "text-slate-400"}>{completedIds.has(item.id) ? "✓" : "○"}</span><span className="flex-1">{item.title}</span><ArrowRight className="size-3.5 shrink-0" /></button></li>)}</ul>
+                  {isLocked ? <p className="mt-2 text-amber-800">읽기는 자유롭게 할 수 있습니다. 퀴즈 제출은 먼저 알면 좋은 개념 {missing.length}개를 완료한 뒤 열립니다.</p> : null}
+                </> : null}
               </div>
+            </details>
 
-              <p className="mb-4 text-xs leading-6 text-slate-500">처음이라면 ‘쉽게 이해’부터 읽고 스스로 확인 질문에 답해 보세요. 다음 단계는 용어 풀이와 길잡이를 따라 읽으면 됩니다.</p>
-              <Tabs value={level} onValueChange={(value) => { setLevel(value); setSelectedText(""); }}>
-                <TabsList className="mb-6 w-full overflow-x-auto">
-                  {levels.map((item) => <TabsTrigger key={item.value} value={item.value} className="min-w-[112px] flex-1 whitespace-nowrap"><span className="mr-1.5 text-blue-600">0{item.value}</span>{item.short}</TabsTrigger>)}
-                </TabsList>
-                {levels.map((item) => (
-                  <TabsContent key={item.value} value={item.value} className="outline-none">
-                    <div className="mb-5 border-l-2 border-blue-600 pl-4">
-                      <h3 className="text-lg font-bold text-slate-900">{item.title}</h3>
-                      <p className="mt-1 text-xs leading-5 text-slate-500">{item.description}</p>
-                    </div>
-                    {!result ? (
-                      <div className="space-y-3 py-6" aria-label="아티클 불러오는 중"><div className="h-4 w-3/4 animate-pulse rounded bg-slate-100" /><div className="h-4 w-full animate-pulse rounded bg-slate-100" /><div className="h-4 w-2/3 animate-pulse rounded bg-slate-100" /></div>
-                    ) : result.error ? (
-                      <div role="alert" className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700">{result.error}</div>
-                    ) : body ? (
-                      <div>
-                        <div
-                          className={`reader-prose prose prose-invert max-w-none transition-all prose-headings:tracking-tight prose-headings:text-slate-900 prose-p:text-slate-500 prose-li:text-slate-500 prose-strong:text-slate-900 prose-th:text-slate-800 prose-td:text-slate-500 ${
-                            isLargeFont ? "prose-lg prose-p:leading-9" : "prose-base prose-p:leading-8"
-                          }`}
-                          onMouseUp={() => {
-                            const value = window.getSelection()?.toString().trim() ?? "";
-                            if (value.length >= 3) setSelectedText(value.slice(0, 1600));
-                          }}
-                        >
-                          <ReactMarkdown
-                            skipHtml
-                            remarkPlugins={[remarkGfm]}
-                            rehypePlugins={[rehypeHighlight]}
-                            components={{
-                              p: ({ children }) => <p>{renderWithGlossary(children)}</p>,
-                              li: ({ children }) => <li>{renderWithGlossary(children)}</li>,
-                              pre: ({ node, children }) => {
-                                const codeNode = node?.children.find((child) => child.type === "element" && child.tagName === "code");
-                                if (codeNode?.type === "element") {
-                                  const classes = codeNode.properties.className;
-                                  const classNames = Array.isArray(classes) ? classes : [];
-                                  if (classNames.includes("language-mermaid")) {
-                                    return <MermaidRenderer chart={markdownNodeText(codeNode).trim()} />;
-                                  }
-                                }
-                                return <CodeBlock>{children}</CodeBlock>;
-                              },
-                              code: ({ className, children, ...props }) => {
-                                return (
-                                  <code className={className} {...props}>
-                                    {children}
-                                  </code>
-                                );
-                              },
-                              a: ({ href, children }) => (
-                                <a href={href} target="_blank" rel="noopener noreferrer">
-                                  {children}
-                                </a>
-                              ),
-                            }}
-                          >
-                            {body}
-                          </ReactMarkdown>
-                        </div>
-                        {Number(level) < 4 ? (
-                          <div className="mt-8 flex justify-end border-t border-slate-200 pt-4">
-                            <Button
-                              variant="secondary"
-                              size="sm"
-                              onClick={() => {
-                                const nextLevel = String(Number(level) + 1);
-                                setLevel(nextLevel);
-                                setSelectedText("");
-                              }}
-                              className="gap-1.5"
-                            >
-                              <span>{Number(level) + 1}단계 · {levels[Number(level)]?.short} 읽기</span>
-                              <ArrowRight className="size-3.5" />
-                            </Button>
-                          </div>
-                        ) : null}
-                      </div>
-                    ) : (
-                      <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50 p-6 text-center">
-                        <BookOpen className="mx-auto size-7 text-blue-600" />
-                        <h4 className="mt-3 text-sm font-bold text-slate-800">이 레벨의 아티클을 준비하고 있어요</h4>
-                        <p className="mt-2 text-xs leading-6 text-slate-500">현재는 개념 지도가 먼저 열려 있습니다. 이미 아는 내용이라면 아래에서 이해도를 스스로 기록할 수 있어요.</p>
-                      </div>
-                    )}
-                  </TabsContent>
-                ))}
-              </Tabs>
-              {selectedText ? <div className="mt-5 flex items-center gap-3 rounded-xl border border-blue-200 bg-blue-50 p-3"><p className="min-w-0 flex-1 truncate text-xs text-slate-500">“{selectedText}”</p><Button size="sm" variant="secondary" onClick={() => setTutorOpen(true)}><Bot className="size-3.5" /> 이 문장 질문하기</Button></div> : null}
+            {levels.map((item) => <TabsContent key={item.value} value={item.value} className="outline-none">
+              <h3 className="sr-only">{item.value}단계 · {item.title}</h3>
+              {!result ? <div role="status" className="space-y-3 py-6" aria-label="아티클 불러오는 중"><div className="h-6 w-3/4 animate-pulse rounded bg-slate-100" /><div className="h-4 w-full animate-pulse rounded bg-slate-100" /><div className="h-4 w-2/3 animate-pulse rounded bg-slate-100" /></div>
+                : result.error ? <p role="alert" className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700">{result.error}</p>
+                : body ? <ArticleMarkdown body={body} largeFont={isLargeFont} onSelectText={setSelectedText} />
+                : <div className="rounded-xl border border-dashed border-slate-200 p-5 text-sm leading-7 text-slate-600"><BookOpen className="mb-2 size-5" /><h4 className="font-semibold text-slate-900">이 단계의 글을 준비하고 있어요</h4><p>다른 단계를 읽거나 이미 아는 내용의 이해도를 아래에 기록해 보세요.</p></div>}
+            </TabsContent>)}
+
+            {selectedText ? <div className="mt-5 rounded-xl border border-blue-200 bg-blue-50 p-3"><p className="line-clamp-2 text-xs leading-6 text-slate-600">“{selectedText}”</p><Button className="mt-2 h-11 gap-1.5" size="sm" variant="secondary" onClick={() => setTutorOpen(true)}><Bot className="size-4" />이 문장 질문하기</Button></div> : null}
+
+            <div className="reader-playground"><InteractivePlayground topicSlug={topic.slug} /></div>
+            <div ref={quizRef} tabIndex={-1} aria-label="퀴즈 영역" className="scroll-mt-3 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
               <QuizSession key={`${topic.id}:${level}`} topic={topic} level={Number(level) as 1 | 2 | 3 | 4} locked={isLocked} isDemo={isDemo} onAvailability={setQuizBacked} onProgressUpdate={(progress) => onQuizProgress(topic, progress)} />
             </div>
 
-            <div className="shrink-0 border-t border-slate-200 bg-white px-5 py-4 sm:px-8">
-              <div className="mb-4 flex items-center gap-3"><span className="whitespace-nowrap text-[11px] text-slate-500">읽기 단계 {level}/4</span><Progress value={(Number(level) / 4) * 100} /><span className="text-[11px] text-blue-700">{Math.round(Number(level) / 4 * 100)}%</span></div>
-              {isLocked ? <p className="mb-3 text-xs text-amber-700">완료 표시를 하려면 위의 선수 토픽을 먼저 완료해 주세요. 읽기는 언제든 가능합니다.</p> : null}
-              {!isCompleted && !isLocked && quizBacked === false ? (
-                <div className="mb-3 flex items-center gap-2">
-                  <label htmlFor="understanding" className="whitespace-nowrap text-[11px] text-slate-500">내 이해도</label>
-                  <select id="understanding" value={selfAssessment} onChange={(event) => setSelfAssessment(Number(event.target.value))} className="h-8 rounded-lg border border-slate-200 bg-white px-2 text-xs text-slate-800 outline-none focus:ring-2 focus:ring-blue-500/30">
-                    <option value={1}>1 · 다시 보기</option><option value={2}>2 · 조금 이해</option><option value={3}>3 · 기본 이해</option><option value={4}>4 · 잘 이해</option><option value={5}>5 · 설명 가능</option>
-                  </select>
-                  {isDemo ? <span className="ml-auto text-[10px] text-slate-500">이 브라우저에 저장</span> : null}
-                </div>
-              ) : null}
-              {saveError ? <p role="alert" className="mb-2 text-xs text-rose-700">{saveError}</p> : null}
-              <div className="flex flex-wrap gap-2">
-                {quizBacked === null ? <Button variant="secondary" disabled>퀴즈 확인 중...</Button>
-                  : quizBacked ? isCompleted ? <Button variant="secondary" disabled><Trophy className="size-4 text-amber-700" /> 학습 완료</Button> : <span className="self-center text-xs text-blue-700">4개 단계의 퀴즈를 통과하면 이 주제의 학습이 완료됩니다.</span>
-                  : isCompleted ? <Button variant="secondary" disabled><CheckCheck className="size-4 text-emerald-700" /> 이해도 완료</Button>
-                  : <Button onClick={() => onComplete(topic, selfAssessment)} disabled={isLocked || saving}><Check className="size-4" /> {saving ? "저장 중..." : "이해도 완료 체크"}</Button>}
-                {nextTopic && isCompleted ? <Button variant="ghost" onClick={() => onNext(nextTopic)} className="ml-auto">다음 학습: {nextTopic.title}<ArrowRight className="size-4" /></Button> : null}
-              </div>
-            </div>
-            <AiTutorDrawer key={`${topic.id}:${level}`} open={tutorOpen} onOpenChange={setTutorOpen} topic={topic} level={Number(level)} articleContext={selectedText} />
-          </>
-        ) : (
-          <><SheetTitle className="sr-only">아티클 리더</SheetTitle><SheetDescription className="sr-only">토픽을 선택하세요.</SheetDescription></>
-        )}
-      </SheetContent>
-    </Sheet>
-  );
-}
+            <section aria-label="학습 마무리" className="mt-6 border-t border-slate-200 pt-4 text-sm leading-6 text-slate-600">
+              {saveError ? <p role="alert" className="mb-3 text-rose-700">{saveError}</p> : null}
+              {quizBacked === null ? <p role="status" className="text-xs text-slate-500">퀴즈 정보를 확인하고 있습니다.</p>
+                : isCompleted ? <p className="flex items-center gap-2 font-medium text-emerald-700"><Trophy className="size-4" />이 주제의 학습을 완료했습니다.</p>
+                : quizBacked ? <p className="text-xs">각 단계의 퀴즈를 모두 통과하면 학습 완료로 기록됩니다.</p>
+                : <div className="flex flex-wrap items-center gap-2">
+                  <label htmlFor={understandingId} className="text-xs">내 이해도</label>
+                  <select id={understandingId} value={selfAssessment} onChange={(event) => setSelfAssessment(Number(event.target.value))} className="h-11 min-w-0 rounded-lg border border-slate-200 bg-white px-2 text-base text-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 sm:text-sm"><option value={1}>1 · 다시 보기</option><option value={2}>2 · 조금 이해</option><option value={3}>3 · 기본 이해</option><option value={4}>4 · 잘 이해</option><option value={5}>5 · 설명 가능</option></select>
+                  <Button className="h-11" onClick={() => onComplete(topic, selfAssessment)} disabled={isLocked || saving}><CheckCheck className="size-4" />{saving ? "저장 중..." : "이해도 기록"}</Button>
+                  {isLocked ? <p className="w-full text-xs text-amber-800">먼저 알면 좋은 개념을 완료하면 기록할 수 있습니다.</p> : isDemo ? <p className="w-full text-xs text-slate-500">이 브라우저에 저장됩니다.</p> : null}
+                </div>}
+              {nextTopic && isCompleted ? <Button variant="secondary" onClick={() => onNext(nextTopic)} className="mt-3 h-auto min-h-11 w-full justify-between whitespace-normal py-3 text-left"><span>다음 주제 · {nextTopic.title}</span><ArrowRight className="size-4 shrink-0" /></Button> : null}
+            </section>
 
-function LayersIcon() {
-  return <span aria-hidden="true" className="text-blue-700">✦</span>;
+            <nav aria-label="단계 이동" className="mt-5 flex items-center justify-between gap-3 border-t border-slate-100 pt-4">
+              {Number(level) > 1 ? <Button variant="ghost" className="h-11 gap-1.5 px-2" onClick={() => navigateLevel(String(Number(level) - 1))}><ArrowLeft className="size-4" />이전 단계</Button> : <span />}
+              {Number(level) < 4 ? <Button variant="secondary" className="h-11 gap-1.5" onClick={() => navigateLevel(String(Number(level) + 1))}>{Number(level) + 1}단계 · {levels[Number(level)]?.short}<ArrowRight className="size-4" /></Button> : <Button variant="ghost" className="h-11" onClick={() => { scrollRef.current?.scrollTo({ top: 0, behavior: "instant" }); tabsRef.current?.querySelector<HTMLButtonElement>('[data-state="active"]')?.focus({ preventScroll: true }); }}>본문 맨 위로</Button>}
+            </nav>
+          </div>
+        </Tabs>
+        <AiTutorDrawer key={`${topic.id}:${level}`} open={tutorOpen} onOpenChange={setTutorOpen} topic={topic} level={Number(level)} articleContext={selectedText} />
+      </> : <><SheetTitle className="sr-only">아티클 리더</SheetTitle><SheetDescription className="sr-only">주제를 선택하세요.</SheetDescription></>}
+    </SheetContent>
+  </Sheet>;
 }

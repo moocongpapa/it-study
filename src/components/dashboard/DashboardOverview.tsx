@@ -3,7 +3,7 @@
 import { useMemo, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowRight, BookOpenCheck, CalendarClock, CheckCircle2, Flame, Layers3, RotateCcw, Sparkles } from "lucide-react";
+import { ArrowRight, BookOpenCheck, CalendarClock, CheckCircle2, Flame, Layers3, RotateCcw } from "lucide-react";
 import { reviewTopic } from "@/lib/actions/progress";
 import { DEMO_COMPLETED_KEY, DEMO_LEARNING_KEY, DEMO_PROGRESS_EVENT, getDemoProgressRows, readDemoLearning, reviewDemoTopic } from "@/lib/demo-learning";
 import { Card } from "@/components/ui/card";
@@ -94,22 +94,22 @@ export function DashboardOverview({ domains, topics, progress: initialProgress, 
     return `/roadmap/${domain?.slug ?? ""}?topic=${topic.slug}`;
   }
 
-  return <div className="px-4 py-8 md:px-7 md:py-10">
-    <div className="mb-8 flex flex-wrap items-end justify-between gap-5">
-      <div><p className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[.2em] text-blue-700"><Sparkles className="size-3.5" /> LEARNING DASHBOARD</p><h2 className="text-3xl font-bold tracking-tight text-slate-900 md:text-[38px]">오늘의 학습 흐름</h2><p className="mt-3 text-sm leading-7 text-slate-500">이해한 개념을 다시 꺼내 보고, 다음 연결을 준비하세요.</p></div>
-      <Link href="/roadmap" className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-xs font-semibold text-slate-800 hover:bg-slate-50">전체 지도 보기 <ArrowRight className="size-4" /></Link>
+  return <div className="mx-auto max-w-6xl px-4 py-5 md:px-6 md:py-7">
+    <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+      <div><h2 className="text-xl font-semibold tracking-tight text-slate-900 md:text-2xl">오늘의 학습 흐름</h2><p className="mt-1 text-sm leading-7 text-slate-500">이해한 개념을 다시 꺼내 보고, 다음 연결을 준비하세요.</p></div>
+      <Link href="/roadmap" className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-xs font-semibold text-slate-800 hover:bg-slate-50">주제 둘러보기 <ArrowRight className="size-4" /></Link>
     </div>
 
-    <div className="mb-8 grid gap-3 sm:grid-cols-3">
-      <Card className="flex items-center gap-4 p-5"><span className="grid size-11 place-items-center rounded-xl bg-emerald-50 text-emerald-700"><BookOpenCheck className="size-5" /></span><div><p className="text-2xl font-bold text-slate-900">{completed.length}<span className="ml-1 text-sm font-medium text-slate-500">/ {topics.length}</span></p><p className="text-xs text-slate-500">완료한 토픽 · {percentage}%</p></div></Card>
-      <Card className="flex items-center gap-4 p-5"><span className="grid size-11 place-items-center rounded-xl bg-blue-50 text-blue-700"><CalendarClock className="size-5" /></span><div><p className="text-2xl font-bold text-slate-900">{due.length}</p><p className="text-xs text-slate-500">오늘 복습할 토픽</p></div></Card>
-      <Card className="flex items-center gap-4 p-5"><span className="grid size-11 place-items-center rounded-xl bg-amber-50 text-amber-700"><Flame className="size-5" /></span><div><p className="text-2xl font-bold text-slate-900">{streak}<span className="ml-1 text-sm font-medium text-slate-500">일</span></p><p className="text-xs text-slate-500">연속 학습</p></div></Card>
+    <div className="mb-5 grid grid-cols-3 gap-2 sm:gap-3">
+      <Card className="flex min-w-0 items-center gap-3 p-3 sm:p-5"><span className="hidden size-11 shrink-0 place-items-center sm:grid rounded-xl bg-emerald-50 text-emerald-700"><BookOpenCheck className="size-5" /></span><div><p className="text-2xl font-bold text-slate-900">{completed.length}<span className="ml-1 text-sm font-medium text-slate-500">/ {topics.length}</span></p><p className="text-[11px] leading-5 text-slate-500">완료한 주제 · {percentage}%</p></div></Card>
+      <Card className="flex min-w-0 items-center gap-3 p-3 sm:p-5"><span className="hidden size-11 shrink-0 place-items-center sm:grid rounded-xl bg-blue-50 text-blue-700"><CalendarClock className="size-5" /></span><div><p className="text-2xl font-bold text-slate-900">{due.length}</p><p className="text-[11px] leading-5 text-slate-500">오늘 복습</p></div></Card>
+      <Card className="flex min-w-0 items-center gap-3 p-3 sm:p-5"><span className="hidden size-11 shrink-0 place-items-center sm:grid rounded-xl bg-amber-50 text-amber-700"><Flame className="size-5" /></span><div><p className="text-2xl font-bold text-slate-900">{streak}<span className="ml-1 text-sm font-medium text-slate-500">일</span></p><p className="text-[11px] leading-5 text-slate-500">연속 학습</p></div></Card>
     </div>
 
     <div className="grid gap-6 xl:grid-cols-[1.25fr_.75fr]">
       <section className="space-y-6">
         <Card className="p-5 sm:p-6">
-          <div className="mb-5 flex items-center gap-2"><RotateCcw className="size-4 text-blue-700" /><h3 className="text-sm font-bold text-slate-900">오늘 복습해야 할 골든 토픽</h3><span className="ml-auto text-[11px] text-slate-500">1 → 3 → 7 → 14 → 30일</span></div>
+          <div className="mb-4 flex flex-wrap items-center gap-2"><RotateCcw className="size-4 text-blue-700" /><h3 className="text-sm font-bold text-slate-900">오늘 복습할 주제</h3><span className="ml-auto text-[11px] text-slate-500">1 → 3 → 7 → 14 → 30일</span></div>
           {error ? <p role="alert" className="mb-4 text-xs text-rose-700">{error}</p> : null}
           {due.length ? <div className="space-y-3">{due.map((item) => {
             const topic = byId.get(item.topic_id);
@@ -128,7 +128,7 @@ export function DashboardOverview({ domains, topics, progress: initialProgress, 
                     type="button"
                     disabled={reviewingId === item.topic_id}
                     onClick={() => void markReviewed(item.topic_id, quality)}
-                    className={`rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-semibold text-slate-500 transition-all active:scale-95 disabled:opacity-50 ${color}`}
+                    className={`min-h-11 rounded-xl border border-slate-200 bg-white px-3 py-2 text-[11px] font-semibold text-slate-500 transition-all active:scale-95 disabled:opacity-50 ${color}`}
                   >
                     {reviewingId === item.topic_id ? "저장 중..." : label}
                   </button>

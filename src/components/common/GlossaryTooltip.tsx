@@ -1,83 +1,24 @@
 "use client";
 
-import { useState, useRef, type ReactNode } from "react";
-import { Lightbulb, Info } from "lucide-react";
+import type { ReactNode } from "react";
+import * as Dialog from "@radix-ui/react-dialog";
+import { Lightbulb, X } from "lucide-react";
 import type { GlossaryTerm } from "@/lib/glossary-data";
 
-interface GlossaryTooltipProps {
-  term: GlossaryTerm;
-  children: ReactNode;
-}
-
-export function GlossaryTooltip({ term, children }: GlossaryTooltipProps) {
-  const [open, setOpen] = useState(false);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  const handleMouseEnter = () => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    setOpen(true);
-  };
-
-  const handleMouseLeave = () => {
-    timeoutRef.current = setTimeout(() => {
-      setOpen(false);
-    }, 150);
-  };
-
-  return (
-    <span
-      className="relative inline-block cursor-help font-medium text-blue-700 underline decoration-cyan-400/50 decoration-dashed underline-offset-4 transition-colors hover:text-blue-700 hover:decoration-cyan-300"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onClick={() => setOpen((prev) => !prev)}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          setOpen((prev) => !prev);
-        }
-      }}
-      aria-label={`${term.term} 용어 설명`}
-    >
-      {children}
-
-      {open && (
-        <span
-          className="absolute bottom-full left-1/2 z-50 mb-2 w-72 -translate-x-1/2 rounded-xl border border-blue-200 bg-white p-4 text-left shadow-sm  animate-in fade-in zoom-in-95 pointer-events-auto"
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-        >
-          {/* Header */}
-          <span className="flex items-center gap-1.5 border-b border-slate-200 pb-2 text-[11px] font-bold text-blue-700">
-            <span className="rounded bg-blue-50 px-1.5 py-0.5 text-[10px] text-blue-700 uppercase tracking-wider">
-              {term.category}
-            </span>
-            <span className="text-slate-900 text-xs">{term.term}</span>
-          </span>
-
-          {/* Analogy for non-engineers */}
-          <span className="mt-2.5 block rounded-xl border border-amber-200 bg-amber-50 p-2.5 text-xs text-amber-700 leading-relaxed">
-            <span className="flex items-center gap-1 font-bold text-amber-700 mb-1 text-[11px]">
-              <Lightbulb className="size-3.5" />
-              비전공자 맞춤 비유
-            </span>
-            {term.analogy}
-          </span>
-
-          {/* Technical definition */}
-          <span className="mt-2.5 block text-[11px] leading-5 text-slate-500">
-            <span className="flex items-center gap-1 font-semibold text-slate-500 mb-0.5 text-[10px]">
-              <Info className="size-3" />
-              엔지니어링 정의
-            </span>
-            {term.definition}
-          </span>
-
-          {/* Tooltip arrow */}
-          <span className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 border-x-4 border-t-4 border-x-transparent border-t-white" />
-        </span>
-      )}
-    </span>
-  );
+export function GlossaryTooltip({ term, children }: { term: GlossaryTerm; children: ReactNode }) {
+  return <Dialog.Root>
+    <Dialog.Trigger asChild>
+      <button type="button" aria-label={`${term.term} 용어 설명`} className="inline cursor-help rounded-sm font-medium text-blue-700 underline decoration-blue-300 decoration-dashed underline-offset-4 hover:decoration-blue-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">{children}</button>
+    </Dialog.Trigger>
+    <Dialog.Portal>
+      <Dialog.Overlay className="fixed inset-0 z-50 bg-slate-900/25" />
+      <Dialog.Content className="fixed left-1/2 top-1/2 z-50 max-h-[calc(100dvh-3rem)] w-[calc(100%-2rem)] max-w-sm -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-xl border border-slate-200 bg-white p-5 shadow-lg focus:outline-none">
+        <Dialog.Title className="pr-10 text-lg font-semibold text-slate-900">{term.term}</Dialog.Title>
+        <Dialog.Description className="mt-1 text-xs text-slate-500">{term.category} · 용어 풀이</Dialog.Description>
+        <div className="mt-4 rounded-lg bg-amber-50 p-3 text-sm leading-7 text-slate-700"><p className="mb-1 flex items-center gap-1.5 text-xs font-medium text-amber-800"><Lightbulb className="size-3.5" />비유로 이해하기</p>{term.analogy}</div>
+        <p className="mt-4 text-sm leading-7 text-slate-700">{term.definition}</p>
+        <Dialog.Close asChild><button type="button" aria-label="용어 설명 닫기" className="absolute right-2 top-2 grid size-11 place-items-center rounded-lg text-slate-500 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"><X className="size-5" /></button></Dialog.Close>
+      </Dialog.Content>
+    </Dialog.Portal>
+  </Dialog.Root>;
 }

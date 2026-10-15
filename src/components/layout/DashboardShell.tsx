@@ -115,37 +115,37 @@ export function DashboardShell({ children, domains, isDemo, isAuthenticated }: D
           </SheetContent>
         </Sheet>
         <div className="lg:pl-60">
-          <header className="sticky top-0 z-20 border-b border-slate-200 bg-white">
+          <header className="relative z-20 border-b border-slate-200 bg-white md:sticky md:top-0">
             <div className="flex min-h-14 flex-wrap items-center gap-2 px-4 py-2.5 sm:px-6">
-              <Button variant="ghost" size="icon" className="size-9 shrink-0 lg:hidden" onClick={() => setMobileOpen(true)} aria-label="메뉴 열기"><Menu className="size-5" /></Button>
+              <Button variant="ghost" size="icon" className="size-11 shrink-0 lg:hidden" onClick={() => setMobileOpen(true)} aria-label="메뉴 열기" aria-expanded={mobileOpen} aria-haspopup="dialog"><Menu className="size-5" /></Button>
               <h1 className="min-w-0 flex-1 truncate text-base font-semibold tracking-tight text-slate-900">{title}</h1>
               {isRoadmap ? (
                 <div className="order-3 flex w-full items-center gap-2 md:order-none md:ml-4 md:w-auto">
-                  <label className="flex h-9 min-w-0 flex-1 items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 text-slate-400 focus-within:border-blue-400 focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-100 md:w-56">
+                  <label className="flex h-11 min-w-0 flex-1 items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 text-slate-400 focus-within:border-blue-400 focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-100 md:h-9 md:w-56">
                     <Search className="size-4 shrink-0" />
-                    <input ref={searchInputRef} value={query} onChange={(event) => setQuery(event.target.value)} placeholder="주제 검색" aria-label="토픽 검색" className="w-full min-w-0 bg-transparent text-sm text-slate-900 outline-none placeholder:text-slate-400" />
-                    {query ? <button type="button" onClick={() => setQuery("")} aria-label="검색어 지우기" className="rounded p-0.5 hover:text-slate-900"><X className="size-3.5" /></button> : null}
+                    <input ref={searchInputRef} value={query} onChange={(event) => setQuery(event.target.value)} placeholder="주제 검색" aria-label="토픽 검색" className="w-full min-w-0 bg-transparent text-base text-slate-900 outline-none placeholder:text-slate-400 md:text-sm" />
+                    {query ? <button type="button" onClick={() => setQuery("")} aria-label="검색어 지우기" className="-mr-3 grid size-11 shrink-0 place-items-center rounded hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 md:mr-0 md:size-7"><X className="size-3.5" /></button> : null}
                   </label>
-                  <Button variant="ghost" size="sm" onClick={() => setFiltersOpen((open) => !open)} aria-expanded={filtersOpen} aria-controls="topic-filters" aria-label={hasFilters ? "필터 설정 (적용 중)" : "필터 설정"} className={cn("h-9 shrink-0 gap-1.5 px-2.5", hasFilters || filtersOpen ? "bg-blue-50 text-blue-700" : "text-slate-600")}><SlidersHorizontal className="size-4" />필터{hasFilters ? <span className="size-1.5 rounded-full bg-blue-600" /> : null}</Button>
+                  <Button variant="ghost" size="sm" onClick={() => setFiltersOpen((open) => !open)} aria-expanded={filtersOpen} aria-controls="topic-filters" aria-label={hasFilters ? "필터 설정 (적용 중)" : "필터 설정"} className={cn("h-11 shrink-0 gap-1.5 px-2.5 md:h-9", hasFilters || filtersOpen ? "bg-blue-50 text-blue-700" : "text-slate-600")}><SlidersHorizontal className="size-4" />필터{hasFilters ? <span className="size-1.5 rounded-full bg-blue-600" /> : null}</Button>
                 </div>
               ) : null}
               <div className="flex shrink-0 items-center">
-                {isDemo ? <Badge className="border-slate-200 bg-slate-50 text-slate-500">체험</Badge> : isAuthenticated ? <Button variant="ghost" size="icon" onClick={signOut} aria-label="로그아웃"><LogOut className="size-4" /></Button> : <Button variant="ghost" size="sm" asChild><Link href="/login"><LogIn className="size-3.5" />로그인</Link></Button>}
+                {isDemo ? <Badge className="border-slate-200 bg-slate-50 text-slate-500">체험</Badge> : isAuthenticated ? <Button variant="ghost" size="icon" onClick={signOut} aria-label="로그아웃"><LogOut className="size-4" /></Button> : <Button variant="ghost" size="sm" className="h-11 md:h-8" asChild><Link href="/login"><LogIn className="size-3.5" />로그인</Link></Button>}
               </div>
             </div>
             {isRoadmap && filtersOpen ? (
               <div id="topic-filters" className="flex flex-wrap items-end gap-2 border-t border-slate-100 px-4 py-3 sm:px-6">
                 <label className="min-w-0 flex-1 text-xs text-slate-500 sm:max-w-64">학습 과정
-                  <select value={selectedTrack} onChange={(event) => setSelectedTrack(event.target.value)} aria-label="학습 과정 필터" className="mt-1 block h-9 w-full min-w-0 rounded-lg border border-slate-200 bg-white px-2 text-xs text-slate-700 outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
+                  <select value={selectedTrack} onChange={(event) => setSelectedTrack(event.target.value)} aria-label="학습 과정 필터" className="mt-1 block h-11 w-full min-w-0 rounded-lg border border-slate-200 bg-white px-2 text-base text-slate-700 outline-none focus-visible:ring-2 focus-visible:ring-blue-500 md:h-9 md:text-xs">
                     {CURATED_TRACKS.map((track) => <option key={track.id} value={track.id}>{track.title}</option>)}
                   </select>
                 </label>
                 <label className="min-w-0 flex-1 text-xs text-slate-500 sm:max-w-40">난이도
-                  <select value={difficulty} onChange={(event) => setDifficulty(event.target.value as Difficulty | "all")} aria-label="난이도 필터" className="mt-1 block h-9 w-full min-w-0 rounded-lg border border-slate-200 bg-white px-2 text-xs text-slate-700 outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
+                  <select value={difficulty} onChange={(event) => setDifficulty(event.target.value as Difficulty | "all")} aria-label="난이도 필터" className="mt-1 block h-11 w-full min-w-0 rounded-lg border border-slate-200 bg-white px-2 text-base text-slate-700 outline-none focus-visible:ring-2 focus-visible:ring-blue-500 md:h-9 md:text-xs">
                     <option value="all">모든 난이도</option><option value="beginner">기초</option><option value="intermediate">보통</option><option value="advanced">심화</option><option value="expert">전문</option>
                   </select>
                 </label>
-                {hasFilters ? <Button variant="ghost" size="sm" className="h-9 px-2 text-xs text-slate-500" onClick={() => { setDifficulty("all"); setSelectedTrack("all"); }}>초기화</Button> : null}
+                {hasFilters ? <Button variant="ghost" size="sm" className="h-11 px-2 text-xs text-slate-500 md:h-9" onClick={() => { setDifficulty("all"); setSelectedTrack("all"); }}>초기화</Button> : null}
               </div>
             ) : null}
           </header>
