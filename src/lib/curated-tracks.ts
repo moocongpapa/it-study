@@ -11,8 +11,8 @@ export interface CuratedTrack {
 export const CURATED_TRACKS: CuratedTrack[] = [
   {
     id: "all",
-    title: "전체 지식 지도",
-    subtitle: "Full Knowledge Graph",
+    title: "전체 주제",
+    subtitle: "All Topics",
     badge: "50개 토픽",
     description: "컴퓨터 하드웨어부터 AI 인프라까지 10대 도메인의 전체 커리큘럼입니다.",
     icon: "Compass",

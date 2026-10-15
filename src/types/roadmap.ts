@@ -1,5 +1,3 @@
-import type { Edge, Node } from "@xyflow/react";
-
 export type Difficulty = "beginner" | "intermediate" | "advanced" | "expert";
 export type TopicStatus = "locked" | "available" | "in_progress" | "completed";
 
@@ -79,16 +77,6 @@ export interface UserNodeProgress {
   ease_factor?: number;
   review_count?: number;
 }
-
-export interface TopicNodeData extends Record<string, unknown> {
-  topic: Topic;
-  status: TopicStatus;
-  unmetPrerequisites: number;
-  onOpen?: (topicId: string) => void;
-}
-
-export type TopicFlowNode = Node<TopicNodeData, "topic">;
-export type TopicFlowEdge = Edge;
 
 export interface Catalog {
   domains: Domain[];

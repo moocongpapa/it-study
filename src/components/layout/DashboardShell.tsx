@@ -4,21 +4,19 @@ import { createContext, useContext, useEffect, useMemo, useRef, useState } from 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  Activity, Blocks, BookOpen, ChevronRight, Cloud, Code2, Cpu,
-  Database, GitBranch, HardDrive, LayoutDashboard, LayoutGrid, LogIn, LogOut, Menu,
-  Network, Search, Server, ShieldCheck, X,
+  Blocks, BookOpen, ChevronRight, Cloud, Code2, Cpu, Database, GitBranch, HardDrive,
+  LayoutDashboard, LayoutGrid, LogIn, LogOut, Menu, Network, Search, Server, ShieldCheck, SlidersHorizontal, X,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
 import { createClient } from "@/lib/supabase/client";
+import { CURATED_TRACKS } from "@/lib/curated-tracks";
 import { cn } from "@/lib/utils";
-import type { Difficulty, DomainSummary } from "@/types/roadmap";
+import type { Difficulty, Domain } from "@/types/roadmap";
 
 const icons = { Cpu, HardDrive, Network, GitBranch, Code2, Blocks, Database, Server, Cloud, ShieldCheck };
 const DEMO_STORAGE_KEY = "it-atlas-demo-completed-v1";
-import { CURATED_TRACKS } from "@/lib/curated-tracks";
 
 interface FilterState {
   query: string;
@@ -28,9 +26,7 @@ interface FilterState {
   selectedTrack: string;
   setSelectedTrack: (trackId: string) => void;
 }
-
 const FilterContext = createContext<FilterState | null>(null);
-
 export function useRoadmapFilters() {
   const value = useContext(FilterContext);
   if (!value) throw new Error("RoadmapFilterProvider가 필요합니다.");
@@ -39,260 +35,121 @@ export function useRoadmapFilters() {
 
 interface DashboardShellProps {
   children: React.ReactNode;
-  domains: DomainSummary[];
-  topicDomainMap: Record<string, string>;
-  totalTopics: number;
-  completedTopics: number;
+  domains: Domain[];
   isDemo: boolean;
   isAuthenticated: boolean;
 }
 
-function SidebarContents({
-  domains,
-  completedByDomain,
-  pathname,
-  onNavigate,
-}: {
-  domains: DomainSummary[];
-  completedByDomain: Record<string, number>;
-  pathname: string;
-  onNavigate?: () => void;
-}) {
+function SidebarContents({ domains, pathname, onNavigate }: { domains: Domain[]; pathname: string; onNavigate?: () => void }) {
   return (
     <div className="flex h-full flex-col">
-      <Link href="/roadmap" onClick={onNavigate} className="flex items-center gap-3 px-5 pb-8 pt-7">
-        <span className="grid size-10 place-items-center rounded-lg bg-slate-900 text-white">
-          <GitBranch className="size-5" strokeWidth={2.5} />
-        </span>
-        <span>
-          <span className="block text-[17px] font-bold tracking-tight text-slate-900">IT Atlas</span>
-          <span className="block text-[10px] font-medium tracking-[.19em] text-slate-500">KNOWLEDGE MAP</span>
-        </span>
+      <Link href="/roadmap" onClick={onNavigate} className="flex items-center gap-2.5 px-5 py-5">
+        <span className="grid size-9 place-items-center rounded-lg bg-slate-900 text-white"><BookOpen className="size-4" /></span>
+        <span className="text-base font-bold tracking-tight text-slate-900">IT Atlas</span>
       </Link>
-
-      <div className="px-4">
-        <Link href="/dashboard" onClick={onNavigate} className={cn("mb-1 flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold transition-colors", pathname === "/dashboard" ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-100 hover:text-slate-900") }><LayoutDashboard className="size-4" /> 학습 대시보드 <ChevronRight className="ml-auto size-4 opacity-50" /></Link>
-        <Link
-          href="/roadmap"
-          onClick={onNavigate}
-          className={cn(
-            "flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold transition-colors",
-            pathname === "/roadmap" ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-100 hover:text-slate-900",
-          )}
-        >
-          <LayoutGrid className="size-4" /> 전체 지식 지도
-          <ChevronRight className="ml-auto size-4 opacity-50" />
-        </Link>
-      </div>
-
-      <div className="mt-8 px-7 text-[10px] font-bold uppercase tracking-[.2em] text-slate-500">Explore domains</div>
-      <nav aria-label="IT 도메인" className="mt-3 flex-1 space-y-1 overflow-y-auto px-3 pb-4">
+      <nav aria-label="학습 메뉴" className="space-y-1 px-3">
+        <Link href="/roadmap" onClick={onNavigate} aria-current={pathname === "/roadmap" ? "page" : undefined} className={cn("flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium", pathname === "/roadmap" ? "bg-slate-100 text-slate-900" : "text-slate-600 hover:bg-slate-50")}><LayoutGrid className="size-4" />전체 학습 주제</Link>
+        <Link href="/dashboard" onClick={onNavigate} aria-current={pathname === "/dashboard" ? "page" : undefined} className={cn("flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium", pathname === "/dashboard" ? "bg-slate-100 text-slate-900" : "text-slate-600 hover:bg-slate-50")}><LayoutDashboard className="size-4" />내 학습</Link>
+      </nav>
+      <p className="mb-2 mt-6 px-6 text-xs font-medium text-slate-400">분야별 학습</p>
+      <nav aria-label="IT 도메인" className="flex-1 space-y-0.5 overflow-y-auto px-3 pb-4">
         {domains.map((domain) => {
           const Icon = icons[domain.icon_name as keyof typeof icons] ?? BookOpen;
-          const href = `/roadmap/${domain.slug}`;
+          const href = "/roadmap/" + domain.slug;
           const selected = pathname === href;
-          const done = completedByDomain[domain.id] ?? domain.completedCount;
-          const percentage = domain.topicCount ? (done / domain.topicCount) * 100 : 0;
           return (
-            <Link
-              key={domain.id}
-              href={href}
-              onClick={onNavigate}
-              aria-current={selected ? "page" : undefined}
-              className={cn(
-                "group block rounded-xl border px-3 py-3 transition-all",
-                selected ? "border-slate-200 bg-slate-50 text-slate-900" : "border-transparent text-slate-500 hover:border-slate-300 hover:bg-slate-100 hover:text-slate-900",
-              )}
-            >
-              <span className="flex items-center gap-3">
-                <span className={cn("grid size-8 shrink-0 place-items-center rounded-lg", selected ? "bg-white text-blue-600" : "bg-slate-100 text-slate-500 group-hover:text-slate-900")}> <Icon className="size-4" /> </span>
-                <span className="min-w-0 flex-1 truncate text-[12px] font-semibold">{domain.title}</span>
-                <span className="text-[10px] tabular-nums text-slate-500">{done}/{domain.topicCount}</span>
-              </span>
-              <Progress value={percentage} className="ml-11 mt-2 w-[calc(100%-2.75rem)]" />
+            <Link key={domain.id} href={href} onClick={onNavigate} aria-current={selected ? "page" : undefined} className={cn("flex min-h-11 items-center gap-2.5 rounded-lg px-3 py-2 transition-colors", selected ? "bg-blue-50 text-blue-700" : "text-slate-600 hover:bg-slate-50 hover:text-slate-900")}>
+              <Icon className="size-4 shrink-0" />
+              <span className="min-w-0 flex-1 text-xs font-medium leading-5">{domain.title}</span>
+              {selected ? <ChevronRight className="size-3 shrink-0" /> : null}
             </Link>
           );
         })}
       </nav>
-
     </div>
   );
 }
 
-export function DashboardShell({
-  children, domains, topicDomainMap, totalTopics, completedTopics, isDemo, isAuthenticated,
-}: DashboardShellProps) {
+export function DashboardShell({ children, domains, isDemo, isAuthenticated }: DashboardShellProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [difficulty, setDifficulty] = useState<Difficulty | "all">("all");
-  const [demoCompleted, setDemoCompleted] = useState<string[]>([]);
-
-  useEffect(() => {
-    if (!isDemo) return;
-    const load = () => {
-      try { setDemoCompleted(JSON.parse(localStorage.getItem(DEMO_STORAGE_KEY) ?? "[]") as string[]); }
-      catch { setDemoCompleted([]); }
-    };
-    load();
-    window.addEventListener("demo-progress-change", load);
-    return () => window.removeEventListener("demo-progress-change", load);
-  }, [isDemo]);
-
-  const completedByDomain = useMemo(() => {
-    if (!isDemo) return Object.fromEntries(domains.map((domain) => [domain.id, domain.completedCount]));
-    const counts: Record<string, number> = {};
-    for (const topicId of demoCompleted) {
-      const domainId = topicDomainMap[topicId];
-      if (domainId) counts[domainId] = (counts[domainId] ?? 0) + 1;
-    }
-    return counts;
-  }, [demoCompleted, domains, isDemo, topicDomainMap]);
-
-  const completed = isDemo ? demoCompleted.length : completedTopics;
-  const percentage = totalTopics ? Math.round((completed / totalTopics) * 100) : 0;
-  const selectedDomain = domains.find((domain) => pathname === `/roadmap/${domain.slug}`);
-  const title = selectedDomain?.title ?? (pathname === "/dashboard" ? "학습 대시보드" : "전체 지식 지도");
-
-  async function signOut() {
-    await createClient().auth.signOut();
-    router.refresh();
-  }
-
+  const [selectedTrack, setSelectedTrack] = useState("all");
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const isRoadmap = pathname.startsWith("/roadmap");
+  const hasFilters = difficulty !== "all" || selectedTrack !== "all";
+  const selectedDomain = domains.find((domain) => pathname === "/roadmap/" + domain.slug);
+  const title = selectedDomain?.title ?? (pathname === "/dashboard" ? "내 학습" : "전체 학습 주제");
 
-  // Global shortcut to focus search with '/' or 'Cmd+K'
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
-      if (
-        (event.key === "/" && !["INPUT", "TEXTAREA", "SELECT"].includes((event.target as HTMLElement)?.tagName)) ||
-        ((event.metaKey || event.ctrlKey) && event.key === "k")
-      ) {
+      const target = event.target as HTMLElement;
+      const editing = target.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName);
+      if (isRoadmap && !editing && (event.key === "/" || ((event.metaKey || event.ctrlKey) && event.key === "k"))) {
         event.preventDefault();
         searchInputRef.current?.focus();
       }
     }
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [isRoadmap]);
 
-  const [selectedTrack, setSelectedTrack] = useState<string>("all");
-
+  async function signOut() {
+    await createClient().auth.signOut();
+    router.refresh();
+  }
   const filterValue = useMemo(() => ({ query, setQuery, difficulty, setDifficulty, selectedTrack, setSelectedTrack }), [query, difficulty, selectedTrack]);
 
   return (
     <FilterContext.Provider value={filterValue}>
-      <div className="min-h-screen bg-slate-50">
-        <aside className="fixed inset-y-0 left-0 z-30 hidden w-[270px] border-r border-slate-200 bg-white lg:block">
-          <SidebarContents domains={domains} completedByDomain={completedByDomain} pathname={pathname} />
-        </aside>
+      <div className="min-h-svh bg-slate-50">
+        <aside className="fixed inset-y-0 left-0 z-30 hidden w-60 border-r border-slate-200 bg-white lg:block"><SidebarContents domains={domains} pathname={pathname} /></aside>
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
           <SheetContent side="left" className="max-w-[290px] p-0 lg:hidden">
-            <SheetTitle className="sr-only">도메인 메뉴</SheetTitle>
-            <SheetDescription className="sr-only">로드맵 도메인으로 이동합니다.</SheetDescription>
-            <SidebarContents domains={domains} completedByDomain={completedByDomain} pathname={pathname} onNavigate={() => setMobileOpen(false)} />
+            <SheetTitle className="sr-only">분야별 학습 메뉴</SheetTitle>
+            <SheetDescription className="sr-only">학습 분야를 선택해 주제 목록으로 이동합니다.</SheetDescription>
+            <SidebarContents domains={domains} pathname={pathname} onNavigate={() => setMobileOpen(false)} />
           </SheetContent>
         </Sheet>
-
-        <div className="lg:pl-[270px]">
-          <header className="sticky top-0 z-20 border-b border-slate-200 bg-white ">
-            <div className="flex min-h-[76px] flex-wrap items-center gap-3 px-4 py-3 md:px-7">
-              <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setMobileOpen(true)} aria-label="메뉴 열기"><Menu className="size-5" /></Button>
-              <div className="min-w-0 flex-1">
-                <div className="text-[10px] font-bold uppercase tracking-[.18em] text-slate-500">Learning workspace</div>
-                <h1 className="truncate text-base font-bold tracking-tight text-slate-900 md:text-lg">{title}</h1>
-              </div>
-              <div className="order-3 flex w-full items-center gap-2 md:order-2 md:w-auto">
-                <label className="group flex h-10 min-w-0 flex-1 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 text-slate-500 transition-colors focus-within:border-blue-200 focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-500/30 md:w-[210px] md:flex-none xl:w-[280px]">
-                  <Search className="size-4 shrink-0 transition-colors group-focus-within:text-blue-700" />
-                  <input
-                    ref={searchInputRef}
-                    value={query}
-                    onChange={(event) => setQuery(event.target.value)}
-                    placeholder="토픽 검색..."
-                    aria-label="토픽 검색"
-                    className="w-full min-w-0 bg-transparent text-xs text-slate-900 outline-none placeholder:text-slate-500"
-                  />
-                  {query ? (
-                    <button
-                      type="button"
-                      onClick={() => setQuery("")}
-                      className="rounded p-0.5 text-slate-500 hover:text-slate-900"
-                      aria-label="검색어 지우기"
-                    >
-                      <X className="size-3" />
-                    </button>
-                  ) : (
-                    <kbd className="hidden font-mono text-[10px] text-slate-500 md:inline-block">/</kbd>
-                  )}
-                </label>
-                <select
-                  value={difficulty}
-                  onChange={(event) => setDifficulty(event.target.value as Difficulty | "all")}
-                  aria-label="난이도 필터"
-                  className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-500 outline-none transition-colors hover:border-slate-300 focus:border-blue-200 focus:ring-2 focus:ring-blue-500/30"
-                >
-                  <option value="all">모든 난이도</option>
-                  <option value="beginner">Beginner</option>
-                  <option value="intermediate">Intermediate</option>
-                  <option value="advanced">Advanced</option>
-                  <option value="expert">Expert</option>
-                </select>
-              </div>
-              <div className="order-2 flex items-center gap-2 md:order-3">
-                <div className="hidden min-w-[120px] xl:block">
-                  <div className="mb-1 flex justify-between text-[10px] text-slate-500"><span>전체 진도</span><span className="text-blue-700">{percentage}%</span></div>
-                  <Progress value={percentage} />
+        <div className="lg:pl-60">
+          <header className="sticky top-0 z-20 border-b border-slate-200 bg-white">
+            <div className="flex min-h-14 flex-wrap items-center gap-2 px-4 py-2.5 sm:px-6">
+              <Button variant="ghost" size="icon" className="size-9 shrink-0 lg:hidden" onClick={() => setMobileOpen(true)} aria-label="메뉴 열기"><Menu className="size-5" /></Button>
+              <h1 className="min-w-0 flex-1 truncate text-base font-semibold tracking-tight text-slate-900">{title}</h1>
+              {isRoadmap ? (
+                <div className="order-3 flex w-full items-center gap-2 md:order-none md:ml-4 md:w-auto">
+                  <label className="flex h-9 min-w-0 flex-1 items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 text-slate-400 focus-within:border-blue-400 focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-100 md:w-56">
+                    <Search className="size-4 shrink-0" />
+                    <input ref={searchInputRef} value={query} onChange={(event) => setQuery(event.target.value)} placeholder="주제 검색" aria-label="토픽 검색" className="w-full min-w-0 bg-transparent text-sm text-slate-900 outline-none placeholder:text-slate-400" />
+                    {query ? <button type="button" onClick={() => setQuery("")} aria-label="검색어 지우기" className="rounded p-0.5 hover:text-slate-900"><X className="size-3.5" /></button> : null}
+                  </label>
+                  <Button variant="ghost" size="sm" onClick={() => setFiltersOpen((open) => !open)} aria-expanded={filtersOpen} aria-controls="topic-filters" aria-label={hasFilters ? "필터 설정 (적용 중)" : "필터 설정"} className={cn("h-9 shrink-0 gap-1.5 px-2.5", hasFilters || filtersOpen ? "bg-blue-50 text-blue-700" : "text-slate-600")}><SlidersHorizontal className="size-4" />필터{hasFilters ? <span className="size-1.5 rounded-full bg-blue-600" /> : null}</Button>
                 </div>
-                <span className="text-[11px] font-semibold tabular-nums text-blue-700 xl:hidden" aria-label={`전체 학습 진도 ${percentage}%`}>{percentage}%</span>
-                {isDemo ? <Badge className="border-blue-200 bg-blue-50 text-blue-700">DEMO</Badge> : isAuthenticated ? (
-                  <Button variant="ghost" size="icon" onClick={signOut} aria-label="로그아웃"><LogOut className="size-4" /></Button>
-                ) : (
-                  <Button variant="secondary" size="sm" asChild><Link href="/login"><LogIn className="size-3.5" /> 로그인</Link></Button>
-                )}
+              ) : null}
+              <div className="flex shrink-0 items-center">
+                {isDemo ? <Badge className="border-slate-200 bg-slate-50 text-slate-500">체험</Badge> : isAuthenticated ? <Button variant="ghost" size="icon" onClick={signOut} aria-label="로그아웃"><LogOut className="size-4" /></Button> : <Button variant="ghost" size="sm" asChild><Link href="/login"><LogIn className="size-3.5" />로그인</Link></Button>}
               </div>
             </div>
-
-            {/* Curated Track Bar for Roadmap Views */}
-            {pathname.startsWith("/roadmap") ? (
-              <div className="border-t border-slate-200 bg-white px-4 py-2  md:px-7">
-                <div className="flex items-center gap-2 overflow-x-auto text-xs scrollbar-none">
-                  <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                    추천 학습 트랙:
-                  </span>
-                  {CURATED_TRACKS.map((track) => {
-                    const isSelected = selectedTrack === track.id;
-                    return (
-                      <button
-                        key={track.id}
-                        type="button"
-                        onClick={() => setSelectedTrack(track.id)}
-                        className={cn(
-                          "shrink-0 flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold transition-all",
-                          isSelected
-                            ? "border border-slate-900 bg-slate-900 text-white"
-                            : "border border-slate-200 bg-slate-50 text-slate-500 hover:border-slate-300 hover:text-slate-800"
-                        )}
-                        title={track.description}
-                      >
-                        <span>{track.title}</span>
-                        <span className={cn("rounded-full px-1.5 py-0.2 text-[10px]", isSelected ? "bg-white/20 text-white" : "bg-slate-100 text-slate-500")}>
-                          {track.badge}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
+            {isRoadmap && filtersOpen ? (
+              <div id="topic-filters" className="flex flex-wrap items-end gap-2 border-t border-slate-100 px-4 py-3 sm:px-6">
+                <label className="min-w-0 flex-1 text-xs text-slate-500 sm:max-w-64">학습 과정
+                  <select value={selectedTrack} onChange={(event) => setSelectedTrack(event.target.value)} aria-label="학습 과정 필터" className="mt-1 block h-9 w-full min-w-0 rounded-lg border border-slate-200 bg-white px-2 text-xs text-slate-700 outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
+                    {CURATED_TRACKS.map((track) => <option key={track.id} value={track.id}>{track.title}</option>)}
+                  </select>
+                </label>
+                <label className="min-w-0 flex-1 text-xs text-slate-500 sm:max-w-40">난이도
+                  <select value={difficulty} onChange={(event) => setDifficulty(event.target.value as Difficulty | "all")} aria-label="난이도 필터" className="mt-1 block h-9 w-full min-w-0 rounded-lg border border-slate-200 bg-white px-2 text-xs text-slate-700 outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
+                    <option value="all">모든 난이도</option><option value="beginner">기초</option><option value="intermediate">보통</option><option value="advanced">심화</option><option value="expert">전문</option>
+                  </select>
+                </label>
+                {hasFilters ? <Button variant="ghost" size="sm" className="h-9 px-2 text-xs text-slate-500" onClick={() => { setDifficulty("all"); setSelectedTrack("all"); }}>초기화</Button> : null}
               </div>
             ) : null}
           </header>
-
-          <main className="min-h-[calc(100vh-76px)]">{children}</main>
-          <footer className="flex flex-wrap items-center justify-between gap-2 border-t border-slate-200 px-6 py-5 text-[11px] text-slate-500">
-            <span>IT Atlas · 개념을 연결하고 깊이를 쌓는 학습 공간</span>
-            <span className="flex items-center gap-1"><Activity className="size-3" /> 10개 도메인 · {totalTopics}개 핵심 토픽</span>
-          </footer>
+          <main>{children}</main>
         </div>
       </div>
     </FilterContext.Provider>
