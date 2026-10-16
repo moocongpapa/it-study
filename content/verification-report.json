@@ -1,26 +1,82 @@
 {
-  "checkedAt": "2026-10-14T11:45:16.151Z",
-  "articles": 48,
-  "levels": 192,
-  "quizzes": 192,
+  "checkedAt": "2026-10-16T00:44:04.422Z",
+  "articles": 128,
+  "levels": 512,
+  "quizzes": 512,
   "answerCounts": [
-    48,
-    49,
-    47,
-    48
+    128,
+    129,
+    127,
+    128
   ],
-  "diagrams": 48,
+  "diagrams": 128,
   "executedExamples": {
-    "python": 30,
+    "python": 92,
     "jsAndTs": 2,
-    "sql": 3
+    "sql": 4
   },
   "database": {
-    "articles": 50,
-    "quizzes": 208,
+    "articles": 130,
+    "quizzes": 528,
     "uncovered": 0
   },
   "references": [
+    {
+      "url": "https://www.anthropic.com/engineering/building-effective-agents",
+      "status": 200
+    },
+    {
+      "url": "https://modelcontextprotocol.io/docs/getting-started/intro",
+      "status": 200
+    },
+    {
+      "url": "https://genai.owasp.org/llm-top-10/",
+      "status": 200
+    },
+    {
+      "url": "https://scrumguides.org/scrum-guide.html",
+      "status": 200
+    },
+    {
+      "url": "https://kanbanguides.org/the-kanban-guide/2025.5/",
+      "status": 200
+    },
+    {
+      "url": "https://www.gov.uk/service-manual/agile-delivery",
+      "status": 200
+    },
+    {
+      "url": "https://developers.google.com/machine-learning/crash-course",
+      "status": 200
+    },
+    {
+      "url": "https://scikit-learn.org/stable/model_selection.html",
+      "status": 200
+    },
+    {
+      "url": "https://scikit-learn.org/stable/common_pitfalls.html",
+      "status": 200
+    },
+    {
+      "url": "https://docs.cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning",
+      "status": 200
+    },
+    {
+      "url": "https://www.nist.gov/itl/ai-risk-management-framework",
+      "status": 200
+    },
+    {
+      "url": "https://sre.google/workbook/table-of-contents/",
+      "status": 200
+    },
+    {
+      "url": "https://www.itl.nist.gov/div898/handbook/",
+      "status": 200
+    },
+    {
+      "url": "https://www.postgresql.org/docs/current/queries.html",
+      "status": 200
+    },
     {
       "url": "https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions",
       "status": 200
@@ -35,6 +91,18 @@
     },
     {
       "url": "https://algs4.cs.princeton.edu/13stacks/",
+      "status": 200
+    },
+    {
+      "url": "https://docs.pytorch.org/tutorials/beginner/basics/intro.html",
+      "status": 200
+    },
+    {
+      "url": "https://arxiv.org/abs/1706.03762",
+      "status": 200
+    },
+    {
+      "url": "https://arxiv.org/abs/2006.11239",
       "status": 200
     },
     {
@@ -79,6 +147,14 @@
     },
     {
       "url": "https://www.postgresql.org/docs/17/using-explain.html",
+      "status": 200
+    },
+    {
+      "url": "https://www.gov.uk/service-manual",
+      "status": 200
+    },
+    {
+      "url": "https://www.w3.org/TR/WCAG22/",
       "status": 200
     },
     {
@@ -135,6 +211,22 @@
     },
     {
       "url": "https://www.rfc-editor.org/rfc/rfc2308",
+      "status": 200
+    },
+    {
+      "url": "https://huggingface.co/learn/llm-course/chapter1/1",
+      "status": 200
+    },
+    {
+      "url": "https://arxiv.org/abs/2005.11401",
+      "status": 200
+    },
+    {
+      "url": "https://arxiv.org/abs/2106.09685",
+      "status": 200
+    },
+    {
+      "url": "https://json-schema.org/learn/getting-started-step-by-step",
       "status": 200
     },
     {
@@ -431,9 +523,10 @@
     }
   ],
   "minLevelCharacters": [
-    1068,
-    904,
-    505,
-    658
-  ]
+    793,
+    704,
+    491,
+    650
+  ],
+  "referencesCheckedAt": "2026-10-16T00:45:17.623Z"
 }

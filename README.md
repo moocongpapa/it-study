@@ -9,7 +9,7 @@ npm ci
 npm run dev
 ```
 
-`package-lock.json`으로 동일한 버전을 설치합니다. 기본 주소는 `http://localhost:3000/roadmap`입니다. DB 환경 변수가 없으면 10개 도메인, 50개 토픽, 78개 선수 관계와 프로세스·스레드 아티클 및 8개 체험용 퀴즈를 로컬 미리보기로 실행합니다. 미리보기의 완료·퀴즈·복습 상태는 해당 브라우저의 `localStorage`에 저장됩니다.
+`package-lock.json`으로 동일한 버전을 설치합니다. 기본 주소는 `http://localhost:3000/roadmap`입니다. DB 환경 변수가 없으면 18개 분야, 130개 토픽, 197개 선수 관계와 두 편의 샘플 아티클과 8개 체험용 퀴즈를 로컬 미리보기로 실행합니다. 미리보기의 완료·퀴즈·복습 상태는 해당 브라우저의 `localStorage`에 저장됩니다.
 
 ## 학습 화면
 
@@ -19,15 +19,16 @@ npm run dev
 
 ## Supabase 연결
 
-1. Supabase 프로젝트에 `supabase/migrations/`의 마이그레이션을 파일명 순서로 적용한 뒤 `supabase/seed.sql`, `supabase/quiz_seed.sql`을 순서대로 실행합니다. Supabase CLI가 설정된 경우 `supabase db reset`으로 로컬 DB를 다시 만들 수 있습니다. `quiz_seed.sql`은 프로세스·스레드에 객관식 및 단답형 8개를 추가합니다. 기존 시드의 4개 객관식과 합쳐 총 12개입니다.
+1. Supabase 프로젝트에 `supabase/migrations/`의 마이그레이션을 파일명 순서로 적용한 뒤 `supabase/seed.sql`, `supabase/quiz_seed.sql`, `supabase/expansion_seed.sql`을 순서대로 실행합니다. `quiz_seed.sql`은 프로세스·스레드에 객관식 및 단답형 8개를 추가합니다. 기존 시드의 4개 객관식과 합쳐 총 12개입니다.
 2. `.env.example`을 `.env.local`로 복사하고 프로젝트 URL과 **publishable key**를 입력합니다. 기존 anon 키를 쓰는 프로젝트라면 `NEXT_PUBLIC_SUPABASE_ANON_KEY`도 지원합니다. 서비스 역할 키는 프론트엔드에 넣지 않습니다. Vercel에도 동일한 공개 환경 변수를 등록한 뒤 새로 빌드해야 합니다.
 3. Supabase Auth의 URL Configuration에서 앱 주소를 Site URL로, `http://localhost:3000/auth/callback`을 Redirect URL로 추가합니다. 다른 포트로 실행하면 그 포트의 콜백도 추가합니다. Email OTP 로그인을 활성화합니다.
 4. AI 튜터를 쓰려면 `.env.local`에 `AI_GATEWAY_API_KEY`를 추가합니다. Vercel 환경에서는 OIDC 인증을 사용할 수도 있습니다. 기본 모델은 `AI_TUTOR_MODEL=openai/gpt-5.4-mini`이며 Vercel AI Gateway 모델 ID로 바꿀 수 있습니다.
 5. 개발 서버를 재시작합니다. 로그인한 사용자의 진도는 `user_node_progress`, 퀴즈 통과는 `user_quiz_passes`, 학습 일수는 `user_learning_days`에 저장됩니다. 정답 컬럼은 Data API에서 직접 읽을 수 없고, 채점 RPC가 사용자 ID와 선수 조건을 확인합니다.
 
-기본 SQL 시드에는 프로세스와 스레드 글이, `content/starter-content.json`에는 트랜지스터와 논리회로 글이 있습니다. 나머지 48개 토픽의 4단계 원고와 레벨별 퀴즈는 `content/topics/*.md`와 빌드 결과 `content/library.json`으로 관리합니다. 전체 라이브러리를 적용하면 공개 글 50개·퀴즈 208개가 됩니다. 체험 모드는 샘플 두 편을 표시하고, 운영 학습은 Supabase의 공개 글을 읽습니다.
+기본 SQL 시드에는 프로세스와 스레드 글이, `content/starter-content.json`에는 트랜지스터와 논리회로 글이 있습니다. 기존 48개와 추가 80개 토픽의 4단계 원고와 레벨별 퀴즈는 `content/topics/*.md`와 빌드 결과 `content/library.json`으로 관리합니다. 전체 라이브러리를 적용하면 공개 글 130개·퀴즈 528개가 됩니다. 체험 모드는 샘플 두 편을 표시하고, 운영 학습은 Supabase의 공개 글을 읽습니다.
 
 ```bash
+npm run content:build-expansion
 npm run content:build
 npm run content:verify -- --links
 npm run content:seed-starter -- --apply
@@ -37,9 +38,30 @@ npm run content:verify-live -- --base-url https://it-study-two.vercel.app
 
 저장 CLI는 `.env.local`의 프로젝트 URL과 service role 키를 사용합니다. `--project-ref`와 URL이 일치해야 저장하며 기본 실행은 검증만 합니다. 원자적 RPC가 기존 글이나 퀴즈가 있는 토픽을 보존하므로 재실행이 안전합니다. 관리자 SQL 방식은 `npm run content:seed-library -- --export-sql /tmp/it-study-content-sql`로 도메인별 한 문장 SQL을 만들 수 있습니다. SQL에는 키가 없으며 slug로 실제 topic UUID를 조회합니다. 작성 범위·검토 기준은 `CONTENT_COMPLETION_PLAN.md`, 구조·예제·링크 검증은 `content/verification-report.json`, 공개 사이트 본문·퀴즈의 원고 일치 검사 결과는 `content/live-verification-report.json`에 기록합니다. 운영 검사기는 GET 요청만 사용합니다.
 
+## 데이터·AI·업무 지식 확장
+
+기존 컴퓨터·개발 10개 분야에 다음 8개 분야를 추가했습니다. 각 분야에 10개 토픽, 각 토픽에 네 단계 글과 퀴즈 4개를 제공합니다.
+
+| 분야 | 다루는 내용 |
+|---|---|
+| 데이터 분석 & 데이터 업무 | 통계·확률·실험·SQL·데이터 품질·파이프라인·거버넌스 |
+| AI & 머신러닝 기초 | 문제 정의·데이터 분리·특성·회귀·분류·군집·실험 |
+| 딥러닝 & AI 모델 원리 | 텐서·미분·역전파·학습 루프·CNN·Transformer·전이학습·확산·강화학습 |
+| 생성형 AI & LLM 활용 | 토큰·프롬프트·구조화 출력·임베딩·RAG·LoRA·환각·평가·멀티모달 |
+| AI 앱·에이전트 & 업무 자동화 | API·문서 수집·검색·도구 호출·MCP·메모리·승인·추적·개발 보조 |
+| AI 운영·보안 & 책임 있는 AI | MLOps·버전·서빙·GPU·비용·드리프트·프롬프트 주입·개인정보·위험 |
+| IT·AI 프로젝트 관리 | 목표·역할·요구사항·추정·일정·스크럼·칸반·위험·출시·AI 시범 |
+| 제품·UX & IT 업무 전략 | 문제 발견·사용자 조사·우선순위·MVP·지표·접근성·문서·TCO·구축/구매·OKR |
+
+새 원고의 편집 원본은 `content/expansion/*.json`입니다. `content:build-expansion`이 주제 카탈로그·선수 관계·80개 Markdown·확장 시드·manifest를 만듭니다. 그다음 `content:build`로 기존 48개와 합친 128개 라이브러리를 만듭니다. 기본 샘플 두 편을 더해 운영 글은 130개입니다. 기존 50개용 `content:rewrite-readable`은 추가 80개를 수정하지 않습니다.
+
+새 DB에는 기본 마이그레이션·시드 다음 **`supabase/expansion_seed.sql`을 먼저 적용**하고 starter/library를 저장합니다. 확장 시드는 기존 행을 덮어쓰지 않으며, 글·퀴즈 RPC도 기존 콘텐츠를 보존합니다. 기존 운영 DB에는 확장 시드와 새 글만 추가하면 됩니다. 선수 DAG는 197개 간선이고, 기존 50개 토픽의 선수 조건은 바꾸지 않았습니다.
+
+필터의 ‘학습 과정’에서 AI 입문·AI 앱·AI 운영·프로젝트 관리·제품 전략을 선택할 수 있습니다. 과정은 여러 분야의 추천 모음이며, 완료 기록의 선수 조건은 전체 DAG를 따릅니다. 원고는 어디서든 열어 읽을 수 있습니다. 범위와 검토 기준은 `CONTENT_EXPANSION_PLAN.md`, 검증 결과는 `content/verification-report.json` 및 `content/live-verification-report.json`에 기록합니다.
+
 ## 비전공자용 원고 편집
 
-운영 원고 50개는 한 문장 요약, 필요한 이유, 일상 비유, 단계별 흐름, 작은 예, 용어 풀이, 답이 있는 확인 질문으로 구성합니다. 2~4단계에는 예제와 장애·설계 비교를 읽기 위한 길잡이가 있습니다. 편집 자료는 `content/readability-guides/*.json`, 기존 샘플 두 편의 수정 원고는 `content/foundations/*.md`, 전체 수정 본문은 `content/readable-library.json`으로 관리합니다.
+기존 기초 원고 50개는 한 문장 요약, 필요한 이유, 일상 비유, 단계별 흐름, 작은 예, 용어 풀이, 답이 있는 확인 질문으로 구성합니다. 2~4단계에는 예제와 장애·설계 비교를 읽기 위한 길잡이가 있습니다. 편집 자료는 `content/readability-guides/*.json`, 기존 샘플 두 편의 수정 원고는 `content/foundations/*.md`, 기초 50개 수정 본문은 `content/readable-library.json`으로 관리합니다.
 
 원고 재작성은 `npm run content:rewrite-readable` 다음에 `npm run content:build`를 실행합니다. 기존 본문을 편집할 때는 운영 DB에서 slug와 본문 해시를 JSON으로 저장하고 `npm run content:export-revisions -- --baseline-file <snapshot.json> --out-dir <sql-directory>`를 실행합니다. 생성 SQL은 해당 DB의 관리자 권한으로 실행합니다. 예상한 본문 해시 또는 이미 수정된 해시와 일치할 때만 변경하며, 동시 편집이 발견되면 도메인 묶음 전체를 중단합니다.
 

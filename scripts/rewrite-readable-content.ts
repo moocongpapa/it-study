@@ -19,8 +19,8 @@ async function main() {
   const guides: z.infer<typeof GuideSchema>[] = [];
   for (const file of (await readdir("content/readability-guides")).filter((f) => f.endsWith(".json")).sort())
     guides.push(...z.array(GuideSchema).parse(JSON.parse(await readFile(`content/readability-guides/${file}`, "utf8"))));
-  if (guides.length !== 50 || new Set(guides.map((g) => g.slug)).size !== 50 || catalog.topics.some((t) => !guides.some((g) => g.slug === t.slug)))
-    throw new Error("Readability guides must cover exactly 50 known topics");
+  if (!guides.length || new Set(guides.map((g) => g.slug)).size !== guides.length || guides.some((g) => !catalog.topics.some((t) => t.slug === g.slug)))
+    throw new Error("Readability guides must be unique and reference known topics");
   const output = [];
   for (const guide of guides) {
     const legacy = ["logic-gates", "processes-threads"].includes(guide.slug);

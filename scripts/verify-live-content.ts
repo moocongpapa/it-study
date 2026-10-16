@@ -58,7 +58,7 @@ async function main() {
     return { slug: domain.slug, status: 200 };
   })));
   const quizCount = topics.reduce((sum, topic) => sum + topic.quizzes, 0);
-  if (topics.length !== 50 || quizCount !== 208) throw new Error("Production coverage totals mismatch");
+  if (topics.length !== catalog.topics.length || quizCount !== library.size * 4 + 16) throw new Error("Production coverage totals mismatch");
   const report = { checkedAt: new Date().toISOString(), origin: base.origin, mode: "read-only GET", articles: topics.length, levels: topics.length * 4, quizzes: quizCount, sourceMatchedArticles: topics.filter((t) => t.sourceMatched).length, domains, topics };
   await writeFile("content/live-verification-report.json", JSON.stringify(report, null, 2) + "\n");
   console.log(`Production verified: ${report.articles} articles / ${report.levels} levels / ${report.quizzes} quizzes / ${domains.length} domains`);

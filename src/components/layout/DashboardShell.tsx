@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useMemo, useRef, useState } from 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  Blocks, BookOpen, ChevronRight, Cloud, Code2, Cpu, Database, GitBranch, HardDrive,
+  Activity, Bot, BrainCircuit, ChartColumn, ClipboardList, FlaskConical, Target, Workflow, Blocks, BookOpen, ChevronRight, Cloud, Code2, Cpu, Database, GitBranch, HardDrive,
   LayoutDashboard, LayoutGrid, LogIn, LogOut, Menu, Network, Search, Server, ShieldCheck, SlidersHorizontal, X,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -15,7 +15,7 @@ import { CURATED_TRACKS } from "@/lib/curated-tracks";
 import { cn } from "@/lib/utils";
 import type { Difficulty, Domain } from "@/types/roadmap";
 
-const icons = { Cpu, HardDrive, Network, GitBranch, Code2, Blocks, Database, Server, Cloud, ShieldCheck };
+const icons = { Activity, Bot, BrainCircuit, ChartColumn, ClipboardList, FlaskConical, Target, Workflow, Cpu, HardDrive, Network, GitBranch, Code2, Blocks, Database, Server, Cloud, ShieldCheck };
 const DEMO_STORAGE_KEY = "it-atlas-demo-completed-v1";
 
 interface FilterState {
@@ -52,17 +52,21 @@ function SidebarContents({ domains, pathname, onNavigate }: { domains: Domain[];
         <Link href="/dashboard" onClick={onNavigate} aria-current={pathname === "/dashboard" ? "page" : undefined} className={cn("flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium", pathname === "/dashboard" ? "bg-slate-100 text-slate-900" : "text-slate-600 hover:bg-slate-50")}><LayoutDashboard className="size-4" />내 학습</Link>
       </nav>
       <p className="mb-2 mt-6 px-6 text-xs font-medium text-slate-400">분야별 학습</p>
-      <nav aria-label="IT 도메인" className="flex-1 space-y-0.5 overflow-y-auto px-3 pb-4">
+      <nav aria-label="학습 분야" className="flex-1 space-y-0.5 overflow-y-auto px-3 pb-4">
         {domains.map((domain) => {
           const Icon = icons[domain.icon_name as keyof typeof icons] ?? BookOpen;
           const href = "/roadmap/" + domain.slug;
           const selected = pathname === href;
+          const group = domain.display_order === 1 ? "컴퓨터·개발" : domain.display_order === 11 ? "데이터·AI" : domain.display_order === 17 ? "프로젝트·제품" : null;
           return (
-            <Link key={domain.id} href={href} onClick={onNavigate} aria-current={selected ? "page" : undefined} className={cn("flex min-h-11 items-center gap-2.5 rounded-lg px-3 py-2 transition-colors", selected ? "bg-blue-50 text-blue-700" : "text-slate-600 hover:bg-slate-50 hover:text-slate-900")}>
-              <Icon className="size-4 shrink-0" />
-              <span className="min-w-0 flex-1 text-xs font-medium leading-5">{domain.title}</span>
-              {selected ? <ChevronRight className="size-3 shrink-0" /> : null}
-            </Link>
+            <div key={domain.id}>
+              {group ? <p className="px-3 pb-1 pt-4 text-[11px] font-medium text-slate-400">{group}</p> : null}
+              <Link href={href} onClick={onNavigate} aria-current={selected ? "page" : undefined} className={cn("flex min-h-11 items-center gap-2.5 rounded-lg px-3 py-2 transition-colors", selected ? "bg-blue-50 text-blue-700" : "text-slate-600 hover:bg-slate-50 hover:text-slate-900")}>
+                <Icon className="size-4 shrink-0" />
+                <span className="min-w-0 flex-1 text-xs font-medium leading-5">{domain.title}</span>
+                {selected ? <ChevronRight className="size-3 shrink-0" /> : null}
+              </Link>
+            </div>
           );
         })}
       </nav>
@@ -136,7 +140,7 @@ export function DashboardShell({ children, domains, isDemo, isAuthenticated }: D
             {isRoadmap && filtersOpen ? (
               <div id="topic-filters" className="flex flex-wrap items-end gap-2 border-t border-slate-100 px-4 py-3 sm:px-6">
                 <label className="min-w-0 flex-1 text-xs text-slate-500 sm:max-w-64">학습 과정
-                  <select value={selectedTrack} onChange={(event) => setSelectedTrack(event.target.value)} aria-label="학습 과정 필터" className="mt-1 block h-11 w-full min-w-0 rounded-lg border border-slate-200 bg-white px-2 text-base text-slate-700 outline-none focus-visible:ring-2 focus-visible:ring-blue-500 md:h-9 md:text-xs">
+                  <select value={selectedTrack} onChange={(event) => { setSelectedTrack(event.target.value); setQuery(""); if (event.target.value !== "all" && pathname !== "/roadmap") router.push("/roadmap"); }} aria-label="학습 과정 필터" className="mt-1 block h-11 w-full min-w-0 rounded-lg border border-slate-200 bg-white px-2 text-base text-slate-700 outline-none focus-visible:ring-2 focus-visible:ring-blue-500 md:h-9 md:text-xs">
                     {CURATED_TRACKS.map((track) => <option key={track.id} value={track.id}>{track.title}</option>)}
                   </select>
                 </label>

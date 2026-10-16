@@ -89,6 +89,78 @@
       "icon_name": "ShieldCheck",
       "display_order": 10,
       "created_at": ""
+    },
+    {
+      "id": "data-analytics",
+      "slug": "data-analytics",
+      "title": "데이터 분석 & 데이터 업무",
+      "description": "지표·통계·실험·SQL·파이프라인을 통해 데이터를 업무 판단으로 연결합니다.",
+      "icon_name": "ChartColumn",
+      "display_order": 11,
+      "created_at": ""
+    },
+    {
+      "id": "ai-machine-learning",
+      "slug": "ai-machine-learning",
+      "title": "AI & 머신러닝 기초",
+      "description": "AI의 역할부터 데이터 분할·피처·모델 평가·실험 설계까지 배웁니다.",
+      "icon_name": "BrainCircuit",
+      "display_order": 12,
+      "created_at": ""
+    },
+    {
+      "id": "deep-learning",
+      "slug": "deep-learning",
+      "title": "딥러닝 & AI 모델 원리",
+      "description": "텐서·기울기·신경망에서 비전·언어·Transformer·생성 모델까지 원리를 따라갑니다.",
+      "icon_name": "FlaskConical",
+      "display_order": 13,
+      "created_at": ""
+    },
+    {
+      "id": "generative-ai",
+      "slug": "generative-ai",
+      "title": "생성형 AI & LLM 활용",
+      "description": "LLM·토큰·프롬프트·RAG·미세조정·평가를 업무 사례로 연결합니다.",
+      "icon_name": "Bot",
+      "display_order": 14,
+      "created_at": ""
+    },
+    {
+      "id": "ai-engineering",
+      "slug": "ai-engineering",
+      "title": "AI 앱·에이전트 & 업무 자동화",
+      "description": "AI API·RAG·MCP·도구 실행·메모리·승인·코딩과 업무 자동화를 설계합니다.",
+      "icon_name": "Workflow",
+      "display_order": 15,
+      "created_at": ""
+    },
+    {
+      "id": "mlops-responsible-ai",
+      "slug": "mlops-responsible-ai",
+      "title": "AI 운영·보안 & 책임 있는 AI",
+      "description": "AI 배포·GPU·비용·드리프트·주입 공격·개인정보·위험·복구를 운영합니다.",
+      "icon_name": "Activity",
+      "display_order": 16,
+      "created_at": ""
+    },
+    {
+      "id": "project-management",
+      "slug": "project-management",
+      "title": "IT·AI 프로젝트 관리",
+      "description": "목표와 범위에서 요구사항·일정·위험·출시까지, IT와 AI 프로젝트를 끝까지 운영하는 방법을 배웁니다.",
+      "icon_name": "ClipboardList",
+      "display_order": 17,
+      "created_at": ""
+    },
+    {
+      "id": "product-business",
+      "slug": "product-business",
+      "title": "제품·UX & IT 업무 전략",
+      "description": "사용자 문제와 제품 가치부터 접근성·협업·사업 타당성·구축과 구매·IT 전략까지 연결합니다.",
+      "icon_name": "Target",
+      "display_order": 18,
+      "created_at": ""
     }
   ],
   "topics": [
@@ -641,6 +713,886 @@
       "estimated_minutes": 110,
       "display_order": 5,
       "created_at": ""
+    },
+    {
+      "id": "ai-api-integration",
+      "domain_id": "ai-engineering",
+      "slug": "ai-api-integration",
+      "title": "AI API·스트리밍·재시도·취소",
+      "summary": "AI 호출은 실패·지연·부분 응답을 가진 외부 의존성이므로 시간·비용·취소와 재시도를 함께 설계합니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 1,
+      "created_at": ""
+    },
+    {
+      "id": "rag-document-ingestion",
+      "domain_id": "ai-engineering",
+      "slug": "rag-document-ingestion",
+      "title": "RAG 문서 수집·청킹·권한·삭제",
+      "summary": "RAG 품질은 검색 전의 문서 추출·분할·버전·권한·삭제 처리부터 시작됩니다.",
+      "difficulty": "advanced",
+      "estimated_minutes": 60,
+      "display_order": 2,
+      "created_at": ""
+    },
+    {
+      "id": "retrieval-hybrid-reranking",
+      "domain_id": "ai-engineering",
+      "slug": "retrieval-hybrid-reranking",
+      "title": "하이브리드 검색·재랭킹·검색 평가",
+      "summary": "서로 다른 검색 방법의 후보를 합치고 재랭킹으로 순서를 다듬되 정답 근거를 놓치지 않는지 평가합니다.",
+      "difficulty": "advanced",
+      "estimated_minutes": 60,
+      "display_order": 3,
+      "created_at": ""
+    },
+    {
+      "id": "tool-calling",
+      "domain_id": "ai-engineering",
+      "slug": "tool-calling",
+      "title": "도구 호출·MCP와 서버 검증",
+      "summary": "모델의 도구 호출은 실행 제안이며 실제 서버가 인자·사용자 권한·업무 조건을 검증한 뒤 실행합니다.",
+      "difficulty": "advanced",
+      "estimated_minutes": 60,
+      "display_order": 4,
+      "created_at": ""
+    },
+    {
+      "id": "agent-workflows",
+      "domain_id": "ai-engineering",
+      "slug": "agent-workflows",
+      "title": "워크플로·에이전트 루프·종료 조건",
+      "summary": "정해진 흐름과 모델이 다음 행동을 고르는 루프를 구분하고 종료·실패·예산 조건을 코드로 제한합니다.",
+      "difficulty": "advanced",
+      "estimated_minutes": 60,
+      "display_order": 5,
+      "created_at": ""
+    },
+    {
+      "id": "agent-state-memory",
+      "domain_id": "ai-engineering",
+      "slug": "agent-state-memory",
+      "title": "에이전트 상태·메모리·세션 분리",
+      "summary": "대화·작업 상태·장기 기억은 수명과 권한이 다르므로 범위·버전·삭제 규칙을 나누어 저장합니다.",
+      "difficulty": "advanced",
+      "estimated_minutes": 60,
+      "display_order": 6,
+      "created_at": ""
+    },
+    {
+      "id": "agent-permissions-hitl",
+      "domain_id": "ai-engineering",
+      "slug": "agent-permissions-hitl",
+      "title": "에이전트 권한·사람 승인·감사",
+      "summary": "AI가 행동을 제안하는 범위와 실제 실행 권한을 나누고 중요한 변경은 대상·내용이 명확한 사람 승인과 연결합니다.",
+      "difficulty": "advanced",
+      "estimated_minutes": 60,
+      "display_order": 7,
+      "created_at": ""
+    },
+    {
+      "id": "agent-evaluation-tracing",
+      "domain_id": "ai-engineering",
+      "slug": "agent-evaluation-tracing",
+      "title": "에이전트 평가·추적·실패 재현",
+      "summary": "에이전트는 최종 문장뿐 아니라 도구 선택·중간 상태·권한·비용까지 과제 단위로 평가해야 합니다.",
+      "difficulty": "advanced",
+      "estimated_minutes": 60,
+      "display_order": 8,
+      "created_at": ""
+    },
+    {
+      "id": "ai-coding-assistants",
+      "domain_id": "ai-engineering",
+      "slug": "ai-coding-assistants",
+      "title": "AI 코딩 보조·코드 리뷰·검증",
+      "summary": "AI가 만든 코드는 초안으로 검토하고 요구·테스트·보안·변경 영향을 확인한 뒤 반영합니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 9,
+      "created_at": ""
+    },
+    {
+      "id": "ai-business-automation",
+      "domain_id": "ai-engineering",
+      "slug": "ai-business-automation",
+      "title": "AI 업무 자동화·검토·중복 방지",
+      "summary": "AI 자동화는 입력·판단·초안·검토·실행을 나누고 실패와 중복 실행이 업무에 주는 영향을 통제합니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 10,
+      "created_at": ""
+    },
+    {
+      "id": "ai-ml-dl",
+      "domain_id": "ai-machine-learning",
+      "slug": "ai-ml-dl",
+      "title": "AI·머신러닝·딥러닝의 차이",
+      "summary": "AI는 지능적 과제를 다루는 넓은 분야이고, 머신러닝은 데이터로 규칙을 학습하며 딥러닝은 여러 층의 신경망을 쓰는 방법입니다.",
+      "difficulty": "beginner",
+      "estimated_minutes": 30,
+      "display_order": 1,
+      "created_at": ""
+    },
+    {
+      "id": "ml-problem-framing",
+      "domain_id": "ai-machine-learning",
+      "slug": "ml-problem-framing",
+      "title": "머신러닝 문제 정의와 기준선",
+      "summary": "업무 문제를 예측 대상·결정 시점·오류 비용으로 바꾸고 단순한 기준선과 비교합니다.",
+      "difficulty": "beginner",
+      "estimated_minutes": 30,
+      "display_order": 2,
+      "created_at": ""
+    },
+    {
+      "id": "train-validation-test",
+      "domain_id": "ai-machine-learning",
+      "slug": "train-validation-test",
+      "title": "학습·검증·테스트와 데이터 누출",
+      "summary": "모델 조정에 쓴 자료와 최종 평가 자료를 분리하고 실제 사용 시점에 없는 정보가 섞이지 않게 합니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 3,
+      "created_at": ""
+    },
+    {
+      "id": "features-preprocessing",
+      "domain_id": "ai-machine-learning",
+      "slug": "features-preprocessing",
+      "title": "피처·인코딩·전처리",
+      "summary": "업무 자료를 모델이 사용할 수 있는 값으로 바꾸되 학습과 운영에서 같은 의미와 변환을 유지합니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 4,
+      "created_at": ""
+    },
+    {
+      "id": "regression-models",
+      "domain_id": "ai-machine-learning",
+      "slug": "regression-models",
+      "title": "회귀·손실 함수와 예측 오차",
+      "summary": "연속적인 값을 예측하는 회귀에서는 오차를 어떻게 계산하느냐에 따라 학습 목표와 업무 해석이 달라집니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 5,
+      "created_at": ""
+    },
+    {
+      "id": "classification-metrics",
+      "domain_id": "ai-machine-learning",
+      "slug": "classification-metrics",
+      "title": "분류·정밀도·재현율과 임계값",
+      "summary": "분류의 품질은 맞힌 비율뿐 아니라 오탐과 놓침을 나누고 실제 비용에 맞는 임계값으로 판단합니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 6,
+      "created_at": ""
+    },
+    {
+      "id": "decision-trees-ensembles",
+      "domain_id": "ai-machine-learning",
+      "slug": "decision-trees-ensembles",
+      "title": "결정 트리·랜덤 포레스트·부스팅",
+      "summary": "트리는 조건을 따라 자료를 나누고, 앙상블은 여러 모델의 판단을 조합해 예측을 개선하는 방법입니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 7,
+      "created_at": ""
+    },
+    {
+      "id": "clustering-reduction",
+      "domain_id": "ai-machine-learning",
+      "slug": "clustering-reduction",
+      "title": "군집화·유사도와 차원 축소",
+      "summary": "정답 없이 비슷한 대상을 묶거나 표현을 압축할 때 거리의 의미와 정보 손실을 검토합니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 8,
+      "created_at": ""
+    },
+    {
+      "id": "overfitting-regularization",
+      "domain_id": "ai-machine-learning",
+      "slug": "overfitting-regularization",
+      "title": "과적합·일반화·정규화",
+      "summary": "학습 자료에만 잘 맞는 모델을 피하려면 새 자료 성능과 모델 복잡도·규제를 함께 조절합니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 9,
+      "created_at": ""
+    },
+    {
+      "id": "ml-experiment-design",
+      "domain_id": "ai-machine-learning",
+      "slug": "ml-experiment-design",
+      "title": "모델 실험·재현성과 튜닝",
+      "summary": "설정·자료·평가 절차를 기록해야 어떤 변경이 성능에 기여했는지 다시 확인할 수 있습니다.",
+      "difficulty": "advanced",
+      "estimated_minutes": 60,
+      "display_order": 10,
+      "created_at": ""
+    },
+    {
+      "id": "data-literacy",
+      "domain_id": "data-analytics",
+      "slug": "data-literacy",
+      "title": "데이터로 질문하고 지표 읽기",
+      "summary": "숫자를 해석하기 전에 무엇을 누구에 대해 어떤 단위와 기간으로 센 것인지 정합니다.",
+      "difficulty": "beginner",
+      "estimated_minutes": 30,
+      "display_order": 1,
+      "created_at": ""
+    },
+    {
+      "id": "descriptive-statistics",
+      "domain_id": "data-analytics",
+      "slug": "descriptive-statistics",
+      "title": "평균·중앙값·분산과 분포",
+      "summary": "평균 하나와 함께 가운데 값, 퍼짐, 긴 꼬리를 살펴야 데이터의 모습을 이해할 수 있습니다.",
+      "difficulty": "beginner",
+      "estimated_minutes": 30,
+      "display_order": 2,
+      "created_at": ""
+    },
+    {
+      "id": "probability-bayes",
+      "domain_id": "data-analytics",
+      "slug": "probability-bayes",
+      "title": "확률·조건부 확률과 베이즈 사고",
+      "summary": "새로운 증거를 해석할 때 기존 발생률과 그 증거가 나타날 가능성을 함께 고려합니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 3,
+      "created_at": ""
+    },
+    {
+      "id": "sampling-confidence",
+      "domain_id": "data-analytics",
+      "slug": "sampling-confidence",
+      "title": "표본·편향과 불확실성",
+      "summary": "일부 관측으로 전체를 추정할 때 표본을 뽑는 방식과 추정의 불확실성을 함께 살핍니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 4,
+      "created_at": ""
+    },
+    {
+      "id": "hypothesis-ab-testing",
+      "domain_id": "data-analytics",
+      "slug": "hypothesis-ab-testing",
+      "title": "가설 검정과 A/B 실험",
+      "summary": "변경의 효과를 확인하려면 비교군을 만들고 우연한 변동과 운영상 중요한 차이를 구분합니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 5,
+      "created_at": ""
+    },
+    {
+      "id": "sql-analytics",
+      "domain_id": "data-analytics",
+      "slug": "sql-analytics",
+      "title": "SQL 집계·조인·윈도 함수",
+      "summary": "여러 행을 묶거나 연결할 때 한 행의 의미를 유지해야 보고서의 합계와 순위가 정확해집니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 6,
+      "created_at": ""
+    },
+    {
+      "id": "data-cleaning-quality",
+      "domain_id": "data-analytics",
+      "slug": "data-cleaning-quality",
+      "title": "결측·중복·이상치와 데이터 품질",
+      "summary": "자료를 정리할 때 빠진 값과 반복된 값의 뜻을 먼저 확인하고 수정 규칙을 기록합니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 7,
+      "created_at": ""
+    },
+    {
+      "id": "etl-data-pipelines",
+      "domain_id": "data-analytics",
+      "slug": "etl-data-pipelines",
+      "title": "ETL·ELT와 데이터 파이프라인",
+      "summary": "데이터를 옮기는 작업은 한 번의 복사보다 재실행·검증·실패 복구를 포함한 흐름으로 설계합니다.",
+      "difficulty": "advanced",
+      "estimated_minutes": 60,
+      "display_order": 8,
+      "created_at": ""
+    },
+    {
+      "id": "analytics-warehouses",
+      "domain_id": "data-analytics",
+      "slug": "analytics-warehouses",
+      "title": "웨어하우스·레이크와 분석 모델",
+      "summary": "원본 자료 보관과 일관된 지표 제공은 서로 다른 목적이며 저장·변환 계층을 나누어 설계합니다.",
+      "difficulty": "advanced",
+      "estimated_minutes": 60,
+      "display_order": 9,
+      "created_at": ""
+    },
+    {
+      "id": "data-governance-lineage",
+      "domain_id": "data-analytics",
+      "slug": "data-governance-lineage",
+      "title": "데이터 소유권·계약·계보",
+      "summary": "누가 데이터를 책임지고 어떤 변환을 거쳐 어디에 쓰이는지 알아야 변경과 사고의 영향을 추적할 수 있습니다.",
+      "difficulty": "advanced",
+      "estimated_minutes": 60,
+      "display_order": 10,
+      "created_at": ""
+    },
+    {
+      "id": "vectors-matrices-tensors",
+      "domain_id": "deep-learning",
+      "slug": "vectors-matrices-tensors",
+      "title": "벡터·행렬·텐서와 차원",
+      "summary": "모델의 자료와 연산은 여러 축을 가진 숫자 배열로 표현하며 각 축의 의미와 크기를 맞춰야 합니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 1,
+      "created_at": ""
+    },
+    {
+      "id": "gradients-optimization",
+      "domain_id": "deep-learning",
+      "slug": "gradients-optimization",
+      "title": "미분·경사하강법·학습률",
+      "summary": "손실이 줄어드는 방향을 미분으로 계산하고 학습률만큼 파라미터를 움직여 모델을 조정합니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 2,
+      "created_at": ""
+    },
+    {
+      "id": "neural-networks-backprop",
+      "domain_id": "deep-learning",
+      "slug": "neural-networks-backprop",
+      "title": "신경망·활성화 함수·역전파",
+      "summary": "신경망은 선형 연산과 비선형 함수를 층으로 쌓고 역전파로 각 파라미터의 기울기를 계산합니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 3,
+      "created_at": ""
+    },
+    {
+      "id": "training-loops-batching",
+      "domain_id": "deep-learning",
+      "slug": "training-loops-batching",
+      "title": "학습 루프·미니배치·평가 모드",
+      "summary": "학습은 배치마다 예측·손실·기울기·갱신을 반복하며 평가 단계와 모델 상태를 구분합니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 4,
+      "created_at": ""
+    },
+    {
+      "id": "convolution-vision",
+      "domain_id": "deep-learning",
+      "slug": "convolution-vision",
+      "title": "컴퓨터 비전·합성곱·이미지 전처리",
+      "summary": "이미지는 공간 구조를 가진 숫자 배열이며 합성곱은 같은 작은 필터를 여러 위치에 적용해 특징을 추출합니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 5,
+      "created_at": ""
+    },
+    {
+      "id": "sequences-nlp",
+      "domain_id": "deep-learning",
+      "slug": "sequences-nlp",
+      "title": "자연어 처리·시퀀스·마스킹",
+      "summary": "문장과 시계열은 순서와 길이가 의미를 가지므로 패딩·위치·유효 범위를 함께 다뤄야 합니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 6,
+      "created_at": ""
+    },
+    {
+      "id": "attention-transformers",
+      "domain_id": "deep-learning",
+      "slug": "attention-transformers",
+      "title": "어텐션·Transformer와 위치 정보",
+      "summary": "어텐션은 입력 위치 사이의 관련도를 가중치로 바꿔 필요한 정보를 섞고 Transformer는 이 연산을 층으로 조합합니다.",
+      "difficulty": "advanced",
+      "estimated_minutes": 60,
+      "display_order": 7,
+      "created_at": ""
+    },
+    {
+      "id": "transfer-learning",
+      "domain_id": "deep-learning",
+      "slug": "transfer-learning",
+      "title": "전이 학습·동결·미세조정",
+      "summary": "이미 학습한 표현을 새 과제에 활용하되 무엇을 고정하고 바꿀지와 자료 적합성을 선택합니다.",
+      "difficulty": "advanced",
+      "estimated_minutes": 60,
+      "display_order": 8,
+      "created_at": ""
+    },
+    {
+      "id": "generative-diffusion",
+      "domain_id": "deep-learning",
+      "slug": "generative-diffusion",
+      "title": "생성 모델·확산 모델의 직관",
+      "summary": "확산 모델은 자료에 잡음을 더하는 과정과 그 잡음을 줄이는 방향을 학습해 새로운 표본을 만드는 방법입니다.",
+      "difficulty": "advanced",
+      "estimated_minutes": 60,
+      "display_order": 9,
+      "created_at": ""
+    },
+    {
+      "id": "reinforcement-learning",
+      "domain_id": "deep-learning",
+      "slug": "reinforcement-learning",
+      "title": "강화학습·보상·정책",
+      "summary": "강화학습은 행동이 다음 상태와 보상에 미치는 영향을 이용해 장기적인 행동 전략을 학습합니다.",
+      "difficulty": "advanced",
+      "estimated_minutes": 60,
+      "display_order": 10,
+      "created_at": ""
+    },
+    {
+      "id": "llm-pretraining",
+      "domain_id": "generative-ai",
+      "slug": "llm-pretraining",
+      "title": "LLM의 사전학습·후속 학습·추론",
+      "summary": "언어 모델은 문맥에서 다음 토큰을 예측하도록 학습하며 후속 학습으로 지시 응답 등을 조정하고 추론 때 문맥을 바탕으로 출력을 만듭니다.",
+      "difficulty": "beginner",
+      "estimated_minutes": 30,
+      "display_order": 1,
+      "created_at": ""
+    },
+    {
+      "id": "tokens-context-windows",
+      "domain_id": "generative-ai",
+      "slug": "tokens-context-windows",
+      "title": "토큰·문맥 창·잘림과 생성 길이",
+      "summary": "모델은 글자 수가 아닌 토큰으로 입력과 출력을 다루며 문맥 예산을 넘으면 필요한 정보가 누락되거나 요청이 실패할 수 있습니다.",
+      "difficulty": "beginner",
+      "estimated_minutes": 30,
+      "display_order": 2,
+      "created_at": ""
+    },
+    {
+      "id": "prompting-instructions",
+      "domain_id": "generative-ai",
+      "slug": "prompting-instructions",
+      "title": "프롬프트·지시·예시와 검증",
+      "summary": "좋은 프롬프트는 과제·입력·출력 기준과 예시를 명확히 하고 실제 결과로 개선합니다.",
+      "difficulty": "beginner",
+      "estimated_minutes": 30,
+      "display_order": 3,
+      "created_at": ""
+    },
+    {
+      "id": "structured-outputs",
+      "domain_id": "generative-ai",
+      "slug": "structured-outputs",
+      "title": "구조화 출력·JSON Schema·의미 검증",
+      "summary": "모델 출력을 프로그램이 쓰려면 형식 제약과 파싱뿐 아니라 업무상 값의 의미도 검증해야 합니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 4,
+      "created_at": ""
+    },
+    {
+      "id": "embeddings-similarity",
+      "domain_id": "generative-ai",
+      "slug": "embeddings-similarity",
+      "title": "임베딩·벡터 유사도와 검색",
+      "summary": "임베딩은 자료를 숫자 벡터로 표현해 가까움을 계산하지만 유사도 점수는 사실성이나 권한의 증명이 아닙니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 5,
+      "created_at": ""
+    },
+    {
+      "id": "rag-retrieval",
+      "domain_id": "generative-ai",
+      "slug": "rag-retrieval",
+      "title": "RAG·검색 증강 생성의 전체 흐름",
+      "summary": "RAG는 필요한 외부 자료를 검색해 모델의 문맥에 넣고 그 근거로 답하도록 구성하는 방식입니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 6,
+      "created_at": ""
+    },
+    {
+      "id": "finetuning-lora",
+      "domain_id": "generative-ai",
+      "slug": "finetuning-lora",
+      "title": "미세조정·LoRA·데이터셋 설계",
+      "summary": "미세조정은 원하는 입력·출력 패턴으로 모델을 적응시키며 LoRA는 일부 가중치 변화량을 작은 행렬로 표현합니다.",
+      "difficulty": "advanced",
+      "estimated_minutes": 60,
+      "display_order": 7,
+      "created_at": ""
+    },
+    {
+      "id": "hallucination-grounding",
+      "domain_id": "generative-ai",
+      "slug": "hallucination-grounding",
+      "title": "환각·출처·모르는 답 처리",
+      "summary": "자연스러운 문장과 근거 있는 답은 다르므로 주장별 출처와 모를 때의 행동을 검증해야 합니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 8,
+      "created_at": ""
+    },
+    {
+      "id": "llm-evaluation",
+      "domain_id": "generative-ai",
+      "slug": "llm-evaluation",
+      "title": "LLM 평가셋·루브릭·사람 평가",
+      "summary": "LLM 품질은 업무별 평가 사례와 명시적인 채점 기준으로 측정하고 자동 채점의 편향도 점검합니다.",
+      "difficulty": "advanced",
+      "estimated_minutes": 60,
+      "display_order": 9,
+      "created_at": ""
+    },
+    {
+      "id": "multimodal-models",
+      "domain_id": "generative-ai",
+      "slug": "multimodal-models",
+      "title": "멀티모달·이미지·음성·문서 이해",
+      "summary": "멀티모달 모델은 글·이미지·음성 같은 여러 입력을 다루므로 각 형식의 해상도·시간·출처를 보존해야 합니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 10,
+      "created_at": ""
+    },
+    {
+      "id": "mlops-lifecycle",
+      "domain_id": "mlops-responsible-ai",
+      "slug": "mlops-lifecycle",
+      "title": "MLOps·LLMOps와 모델 수명주기",
+      "summary": "모델 운영은 학습 코드뿐 아니라 데이터·평가·배포·관측·재학습을 하나의 변경 흐름으로 연결하는 일입니다.",
+      "difficulty": "advanced",
+      "estimated_minutes": 60,
+      "display_order": 1,
+      "created_at": ""
+    },
+    {
+      "id": "data-model-versioning",
+      "domain_id": "mlops-responsible-ai",
+      "slug": "data-model-versioning",
+      "title": "데이터·모델·프롬프트 버전 관리",
+      "summary": "같은 이름의 파일 대신 변경 불가능한 식별자로 자료·모델·프롬프트·검색 인덱스의 조합을 기록합니다.",
+      "difficulty": "advanced",
+      "estimated_minutes": 60,
+      "display_order": 2,
+      "created_at": ""
+    },
+    {
+      "id": "model-serving-batch-online",
+      "domain_id": "mlops-responsible-ai",
+      "slug": "model-serving-batch-online",
+      "title": "배치·온라인 추론과 서빙 계약",
+      "summary": "추론을 미리 계산할지 요청마다 수행할지는 최신성·지연·처리량과 실패 시 행동으로 결정합니다.",
+      "difficulty": "advanced",
+      "estimated_minutes": 60,
+      "display_order": 3,
+      "created_at": ""
+    },
+    {
+      "id": "gpu-inference-optimization",
+      "domain_id": "mlops-responsible-ai",
+      "slug": "gpu-inference-optimization",
+      "title": "GPU·정밀도·양자화·KV 캐시",
+      "summary": "AI 추론의 메모리와 속도는 가중치뿐 아니라 활성값·KV 캐시·배치·입출력과 정밀도의 영향을 받습니다.",
+      "difficulty": "expert",
+      "estimated_minutes": 75,
+      "display_order": 4,
+      "created_at": ""
+    },
+    {
+      "id": "llm-cost-latency",
+      "domain_id": "mlops-responsible-ai",
+      "slug": "llm-cost-latency",
+      "title": "LLM 비용·지연·캐시·모델 라우팅",
+      "summary": "AI 비용과 지연은 입력·출력·재시도·도구 호출·캐시를 과제 단위로 측정해야 실제 효율을 알 수 있습니다.",
+      "difficulty": "advanced",
+      "estimated_minutes": 60,
+      "display_order": 5,
+      "created_at": ""
+    },
+    {
+      "id": "drift-monitoring",
+      "domain_id": "mlops-responsible-ai",
+      "slug": "drift-monitoring",
+      "title": "데이터 드리프트·성능 저하·모니터링",
+      "summary": "입력 분포 변화와 실제 예측 품질 저하를 구분하고 정답이 늦게 오는 상황까지 관측합니다.",
+      "difficulty": "advanced",
+      "estimated_minutes": 60,
+      "display_order": 6,
+      "created_at": ""
+    },
+    {
+      "id": "ai-security-prompt-injection",
+      "domain_id": "mlops-responsible-ai",
+      "slug": "ai-security-prompt-injection",
+      "title": "프롬프트 주입·AI 보안 경계",
+      "summary": "검색 문서·메일·도구 결과의 지시를 신뢰된 권한으로 취급하지 않고 모델 외부에서 실행 경계를 통제합니다.",
+      "difficulty": "advanced",
+      "estimated_minutes": 60,
+      "display_order": 7,
+      "created_at": ""
+    },
+    {
+      "id": "ai-privacy-data-handling",
+      "domain_id": "mlops-responsible-ai",
+      "slug": "ai-privacy-data-handling",
+      "title": "AI 입력·로그·보관과 개인정보",
+      "summary": "AI에 전달하고 기록하는 자료는 목적에 필요한 범위로 줄이고 접근·보관·삭제 흐름을 추적합니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 8,
+      "created_at": ""
+    },
+    {
+      "id": "responsible-ai-risk",
+      "domain_id": "mlops-responsible-ai",
+      "slug": "responsible-ai-risk",
+      "title": "책임 있는 AI·위험 평가·모델 카드",
+      "summary": "AI 위험은 모델 점수만이 아니라 사용 맥락·영향받는 사람·오류 피해·책임과 통제를 함께 평가합니다.",
+      "difficulty": "advanced",
+      "estimated_minutes": 60,
+      "display_order": 9,
+      "created_at": ""
+    },
+    {
+      "id": "ai-release-operations",
+      "domain_id": "mlops-responsible-ai",
+      "slug": "ai-release-operations",
+      "title": "AI 출시·카나리·장애 대응·롤백",
+      "summary": "AI 변경은 모델·프롬프트·검색·도구를 묶어 평가하고 일부 트래픽에서 확인한 뒤 확대하며 복구를 준비합니다.",
+      "difficulty": "expert",
+      "estimated_minutes": 75,
+      "display_order": 10,
+      "created_at": ""
+    },
+    {
+      "id": "problem-discovery",
+      "domain_id": "product-business",
+      "slug": "problem-discovery",
+      "title": "문제 발견·사용자 가치·가설",
+      "summary": "제품 기획은 만들 기능을 고르기 전에, 누가 어떤 상황에서 무엇 때문에 어려운지 확인하는 일입니다.",
+      "difficulty": "beginner",
+      "estimated_minutes": 30,
+      "display_order": 1,
+      "created_at": ""
+    },
+    {
+      "id": "user-research-journey",
+      "domain_id": "product-business",
+      "slug": "user-research-journey",
+      "title": "사용자 인터뷰·여정 지도·업무 관찰",
+      "summary": "사용자 조사는 원하는 답을 묻는 설문이 아니라, 실제 경험과 행동의 흐름에서 문제를 찾는 활동입니다.",
+      "difficulty": "beginner",
+      "estimated_minutes": 30,
+      "display_order": 2,
+      "created_at": ""
+    },
+    {
+      "id": "prioritization-roadmaps",
+      "domain_id": "product-business",
+      "slug": "prioritization-roadmaps",
+      "title": "우선순위·제품 로드맵·기술 부채",
+      "summary": "우선순위는 요청을 줄 세우는 계산만이 아니라, 목표·증거·비용·위험을 비교하고 하지 않을 일도 정하는 결정입니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 3,
+      "created_at": ""
+    },
+    {
+      "id": "mvp-experiments",
+      "domain_id": "product-business",
+      "slug": "mvp-experiments",
+      "title": "MVP·프로토타입·업무 실험",
+      "summary": "MVP와 프로토타입은 적은 기능을 급히 만드는 목표가 아니라, 중요한 가정을 작은 비용으로 확인하는 수단입니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 4,
+      "created_at": ""
+    },
+    {
+      "id": "product-metrics-funnels",
+      "domain_id": "product-business",
+      "slug": "product-metrics-funnels",
+      "title": "제품 지표·퍼널·코호트·가드레일",
+      "summary": "제품 지표는 사용자의 가치 달성과 위험을 함께 보여야 하며, 분모·기간·대상을 명확히 해야 해석할 수 있습니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 5,
+      "created_at": ""
+    },
+    {
+      "id": "ux-accessibility",
+      "domain_id": "product-business",
+      "slug": "ux-accessibility",
+      "title": "UX·접근성·인지 부담 줄이기",
+      "summary": "좋은 UX는 화면을 예쁘게 만드는 데서 끝나지 않고, 다양한 사람이 적은 혼란으로 일을 끝내도록 돕습니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 6,
+      "created_at": ""
+    },
+    {
+      "id": "technical-communication",
+      "domain_id": "product-business",
+      "slug": "technical-communication",
+      "title": "기술 문서·ADR·상태 공유·협업",
+      "summary": "기술 커뮤니케이션은 어려운 말을 많이 쓰는 일이 아니라, 상대가 이해하고 결정하고 행동할 정보를 전달하는 일입니다.",
+      "difficulty": "beginner",
+      "estimated_minutes": 30,
+      "display_order": 7,
+      "created_at": ""
+    },
+    {
+      "id": "business-cases-tco",
+      "domain_id": "product-business",
+      "slug": "business-cases-tco",
+      "title": "사업 타당성·총비용·AI 업무 효과",
+      "summary": "IT·AI 도입의 타당성은 구매 가격만이 아니라 구현·운영·오류·사람의 작업을 포함한 총비용과 효과로 판단합니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 8,
+      "created_at": ""
+    },
+    {
+      "id": "vendor-build-buy",
+      "domain_id": "product-business",
+      "slug": "vendor-build-buy",
+      "title": "직접 구축·구매·외부 서비스 평가",
+      "summary": "구축과 구매의 선택은 기능 비교를 넘어 데이터 통제·운영 역량·통합·계약·이탈 비용을 함께 따지는 결정입니다.",
+      "difficulty": "advanced",
+      "estimated_minutes": 60,
+      "display_order": 9,
+      "created_at": ""
+    },
+    {
+      "id": "strategy-okr-learning",
+      "domain_id": "product-business",
+      "slug": "strategy-okr-learning",
+      "title": "IT·AI 전략·OKR·조직 학습",
+      "summary": "전략은 유행 기술 목록이 아니라 어느 문제에 역량을 집중할지 선택하는 일이며, OKR은 목표와 결과를 연결하는 도구입니다.",
+      "difficulty": "advanced",
+      "estimated_minutes": 60,
+      "display_order": 10,
+      "created_at": ""
+    },
+    {
+      "id": "project-charter-scope",
+      "domain_id": "project-management",
+      "slug": "project-charter-scope",
+      "title": "프로젝트 목표·범위·성공 기준",
+      "summary": "프로젝트는 정해진 기간에 변화를 만드는 일이며, 목표·범위·성공 기준을 먼저 합의해야 합니다.",
+      "difficulty": "beginner",
+      "estimated_minutes": 30,
+      "display_order": 1,
+      "created_at": ""
+    },
+    {
+      "id": "stakeholders-raci",
+      "domain_id": "project-management",
+      "slug": "stakeholders-raci",
+      "title": "이해관계자·RACI·의사결정 기록",
+      "summary": "일하는 사람과 최종 결정할 사람을 구분하고, 영향을 받는 사람에게 필요한 정보를 전달합니다.",
+      "difficulty": "beginner",
+      "estimated_minutes": 30,
+      "display_order": 2,
+      "created_at": ""
+    },
+    {
+      "id": "requirements-user-stories",
+      "domain_id": "project-management",
+      "slug": "requirements-user-stories",
+      "title": "요구사항·사용자 스토리·인수 조건",
+      "summary": "요구사항은 기능 이름을 나열하는 일을 넘어, 누구의 어떤 문제를 어떤 조건에서 해결할지 합의하는 일입니다.",
+      "difficulty": "beginner",
+      "estimated_minutes": 30,
+      "display_order": 3,
+      "created_at": ""
+    },
+    {
+      "id": "wbs-estimation",
+      "domain_id": "project-management",
+      "slug": "wbs-estimation",
+      "title": "작업 분해·추정·불확실성",
+      "summary": "큰 일을 확인 가능한 작은 결과로 나누고, 추정값에 숨어 있는 가정과 불확실성을 함께 드러냅니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 4,
+      "created_at": ""
+    },
+    {
+      "id": "scheduling-dependencies",
+      "domain_id": "project-management",
+      "slug": "scheduling-dependencies",
+      "title": "일정·의존성·핵심 경로",
+      "summary": "일정은 작업 시간을 단순히 더하는 표가 아니라, 먼저 끝나야 할 일과 동시에 할 수 있는 일을 표현한 계획입니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 5,
+      "created_at": ""
+    },
+    {
+      "id": "agile-scrum",
+      "domain_id": "project-management",
+      "slug": "agile-scrum",
+      "title": "애자일·스크럼·회고",
+      "summary": "애자일은 작은 결과를 자주 확인하며 계획을 고치는 접근이고, 스크럼은 이를 돕는 구체적인 프레임워크입니다.",
+      "difficulty": "beginner",
+      "estimated_minutes": 30,
+      "display_order": 6,
+      "created_at": ""
+    },
+    {
+      "id": "kanban-flow",
+      "domain_id": "project-management",
+      "slug": "kanban-flow",
+      "title": "칸반·진행 중 작업 제한·흐름 지표",
+      "summary": "칸반은 작업의 흐름을 보이게 하고 동시에 진행하는 일을 제한해, 시작한 일이 끝까지 도착하도록 돕습니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 7,
+      "created_at": ""
+    },
+    {
+      "id": "project-risk-change",
+      "domain_id": "project-management",
+      "slug": "project-risk-change",
+      "title": "프로젝트 위험·이슈·변경 관리",
+      "summary": "아직 일어나지 않은 위험과 이미 발생한 이슈를 구분하고, 변경의 영향과 대응 책임을 관리합니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 8,
+      "created_at": ""
+    },
+    {
+      "id": "delivery-quality-release",
+      "domain_id": "project-management",
+      "slug": "delivery-quality-release",
+      "title": "품질 게이트·출시·인수인계",
+      "summary": "출시는 개발 완료 버튼이 아니라, 품질 증거와 운영 준비·되돌리기 조건을 확인하는 공동 결정입니다.",
+      "difficulty": "advanced",
+      "estimated_minutes": 60,
+      "display_order": 9,
+      "created_at": ""
+    },
+    {
+      "id": "ai-project-management",
+      "domain_id": "project-management",
+      "slug": "ai-project-management",
+      "title": "AI 프로젝트 기획·평가·사람 업무 설계",
+      "summary": "AI 프로젝트는 모델 선택보다 업무 문제·데이터 준비·평가·사람의 검토와 운영 비용을 함께 설계하는 일입니다.",
+      "difficulty": "intermediate",
+      "estimated_minutes": 45,
+      "display_order": 10,
+      "created_at": ""
     }
   ],
   "prerequisites": [
@@ -1110,6 +2062,720 @@
       "id": 78,
       "from_topic_id": "observability",
       "to_topic_id": "llm-vector-infra",
+      "created_at": ""
+    },
+    {
+      "id": 79,
+      "from_topic_id": "llm-pretraining",
+      "to_topic_id": "ai-api-integration",
+      "created_at": ""
+    },
+    {
+      "id": 80,
+      "from_topic_id": "rest-api",
+      "to_topic_id": "ai-api-integration",
+      "created_at": ""
+    },
+    {
+      "id": 81,
+      "from_topic_id": "rag-retrieval",
+      "to_topic_id": "rag-document-ingestion",
+      "created_at": ""
+    },
+    {
+      "id": 82,
+      "from_topic_id": "etl-data-pipelines",
+      "to_topic_id": "rag-document-ingestion",
+      "created_at": ""
+    },
+    {
+      "id": 83,
+      "from_topic_id": "rag-document-ingestion",
+      "to_topic_id": "retrieval-hybrid-reranking",
+      "created_at": ""
+    },
+    {
+      "id": 84,
+      "from_topic_id": "ai-api-integration",
+      "to_topic_id": "tool-calling",
+      "created_at": ""
+    },
+    {
+      "id": 85,
+      "from_topic_id": "structured-outputs",
+      "to_topic_id": "tool-calling",
+      "created_at": ""
+    },
+    {
+      "id": 86,
+      "from_topic_id": "tool-calling",
+      "to_topic_id": "agent-workflows",
+      "created_at": ""
+    },
+    {
+      "id": 87,
+      "from_topic_id": "agent-workflows",
+      "to_topic_id": "agent-state-memory",
+      "created_at": ""
+    },
+    {
+      "id": 88,
+      "from_topic_id": "caching-strategies",
+      "to_topic_id": "agent-state-memory",
+      "created_at": ""
+    },
+    {
+      "id": 89,
+      "from_topic_id": "tool-calling",
+      "to_topic_id": "agent-permissions-hitl",
+      "created_at": ""
+    },
+    {
+      "id": 90,
+      "from_topic_id": "web-auth",
+      "to_topic_id": "agent-permissions-hitl",
+      "created_at": ""
+    },
+    {
+      "id": 91,
+      "from_topic_id": "agent-workflows",
+      "to_topic_id": "agent-evaluation-tracing",
+      "created_at": ""
+    },
+    {
+      "id": 92,
+      "from_topic_id": "llm-evaluation",
+      "to_topic_id": "agent-evaluation-tracing",
+      "created_at": ""
+    },
+    {
+      "id": 93,
+      "from_topic_id": "observability",
+      "to_topic_id": "agent-evaluation-tracing",
+      "created_at": ""
+    },
+    {
+      "id": 94,
+      "from_topic_id": "ai-ml-dl",
+      "to_topic_id": "ai-coding-assistants",
+      "created_at": ""
+    },
+    {
+      "id": 95,
+      "from_topic_id": "testing-pyramid",
+      "to_topic_id": "ai-coding-assistants",
+      "created_at": ""
+    },
+    {
+      "id": 96,
+      "from_topic_id": "agent-permissions-hitl",
+      "to_topic_id": "ai-business-automation",
+      "created_at": ""
+    },
+    {
+      "id": 97,
+      "from_topic_id": "ml-problem-framing",
+      "to_topic_id": "ai-business-automation",
+      "created_at": ""
+    },
+    {
+      "id": 98,
+      "from_topic_id": "ai-ml-dl",
+      "to_topic_id": "ml-problem-framing",
+      "created_at": ""
+    },
+    {
+      "id": 99,
+      "from_topic_id": "data-literacy",
+      "to_topic_id": "ml-problem-framing",
+      "created_at": ""
+    },
+    {
+      "id": 100,
+      "from_topic_id": "ml-problem-framing",
+      "to_topic_id": "train-validation-test",
+      "created_at": ""
+    },
+    {
+      "id": 101,
+      "from_topic_id": "data-cleaning-quality",
+      "to_topic_id": "train-validation-test",
+      "created_at": ""
+    },
+    {
+      "id": 102,
+      "from_topic_id": "train-validation-test",
+      "to_topic_id": "features-preprocessing",
+      "created_at": ""
+    },
+    {
+      "id": 103,
+      "from_topic_id": "features-preprocessing",
+      "to_topic_id": "regression-models",
+      "created_at": ""
+    },
+    {
+      "id": 104,
+      "from_topic_id": "train-validation-test",
+      "to_topic_id": "classification-metrics",
+      "created_at": ""
+    },
+    {
+      "id": 105,
+      "from_topic_id": "probability-bayes",
+      "to_topic_id": "classification-metrics",
+      "created_at": ""
+    },
+    {
+      "id": 106,
+      "from_topic_id": "features-preprocessing",
+      "to_topic_id": "decision-trees-ensembles",
+      "created_at": ""
+    },
+    {
+      "id": 107,
+      "from_topic_id": "classification-metrics",
+      "to_topic_id": "decision-trees-ensembles",
+      "created_at": ""
+    },
+    {
+      "id": 108,
+      "from_topic_id": "features-preprocessing",
+      "to_topic_id": "clustering-reduction",
+      "created_at": ""
+    },
+    {
+      "id": 109,
+      "from_topic_id": "train-validation-test",
+      "to_topic_id": "overfitting-regularization",
+      "created_at": ""
+    },
+    {
+      "id": 110,
+      "from_topic_id": "regression-models",
+      "to_topic_id": "overfitting-regularization",
+      "created_at": ""
+    },
+    {
+      "id": 111,
+      "from_topic_id": "overfitting-regularization",
+      "to_topic_id": "ml-experiment-design",
+      "created_at": ""
+    },
+    {
+      "id": 112,
+      "from_topic_id": "classification-metrics",
+      "to_topic_id": "ml-experiment-design",
+      "created_at": ""
+    },
+    {
+      "id": 113,
+      "from_topic_id": "data-literacy",
+      "to_topic_id": "descriptive-statistics",
+      "created_at": ""
+    },
+    {
+      "id": 114,
+      "from_topic_id": "descriptive-statistics",
+      "to_topic_id": "probability-bayes",
+      "created_at": ""
+    },
+    {
+      "id": 115,
+      "from_topic_id": "probability-bayes",
+      "to_topic_id": "sampling-confidence",
+      "created_at": ""
+    },
+    {
+      "id": 116,
+      "from_topic_id": "sampling-confidence",
+      "to_topic_id": "hypothesis-ab-testing",
+      "created_at": ""
+    },
+    {
+      "id": 117,
+      "from_topic_id": "data-literacy",
+      "to_topic_id": "sql-analytics",
+      "created_at": ""
+    },
+    {
+      "id": 118,
+      "from_topic_id": "relational-normalization",
+      "to_topic_id": "sql-analytics",
+      "created_at": ""
+    },
+    {
+      "id": 119,
+      "from_topic_id": "data-literacy",
+      "to_topic_id": "data-cleaning-quality",
+      "created_at": ""
+    },
+    {
+      "id": 120,
+      "from_topic_id": "data-cleaning-quality",
+      "to_topic_id": "etl-data-pipelines",
+      "created_at": ""
+    },
+    {
+      "id": 121,
+      "from_topic_id": "sql-analytics",
+      "to_topic_id": "etl-data-pipelines",
+      "created_at": ""
+    },
+    {
+      "id": 122,
+      "from_topic_id": "etl-data-pipelines",
+      "to_topic_id": "analytics-warehouses",
+      "created_at": ""
+    },
+    {
+      "id": 123,
+      "from_topic_id": "data-cleaning-quality",
+      "to_topic_id": "data-governance-lineage",
+      "created_at": ""
+    },
+    {
+      "id": 124,
+      "from_topic_id": "features-preprocessing",
+      "to_topic_id": "vectors-matrices-tensors",
+      "created_at": ""
+    },
+    {
+      "id": 125,
+      "from_topic_id": "vectors-matrices-tensors",
+      "to_topic_id": "gradients-optimization",
+      "created_at": ""
+    },
+    {
+      "id": 126,
+      "from_topic_id": "regression-models",
+      "to_topic_id": "gradients-optimization",
+      "created_at": ""
+    },
+    {
+      "id": 127,
+      "from_topic_id": "gradients-optimization",
+      "to_topic_id": "neural-networks-backprop",
+      "created_at": ""
+    },
+    {
+      "id": 128,
+      "from_topic_id": "neural-networks-backprop",
+      "to_topic_id": "training-loops-batching",
+      "created_at": ""
+    },
+    {
+      "id": 129,
+      "from_topic_id": "training-loops-batching",
+      "to_topic_id": "convolution-vision",
+      "created_at": ""
+    },
+    {
+      "id": 130,
+      "from_topic_id": "vectors-matrices-tensors",
+      "to_topic_id": "sequences-nlp",
+      "created_at": ""
+    },
+    {
+      "id": 131,
+      "from_topic_id": "training-loops-batching",
+      "to_topic_id": "sequences-nlp",
+      "created_at": ""
+    },
+    {
+      "id": 132,
+      "from_topic_id": "sequences-nlp",
+      "to_topic_id": "attention-transformers",
+      "created_at": ""
+    },
+    {
+      "id": 133,
+      "from_topic_id": "neural-networks-backprop",
+      "to_topic_id": "attention-transformers",
+      "created_at": ""
+    },
+    {
+      "id": 134,
+      "from_topic_id": "training-loops-batching",
+      "to_topic_id": "transfer-learning",
+      "created_at": ""
+    },
+    {
+      "id": 135,
+      "from_topic_id": "overfitting-regularization",
+      "to_topic_id": "transfer-learning",
+      "created_at": ""
+    },
+    {
+      "id": 136,
+      "from_topic_id": "gradients-optimization",
+      "to_topic_id": "generative-diffusion",
+      "created_at": ""
+    },
+    {
+      "id": 137,
+      "from_topic_id": "convolution-vision",
+      "to_topic_id": "generative-diffusion",
+      "created_at": ""
+    },
+    {
+      "id": 138,
+      "from_topic_id": "ai-ml-dl",
+      "to_topic_id": "reinforcement-learning",
+      "created_at": ""
+    },
+    {
+      "id": 139,
+      "from_topic_id": "probability-bayes",
+      "to_topic_id": "reinforcement-learning",
+      "created_at": ""
+    },
+    {
+      "id": 140,
+      "from_topic_id": "ai-ml-dl",
+      "to_topic_id": "llm-pretraining",
+      "created_at": ""
+    },
+    {
+      "id": 141,
+      "from_topic_id": "llm-pretraining",
+      "to_topic_id": "tokens-context-windows",
+      "created_at": ""
+    },
+    {
+      "id": 142,
+      "from_topic_id": "llm-pretraining",
+      "to_topic_id": "prompting-instructions",
+      "created_at": ""
+    },
+    {
+      "id": 143,
+      "from_topic_id": "prompting-instructions",
+      "to_topic_id": "structured-outputs",
+      "created_at": ""
+    },
+    {
+      "id": 144,
+      "from_topic_id": "type-systems",
+      "to_topic_id": "structured-outputs",
+      "created_at": ""
+    },
+    {
+      "id": 145,
+      "from_topic_id": "vectors-matrices-tensors",
+      "to_topic_id": "embeddings-similarity",
+      "created_at": ""
+    },
+    {
+      "id": 146,
+      "from_topic_id": "prompting-instructions",
+      "to_topic_id": "rag-retrieval",
+      "created_at": ""
+    },
+    {
+      "id": 147,
+      "from_topic_id": "embeddings-similarity",
+      "to_topic_id": "rag-retrieval",
+      "created_at": ""
+    },
+    {
+      "id": 148,
+      "from_topic_id": "transfer-learning",
+      "to_topic_id": "finetuning-lora",
+      "created_at": ""
+    },
+    {
+      "id": 149,
+      "from_topic_id": "llm-pretraining",
+      "to_topic_id": "finetuning-lora",
+      "created_at": ""
+    },
+    {
+      "id": 150,
+      "from_topic_id": "rag-retrieval",
+      "to_topic_id": "hallucination-grounding",
+      "created_at": ""
+    },
+    {
+      "id": 151,
+      "from_topic_id": "hallucination-grounding",
+      "to_topic_id": "llm-evaluation",
+      "created_at": ""
+    },
+    {
+      "id": 152,
+      "from_topic_id": "ml-experiment-design",
+      "to_topic_id": "llm-evaluation",
+      "created_at": ""
+    },
+    {
+      "id": 153,
+      "from_topic_id": "llm-pretraining",
+      "to_topic_id": "multimodal-models",
+      "created_at": ""
+    },
+    {
+      "id": 154,
+      "from_topic_id": "tokens-context-windows",
+      "to_topic_id": "multimodal-models",
+      "created_at": ""
+    },
+    {
+      "id": 155,
+      "from_topic_id": "ml-experiment-design",
+      "to_topic_id": "mlops-lifecycle",
+      "created_at": ""
+    },
+    {
+      "id": 156,
+      "from_topic_id": "cicd-pipelines",
+      "to_topic_id": "mlops-lifecycle",
+      "created_at": ""
+    },
+    {
+      "id": 157,
+      "from_topic_id": "mlops-lifecycle",
+      "to_topic_id": "data-model-versioning",
+      "created_at": ""
+    },
+    {
+      "id": 158,
+      "from_topic_id": "mlops-lifecycle",
+      "to_topic_id": "model-serving-batch-online",
+      "created_at": ""
+    },
+    {
+      "id": 159,
+      "from_topic_id": "rest-api",
+      "to_topic_id": "model-serving-batch-online",
+      "created_at": ""
+    },
+    {
+      "id": 160,
+      "from_topic_id": "attention-transformers",
+      "to_topic_id": "gpu-inference-optimization",
+      "created_at": ""
+    },
+    {
+      "id": 161,
+      "from_topic_id": "model-serving-batch-online",
+      "to_topic_id": "gpu-inference-optimization",
+      "created_at": ""
+    },
+    {
+      "id": 162,
+      "from_topic_id": "ai-api-integration",
+      "to_topic_id": "llm-cost-latency",
+      "created_at": ""
+    },
+    {
+      "id": 163,
+      "from_topic_id": "tokens-context-windows",
+      "to_topic_id": "llm-cost-latency",
+      "created_at": ""
+    },
+    {
+      "id": 164,
+      "from_topic_id": "mlops-lifecycle",
+      "to_topic_id": "drift-monitoring",
+      "created_at": ""
+    },
+    {
+      "id": 165,
+      "from_topic_id": "descriptive-statistics",
+      "to_topic_id": "drift-monitoring",
+      "created_at": ""
+    },
+    {
+      "id": 166,
+      "from_topic_id": "agent-permissions-hitl",
+      "to_topic_id": "ai-security-prompt-injection",
+      "created_at": ""
+    },
+    {
+      "id": 167,
+      "from_topic_id": "rag-retrieval",
+      "to_topic_id": "ai-security-prompt-injection",
+      "created_at": ""
+    },
+    {
+      "id": 168,
+      "from_topic_id": "data-governance-lineage",
+      "to_topic_id": "ai-privacy-data-handling",
+      "created_at": ""
+    },
+    {
+      "id": 169,
+      "from_topic_id": "ai-api-integration",
+      "to_topic_id": "ai-privacy-data-handling",
+      "created_at": ""
+    },
+    {
+      "id": 170,
+      "from_topic_id": "ml-problem-framing",
+      "to_topic_id": "responsible-ai-risk",
+      "created_at": ""
+    },
+    {
+      "id": 171,
+      "from_topic_id": "llm-evaluation",
+      "to_topic_id": "responsible-ai-risk",
+      "created_at": ""
+    },
+    {
+      "id": 172,
+      "from_topic_id": "mlops-lifecycle",
+      "to_topic_id": "ai-release-operations",
+      "created_at": ""
+    },
+    {
+      "id": 173,
+      "from_topic_id": "agent-evaluation-tracing",
+      "to_topic_id": "ai-release-operations",
+      "created_at": ""
+    },
+    {
+      "id": 174,
+      "from_topic_id": "problem-discovery",
+      "to_topic_id": "user-research-journey",
+      "created_at": ""
+    },
+    {
+      "id": 175,
+      "from_topic_id": "problem-discovery",
+      "to_topic_id": "prioritization-roadmaps",
+      "created_at": ""
+    },
+    {
+      "id": 176,
+      "from_topic_id": "problem-discovery",
+      "to_topic_id": "mvp-experiments",
+      "created_at": ""
+    },
+    {
+      "id": 177,
+      "from_topic_id": "data-literacy",
+      "to_topic_id": "product-metrics-funnels",
+      "created_at": ""
+    },
+    {
+      "id": 178,
+      "from_topic_id": "problem-discovery",
+      "to_topic_id": "product-metrics-funnels",
+      "created_at": ""
+    },
+    {
+      "id": 179,
+      "from_topic_id": "user-research-journey",
+      "to_topic_id": "ux-accessibility",
+      "created_at": ""
+    },
+    {
+      "id": 180,
+      "from_topic_id": "problem-discovery",
+      "to_topic_id": "business-cases-tco",
+      "created_at": ""
+    },
+    {
+      "id": 181,
+      "from_topic_id": "data-literacy",
+      "to_topic_id": "business-cases-tco",
+      "created_at": ""
+    },
+    {
+      "id": 182,
+      "from_topic_id": "business-cases-tco",
+      "to_topic_id": "vendor-build-buy",
+      "created_at": ""
+    },
+    {
+      "id": 183,
+      "from_topic_id": "problem-discovery",
+      "to_topic_id": "strategy-okr-learning",
+      "created_at": ""
+    },
+    {
+      "id": 184,
+      "from_topic_id": "product-metrics-funnels",
+      "to_topic_id": "strategy-okr-learning",
+      "created_at": ""
+    },
+    {
+      "id": 185,
+      "from_topic_id": "project-charter-scope",
+      "to_topic_id": "stakeholders-raci",
+      "created_at": ""
+    },
+    {
+      "id": 186,
+      "from_topic_id": "project-charter-scope",
+      "to_topic_id": "requirements-user-stories",
+      "created_at": ""
+    },
+    {
+      "id": 187,
+      "from_topic_id": "requirements-user-stories",
+      "to_topic_id": "wbs-estimation",
+      "created_at": ""
+    },
+    {
+      "id": 188,
+      "from_topic_id": "wbs-estimation",
+      "to_topic_id": "scheduling-dependencies",
+      "created_at": ""
+    },
+    {
+      "id": 189,
+      "from_topic_id": "project-charter-scope",
+      "to_topic_id": "agile-scrum",
+      "created_at": ""
+    },
+    {
+      "id": 190,
+      "from_topic_id": "requirements-user-stories",
+      "to_topic_id": "agile-scrum",
+      "created_at": ""
+    },
+    {
+      "id": 191,
+      "from_topic_id": "project-charter-scope",
+      "to_topic_id": "kanban-flow",
+      "created_at": ""
+    },
+    {
+      "id": 192,
+      "from_topic_id": "project-charter-scope",
+      "to_topic_id": "project-risk-change",
+      "created_at": ""
+    },
+    {
+      "id": 193,
+      "from_topic_id": "scheduling-dependencies",
+      "to_topic_id": "project-risk-change",
+      "created_at": ""
+    },
+    {
+      "id": 194,
+      "from_topic_id": "project-risk-change",
+      "to_topic_id": "delivery-quality-release",
+      "created_at": ""
+    },
+    {
+      "id": 195,
+      "from_topic_id": "requirements-user-stories",
+      "to_topic_id": "delivery-quality-release",
+      "created_at": ""
+    },
+    {
+      "id": 196,
+      "from_topic_id": "project-charter-scope",
+      "to_topic_id": "ai-project-management",
+      "created_at": ""
+    },
+    {
+      "id": 197,
+      "from_topic_id": "ml-problem-framing",
+      "to_topic_id": "ai-project-management",
       "created_at": ""
     }
   ],

@@ -1,0 +1,36 @@
+{
+  "checkedAt": "2026-10-16T00:47:20.250Z",
+  "projectRef": "ofylxwqyahqghvhphdos",
+  "operation": "additive taxonomy and guarded atomic article/quiz insert",
+  "before": {
+    "domains": 10,
+    "topics": 50,
+    "articles": 50,
+    "quizzes": 208,
+    "articleHash": "b97cad35e121de117444478d824838cc",
+    "quizHash": "30e8ce517cb2b333efb2554af0b54645",
+    "progressCount": 0
+  },
+  "after": {
+    "domains": 18,
+    "topics": 130,
+    "prerequisites": 197,
+    "articles": 130,
+    "levels": 520,
+    "quizzes": 528,
+    "cycles": 0,
+    "incompleteTopics": 0,
+    "originalArticleHash": "b97cad35e121de117444478d824838cc",
+    "originalQuizHash": "30e8ce517cb2b333efb2554af0b54645",
+    "progressCount": 0
+  },
+  "added": {
+    "domains": 8,
+    "articles": 80,
+    "quizzes": 320
+  },
+  "existingContentPreserved": true,
+  "userProgressPreserved": true,
+  "publicSourceVerification": "content/live-verification-report.json",
+  "localVerification": "content/verification-report.json"
+}

@@ -13,8 +13,8 @@ export const CURATED_TRACKS: CuratedTrack[] = [
     id: "all",
     title: "전체 주제",
     subtitle: "All Topics",
-    badge: "50개 토픽",
-    description: "컴퓨터 하드웨어부터 AI 인프라까지 10대 도메인의 전체 커리큘럼입니다.",
+    badge: "전체 분야",
+    description: "컴퓨터 기초부터 데이터·AI, 프로젝트 관리와 제품 전략까지 전체 학습 주제입니다.",
     icon: "Compass",
     topicSlugs: [], // 빈 배열은 전체 표시
   },
@@ -110,5 +110,110 @@ export const CURATED_TRACKS: CuratedTrack[] = [
       "monolith-vs-msa",
       "cicd-pipelines",
     ],
+  },
+  {
+    "id": "ai-starter",
+    "title": "비전공자를 위한 AI 입문",
+    "subtitle": "AI Foundations",
+    "badge": "AI 입문 · 10선",
+    "description": "AI가 무엇을 하는지부터 업무 문제·프롬프트·검증·안전한 활용까지 시작합니다.",
+    "icon": "BrainCircuit",
+    "topicSlugs": [
+      "ai-ml-dl",
+      "data-literacy",
+      "ml-problem-framing",
+      "llm-pretraining",
+      "tokens-context-windows",
+      "prompting-instructions",
+      "train-validation-test",
+      "classification-metrics",
+      "ai-coding-assistants",
+      "ai-project-management"
+    ]
+  },
+  {
+    "id": "ai-builder",
+    "title": "AI 앱·에이전트 만들기",
+    "subtitle": "AI Application Engineering",
+    "badge": "AI 앱 · 15선",
+    "description": "LLM API와 구조화 출력에서 RAG·도구 호출·권한·평가까지 연결합니다.",
+    "icon": "Workflow",
+    "topicSlugs": [
+      "llm-pretraining",
+      "tokens-context-windows",
+      "prompting-instructions",
+      "structured-outputs",
+      "vectors-matrices-tensors",
+      "embeddings-similarity",
+      "rag-retrieval",
+      "ai-api-integration",
+      "rag-document-ingestion",
+      "retrieval-hybrid-reranking",
+      "tool-calling",
+      "agent-workflows",
+      "agent-state-memory",
+      "agent-permissions-hitl",
+      "agent-evaluation-tracing"
+    ]
+  },
+  {
+    "id": "ai-operations",
+    "title": "AI 운영·보안·책임",
+    "subtitle": "AI Operations",
+    "badge": "AI 운영 · 10선",
+    "description": "재현 가능한 배포, 비용과 지연, 공격·개인정보·운영 위험을 살펴봅니다.",
+    "icon": "Activity",
+    "topicSlugs": [
+      "mlops-lifecycle",
+      "data-model-versioning",
+      "model-serving-batch-online",
+      "gpu-inference-optimization",
+      "llm-cost-latency",
+      "drift-monitoring",
+      "ai-security-prompt-injection",
+      "ai-privacy-data-handling",
+      "responsible-ai-risk",
+      "ai-release-operations"
+    ]
+  },
+  {
+    "id": "project-delivery",
+    "title": "IT·AI 프로젝트 관리",
+    "subtitle": "Project Delivery",
+    "badge": "PM · 10선",
+    "description": "목표·요구사항·추정·일정·위험부터 출시와 AI 시범 운영까지 따라갑니다.",
+    "icon": "ClipboardList",
+    "topicSlugs": [
+      "project-charter-scope",
+      "stakeholders-raci",
+      "requirements-user-stories",
+      "wbs-estimation",
+      "scheduling-dependencies",
+      "agile-scrum",
+      "kanban-flow",
+      "project-risk-change",
+      "delivery-quality-release",
+      "ai-project-management"
+    ]
+  },
+  {
+    "id": "product-strategy",
+    "title": "제품·UX·업무 전략",
+    "subtitle": "Product & Business",
+    "badge": "제품·업무 · 10선",
+    "description": "사용자 문제를 찾고 실험·지표·접근성·총비용을 근거로 제품을 결정합니다.",
+    "icon": "Target",
+    "topicSlugs": [
+      "problem-discovery",
+      "user-research-journey",
+      "prioritization-roadmaps",
+      "mvp-experiments",
+      "product-metrics-funnels",
+      "ux-accessibility",
+      "technical-communication",
+      "business-cases-tco",
+      "vendor-build-buy",
+      "strategy-okr-learning"
+    ]
   },
 ];

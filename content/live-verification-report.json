@@ -1,11 +1,11 @@
 {
-  "checkedAt": "2026-10-14T11:57:26.321Z",
+  "checkedAt": "2026-10-16T00:47:20.250Z",
   "origin": "https://it-study-two.vercel.app",
   "mode": "read-only GET",
-  "articles": 50,
-  "levels": 200,
-  "quizzes": 208,
-  "sourceMatchedArticles": 50,
+  "articles": 130,
+  "levels": 520,
+  "quizzes": 528,
+  "sourceMatchedArticles": 130,
   "domains": [
     {
       "slug": "hardware",
@@ -45,6 +45,38 @@
     },
     {
       "slug": "web-security-ai",
+      "status": 200
+    },
+    {
+      "slug": "data-analytics",
+      "status": 200
+    },
+    {
+      "slug": "ai-machine-learning",
+      "status": 200
+    },
+    {
+      "slug": "deep-learning",
+      "status": 200
+    },
+    {
+      "slug": "generative-ai",
+      "status": 200
+    },
+    {
+      "slug": "ai-engineering",
+      "status": 200
+    },
+    {
+      "slug": "mlops-responsible-ai",
+      "status": 200
+    },
+    {
+      "slug": "project-management",
+      "status": 200
+    },
+    {
+      "slug": "product-business",
       "status": 200
     }
   ],
@@ -445,6 +477,646 @@
       "slug": "llm-vector-infra",
       "topicId": "c6bca72e-1f67-4cb4-8afa-b031ed02b78d",
       "articleId": "5639bc3d-6518-4f6d-937e-e1cc7822848a",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "ai-api-integration",
+      "topicId": "d6eba8d6-46ff-47b7-8676-ee6acbaa3d5d",
+      "articleId": "7adf3115-4b29-4e05-8a21-d2741f7ad6d1",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "rag-document-ingestion",
+      "topicId": "24c436ec-b727-4282-883f-b20a95a84f29",
+      "articleId": "ef054377-a587-43ad-9187-40738b859a68",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "retrieval-hybrid-reranking",
+      "topicId": "f9d4c5c1-8f7d-4cde-bc13-855a277064c9",
+      "articleId": "65132b50-d6fc-453e-af85-b939f081db47",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "tool-calling",
+      "topicId": "ccea46ed-0499-4c3d-90e0-816f6513d3bc",
+      "articleId": "bfcb5da6-5d81-4c74-80be-1cb830577374",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "agent-workflows",
+      "topicId": "12a19555-1bac-4eb5-9cbd-dda7b71fd72a",
+      "articleId": "253fb4ea-ae42-4af3-bdbc-2590e2925760",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "agent-state-memory",
+      "topicId": "da5baa45-71b1-4abd-a75d-f746c4994d83",
+      "articleId": "8b0e3909-1349-44e1-86bb-0d63d699a8e1",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "agent-permissions-hitl",
+      "topicId": "6f08f153-98be-47d6-8acc-85b009dc2936",
+      "articleId": "f9ea3e65-d689-4a9d-ae23-76836ae24309",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "agent-evaluation-tracing",
+      "topicId": "5395fc89-f4cb-4a9b-ac96-8fad151386c5",
+      "articleId": "74b2a3e4-deb4-445c-9668-31e9a58e7181",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "ai-coding-assistants",
+      "topicId": "e1f17f3d-7305-474d-b5f3-759e8d4abc8e",
+      "articleId": "0564a455-2eda-44e0-9dfa-0f78f6ee20e4",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "ai-business-automation",
+      "topicId": "c08bb8bb-fa06-4e5f-b300-8b96a826a4ba",
+      "articleId": "454a68da-559d-46f1-8369-ba3260bc8637",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "ai-ml-dl",
+      "topicId": "4eb1b320-6f61-4cc1-a3c7-0bcbaa27003d",
+      "articleId": "697904ff-68de-4e29-bd92-bff13f280570",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "ml-problem-framing",
+      "topicId": "44334cff-03ac-4574-bcb0-e929c7898f90",
+      "articleId": "940949e0-5d3d-4449-ad7c-27ddaf43da8e",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "train-validation-test",
+      "topicId": "c551ea14-0fd3-4dac-ad0a-3aa2a515bb60",
+      "articleId": "071d883a-068a-47f1-8a5f-db60556286a6",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "features-preprocessing",
+      "topicId": "322c1c3f-1b71-43e5-a56b-a46810417eb8",
+      "articleId": "141d6f37-6b3c-4a1f-ac97-d37f9d3add76",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "regression-models",
+      "topicId": "c741c53b-f4f2-4dd3-b226-e3e1005d4a4e",
+      "articleId": "73a34c88-05fb-4a9d-afbd-4c7138e74317",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "classification-metrics",
+      "topicId": "4d69fe10-d76c-438a-b328-01d255261361",
+      "articleId": "6a2d2410-103f-44a5-bda7-f9c9d276d956",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "decision-trees-ensembles",
+      "topicId": "16364756-5c23-4d5f-946b-34356f7e8841",
+      "articleId": "b2d82fbf-301f-4593-bd0d-166ffa771ea3",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "clustering-reduction",
+      "topicId": "734483f2-795a-4caf-8b63-b4c10bfbfc91",
+      "articleId": "4f7495a3-3241-49ea-991e-449e280318ea",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "overfitting-regularization",
+      "topicId": "5aeccf46-d8bb-478c-a29d-48b5f984b9ca",
+      "articleId": "3fd8c725-0142-49af-8551-a9f3f17517c4",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "ml-experiment-design",
+      "topicId": "7e3148bc-fe65-4f71-babb-b85b1a15ae61",
+      "articleId": "50eb4a2e-fd35-4351-9238-8b475b026971",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "data-literacy",
+      "topicId": "22078696-e405-4211-a5d6-a3c9ad193de3",
+      "articleId": "b825b666-f576-48c9-88a9-a1af4fa3cba9",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "descriptive-statistics",
+      "topicId": "67667ffc-f6a7-46e6-8a3b-018361291f0a",
+      "articleId": "e99ad877-37c8-4233-9df6-c4b11c54ef75",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "probability-bayes",
+      "topicId": "b964113d-9fbc-4ec7-b96f-dc5f25ef9ceb",
+      "articleId": "ac08368c-b7a6-4355-b0b1-1b2a2ae6ef8b",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "sampling-confidence",
+      "topicId": "17b8a610-e6d4-4657-b6f8-46e33e59be96",
+      "articleId": "57d497be-883a-4469-ab1a-c10fb4aabcd8",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "hypothesis-ab-testing",
+      "topicId": "32dabdca-bf55-496a-b3e0-191ce9ad581d",
+      "articleId": "ca4a0c87-af6d-4e42-a411-ae189ca62dc4",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "sql-analytics",
+      "topicId": "126179cf-f3ac-4899-a25c-25154332f426",
+      "articleId": "60dc29b5-33ce-4e21-a580-c4f529332609",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "data-cleaning-quality",
+      "topicId": "d91e0a16-cf43-4a25-9e21-730cac628a2f",
+      "articleId": "684c574e-c4fa-4c27-8897-09f951550d31",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "etl-data-pipelines",
+      "topicId": "56623e8f-412e-465b-83fb-0191e0c1ce03",
+      "articleId": "98a22382-d61e-4dfd-a0c0-a910056168e7",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "analytics-warehouses",
+      "topicId": "443edbff-857d-43fa-a51d-ffd4636669a5",
+      "articleId": "f7f3c4ae-4ba3-4e39-8c69-6b2916400fe5",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "data-governance-lineage",
+      "topicId": "81541397-b4d5-489a-b3c6-eb8d39454b2f",
+      "articleId": "19d1596a-8d1e-4de2-a83d-838daa6cf581",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "vectors-matrices-tensors",
+      "topicId": "ce818c50-541f-4909-9c14-4ce57666471c",
+      "articleId": "ec61d3eb-e2d4-433c-8fe7-7c13ba7a4589",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "gradients-optimization",
+      "topicId": "006d7be4-6472-4960-9dbf-4fb64baff9fe",
+      "articleId": "3c241359-b4d8-4a53-aee6-e4ada1b0be3d",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "neural-networks-backprop",
+      "topicId": "1d2ddc85-adff-4cae-a6fc-eab41d576da4",
+      "articleId": "bba31090-b301-4811-82d8-c18a59ad280e",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "training-loops-batching",
+      "topicId": "4ca49c11-f0b9-4cf0-93c2-37c8fc99145c",
+      "articleId": "ff947f1d-c794-4bfc-829f-f656b139770a",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "convolution-vision",
+      "topicId": "e6718d80-9a66-4ba2-9097-583427159d1e",
+      "articleId": "bf310d24-b311-4c30-a186-bd0a46856bd8",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "sequences-nlp",
+      "topicId": "4dd08b38-616c-4fdf-a0fd-15f020d0281d",
+      "articleId": "604edf1d-cb71-4f77-9864-7438c338f5fb",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "attention-transformers",
+      "topicId": "a685505b-0dfd-414c-9612-a15a9ba14fb3",
+      "articleId": "04660ea8-0b0e-45db-90ff-661c8fbf83b7",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "transfer-learning",
+      "topicId": "436bdb40-baf5-4d72-ad3c-294d5f949ba8",
+      "articleId": "1fbc6335-fbec-4e51-b6a6-463976130b9e",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "generative-diffusion",
+      "topicId": "2e1be776-958b-49ba-bfea-62e145e15e8e",
+      "articleId": "50bc5ddc-00f4-4610-baa7-72ba1e27288e",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "reinforcement-learning",
+      "topicId": "f8b86a8e-8136-4ee6-ba5d-094c426b4e6e",
+      "articleId": "7413c72b-58bc-4d55-ad68-801087d0a948",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "llm-pretraining",
+      "topicId": "7d462e85-8009-416f-a1ed-4ed3087894ef",
+      "articleId": "1cd00cd8-8bd5-4572-972b-780eb25cfc79",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "tokens-context-windows",
+      "topicId": "15149c01-3e39-437a-b93d-ae8a759d2a00",
+      "articleId": "4f4ebb99-2192-48c1-8bee-c74957e0425d",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "prompting-instructions",
+      "topicId": "b533373c-843b-4d9d-81f8-ac07c91473d4",
+      "articleId": "82aac63a-61fe-4f68-a309-96a75c0b6ac8",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "structured-outputs",
+      "topicId": "9d4b5e0a-f10a-4f15-88cd-ae630580fcdd",
+      "articleId": "10779434-b095-4a26-8c22-606b0714f6fe",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "embeddings-similarity",
+      "topicId": "ab3b89b9-b61e-431a-8adc-f2475896c7de",
+      "articleId": "1ae760cc-c8fd-4ab9-bbab-2162a158743b",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "rag-retrieval",
+      "topicId": "0dde5efc-eaf7-4227-b640-1c0a2a14c7f6",
+      "articleId": "aeec8cc0-0feb-4eb4-965d-cb9ad3a67f60",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "finetuning-lora",
+      "topicId": "d4b73f86-7e4f-4d72-91ca-c2d73270bb79",
+      "articleId": "9d3fa6d1-3fab-4d82-bfc0-de5bb0668c0b",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "hallucination-grounding",
+      "topicId": "c4d4fa6c-0e9f-4837-9d11-58abed68c4c9",
+      "articleId": "bab48603-599c-43a2-90cd-21d4dc89f76c",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "llm-evaluation",
+      "topicId": "4940e8e9-1ba9-4cb3-84a8-b8b1cc82245a",
+      "articleId": "cf10b118-e200-4592-a668-143bf54a4600",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "multimodal-models",
+      "topicId": "8e6c86fe-cc56-492b-bc00-04bbe6d59752",
+      "articleId": "fd30be42-19f3-43b4-9cc0-72d70ea085f3",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "mlops-lifecycle",
+      "topicId": "d63d5d33-ab74-4afa-85ea-6bf7dea8c25c",
+      "articleId": "3a0e1d7a-b2ae-4738-a010-27ba4789d99a",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "data-model-versioning",
+      "topicId": "d362406d-b9a0-49bb-9994-9f3434eafa79",
+      "articleId": "12b21414-8597-4798-a43c-d9007ca97ae4",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "model-serving-batch-online",
+      "topicId": "e7d924d0-c0b0-43fa-9f22-05566dfe0ff6",
+      "articleId": "6dd0ee2f-572f-49b8-a16e-009455223bdb",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "gpu-inference-optimization",
+      "topicId": "29581af3-75e3-4ca1-96cc-23b3d0cee85e",
+      "articleId": "5a4d1c7e-b7ad-4e18-bbde-ffad7be357d6",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "llm-cost-latency",
+      "topicId": "06455d22-1066-45f6-be4f-7106f9ee16a1",
+      "articleId": "30335574-10ae-4667-afb1-78c8a0e23640",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "drift-monitoring",
+      "topicId": "d9646a25-0fbf-4961-aeea-bac112804ec9",
+      "articleId": "bc5c7ab0-db9d-45a7-b623-1e8ba5ddd8d7",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "ai-security-prompt-injection",
+      "topicId": "45aa47e5-5e97-4ad7-899e-50528ab6f094",
+      "articleId": "17fea2ff-c5ad-4ecb-9f38-cb2566e5c5ba",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "ai-privacy-data-handling",
+      "topicId": "34ed410a-a994-4047-bef7-3e0e2050a37d",
+      "articleId": "cfdd843c-60b5-4f6a-8a79-a7621666a0d8",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "responsible-ai-risk",
+      "topicId": "c383daf1-2712-4546-9c03-c2f8a63c8a9a",
+      "articleId": "0b640f7b-fa28-4cd0-8da7-7a3a3cc81a4e",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "ai-release-operations",
+      "topicId": "34acfd73-1ae6-4f23-9a66-be8f11e3b0db",
+      "articleId": "086accc3-9787-4fac-ac03-ea8cd1d3326b",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "problem-discovery",
+      "topicId": "b1184aa7-a5b3-4fff-898c-39172204789f",
+      "articleId": "cbd826f2-cf07-46e5-831e-f4f056df40ad",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "user-research-journey",
+      "topicId": "ab1cf09d-48ec-479a-97b6-317684bb181c",
+      "articleId": "7f7b314e-2fc0-42b3-a8b7-a427932d6f31",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "prioritization-roadmaps",
+      "topicId": "d5182650-ed4f-4b37-a95b-3894bd4c5e36",
+      "articleId": "7f55f396-db61-4e91-bc00-c4fd3fc4c6c7",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "mvp-experiments",
+      "topicId": "1844d7b3-2bcd-4d2d-8f31-1d951c15211b",
+      "articleId": "f9979441-a2d9-4695-9a5e-3d6fbf3aa2d6",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "product-metrics-funnels",
+      "topicId": "e1aed4ac-1394-4f99-905a-aa4cc16884f5",
+      "articleId": "6a3bfe7b-33d5-4808-adf1-00ad0be7f455",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "ux-accessibility",
+      "topicId": "167a1659-2b86-4773-92e5-2db3bcdd75ff",
+      "articleId": "127f1e3d-9dd1-4c27-88a1-d8adf92f40aa",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "technical-communication",
+      "topicId": "04066a59-8989-4ea8-ade8-5da460e11407",
+      "articleId": "af0a2d76-7f8c-4f35-9536-dd9a7e6fc471",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "business-cases-tco",
+      "topicId": "37d1d1ef-dbca-45db-8417-7c291ee7ecdb",
+      "articleId": "fa107112-ac02-4aa6-be98-bcb7f9087639",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "vendor-build-buy",
+      "topicId": "5ae52f42-a946-4455-ab53-bdc50637634c",
+      "articleId": "21cdef39-db5f-4391-9232-ab64fcce86e1",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "strategy-okr-learning",
+      "topicId": "5332dca0-43ef-4bb6-8bae-20c67d1c9ee3",
+      "articleId": "539b7a00-e5bf-46d2-bad4-4e7f512d34bc",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "project-charter-scope",
+      "topicId": "0bd326f5-482b-427a-b12b-9c18b7e1d4b3",
+      "articleId": "75cf5d02-f82c-4ebf-ba96-c768f4bb6948",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "stakeholders-raci",
+      "topicId": "c3d5165d-2b4a-4db2-acd2-d90b67e2c8c7",
+      "articleId": "84096a57-5365-4ff7-b60f-0df7f3c43757",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "requirements-user-stories",
+      "topicId": "164808ee-97d0-4518-b26b-228c1b500075",
+      "articleId": "e0b82353-49b2-4bf9-9859-8f1b31dd0744",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "wbs-estimation",
+      "topicId": "1911961d-8859-46bb-be8e-2085d354139d",
+      "articleId": "d5a86912-ea45-4f5d-92b9-92782f2416aa",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "scheduling-dependencies",
+      "topicId": "20499439-bbf4-496e-9c15-9c765588def8",
+      "articleId": "9ab6f3ae-c573-4817-88c5-9f101a42b7cf",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "agile-scrum",
+      "topicId": "a1277167-5f76-4ab6-b484-bb657ef6de51",
+      "articleId": "1eb326a9-c68a-4058-8ed8-1a20fdf0ebab",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "kanban-flow",
+      "topicId": "72b8d758-7b7b-4f52-aa8a-36202ad8064a",
+      "articleId": "1245aeda-643c-4dc7-87bc-fd6e7a6f6902",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "project-risk-change",
+      "topicId": "434d14e0-74ee-4695-a159-5df18ab247b1",
+      "articleId": "8ce3d785-2eb2-412f-ab42-1f4e2422231c",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "delivery-quality-release",
+      "topicId": "93e865b7-790b-44db-be31-19216f7e4c85",
+      "articleId": "6ca2103d-edb9-45e0-a677-995842c5156a",
+      "levels": 4,
+      "quizzes": 4,
+      "sourceMatched": true
+    },
+    {
+      "slug": "ai-project-management",
+      "topicId": "9cc589a3-e0b8-4d7f-8692-8e1971128722",
+      "articleId": "bff2c3c0-1515-444f-90b3-831dcf7a56d2",
       "levels": 4,
       "quizzes": 4,
       "sourceMatched": true

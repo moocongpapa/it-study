@@ -10,16 +10,18 @@ const RowSchema = z.object({ slug: z.string(), level_1_mental_model: z.string().
 async function main() {
   const options = new Command().requiredOption("--baseline-file <path>", "JSON snapshot of slug/body_hash before editing")
     .requiredOption("--out-dir <path>", "Directory for guarded SQL; this script never writes to DB").parse().opts<{ baselineFile: string; outDir: string }>();
-  const rows = z.array(RowSchema).length(50).parse(JSON.parse(await readFile("content/readable-library.json", "utf8")));
-  const baseline = z.array(z.object({ slug: z.string(), body_hash: z.string().regex(/^[0-9a-f]{32}$/) })).length(50).parse(JSON.parse(await readFile(options.baselineFile, "utf8")));
+  const rows = z.array(RowSchema).min(1).parse(JSON.parse(await readFile("content/readable-library.json", "utf8")));
+  const baseline = z.array(z.object({ slug: z.string(), body_hash: z.string().regex(/^[0-9a-f]{32}$/) })).min(1).parse(JSON.parse(await readFile(options.baselineFile, "utf8")));
   const hashBySlug = new Map(baseline.map((r) => [r.slug, r.body_hash]));
-  if (hashBySlug.size !== 50 || new Set(rows.map((r) => r.slug)).size !== 50 || rows.some((r) => !hashBySlug.has(r.slug))) throw new Error("Snapshot/revision coverage mismatch");
+  if (hashBySlug.size !== baseline.length || new Set(rows.map((r) => r.slug)).size !== rows.length || rows.some((r) => !hashBySlug.has(r.slug))) throw new Error("Snapshot/revision coverage mismatch");
   const catalog = JSON.parse(await readFile("src/lib/demo-catalog.json", "utf8")) as { domains: { id: string; slug: string }[]; topics: { slug: string; domain_id: string }[] };
   const enriched = rows.map((row) => ({ ...row, old_hash: hashBySlug.get(row.slug)!, new_hash: createHash("md5").update(fields.map((f) => row[f]).join("|")).digest("hex") }));
   await mkdir(resolve(options.outDir), { recursive: true });
   for (const domain of catalog.domains) {
     const slugs = catalog.topics.filter((t) => t.domain_id === domain.id).map((t) => t.slug);
-    const payload = JSON.stringify(enriched.filter((row) => slugs.includes(row.slug)));
+    const domainRows = enriched.filter((row) => slugs.includes(row.slug));
+    if (!domainRows.length) continue;
+    const payload = JSON.stringify(domainRows);
     if (payload.includes("$revision_payload$") || payload.includes("$readable_revision$")) throw new Error("SQL delimiter collision");
     const assignments = fields.map((f) => f + " = p.c->>'" + f + "'").join(",\n      ");
     const sql = [
@@ -47,6 +49,6 @@ async function main() {
     await writeFile(resolve(options.outDir, domain.slug + ".sql"), sql);
   }
   await writeFile(resolve(options.outDir, "expected-hashes.json"), JSON.stringify(enriched.map((r) => ({ slug: r.slug, body_hash: r.new_hash })), null, 2) + "\n");
-  console.log("Exported 50 guarded article revisions to " + resolve(options.outDir));
+  console.log(`Exported ${rows.length} guarded article revisions to ${resolve(options.outDir)}`);
 }
 main().catch((error) => { console.error(error instanceof Error ? error.message : error); process.exitCode = 1; });

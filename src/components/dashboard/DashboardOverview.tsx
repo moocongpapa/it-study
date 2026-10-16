@@ -138,7 +138,7 @@ export function DashboardOverview({ domains, topics, progress: initialProgress, 
           })}</div> : <div className="rounded-xl border border-dashed border-emerald-200 bg-emerald-50 p-7 text-center"><CheckCircle2 className="mx-auto size-7 text-emerald-700" /><p className="mt-3 text-sm font-bold text-slate-800">오늘 예정된 복습이 없습니다</p><p className="mt-1 text-xs text-slate-500">새 토픽을 학습하거나 내일 다시 확인하세요.</p></div>}
         </Card>
 
-        <Card className="p-5 sm:p-6"><div className="mb-5 flex items-center gap-2"><Layers3 className="size-4 text-blue-700" /><h3 className="text-sm font-bold text-slate-900">10대 도메인 마스터리</h3></div><div className="grid gap-3 sm:grid-cols-2">{domains.map((domain) => {
+        <Card className="p-5 sm:p-6"><div className="mb-5 flex items-center gap-2"><Layers3 className="size-4 text-blue-700" /><h3 className="text-sm font-bold text-slate-900">분야별 학습 현황</h3></div><div className="grid gap-3 sm:grid-cols-2">{domains.map((domain) => {
           const done = topics.filter((topic) => topic.domain_id === domain.id && completedIds.has(topic.id)).length;
           const percent = domain.topicCount ? Math.round(done / domain.topicCount * 100) : 0;
           return <Link key={domain.id} href={`/roadmap/${domain.slug}`} className="rounded-xl border border-slate-200 bg-slate-50 p-4 transition-colors hover:border-blue-300 hover:bg-blue-50"><div className="mb-3 flex items-start justify-between gap-2"><span className="text-xs font-bold leading-5 text-slate-800">{domain.title}</span><span className="text-[11px] tabular-nums text-blue-700">{done}/{domain.topicCount}</span></div><Progress value={percent} /><span className="mt-2 block text-right text-[10px] text-slate-500">{percent}%</span></Link>;

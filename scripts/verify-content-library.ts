@@ -14,7 +14,7 @@ async function main() {
   const rows = await readLibrary();
   const catalog = JSON.parse(await readFile("src/lib/demo-catalog.json", "utf8"));
   const expected: string[] = catalog.topics.filter((t: { slug: string }) => !["logic-gates", "processes-threads"].includes(t.slug)).map((t: { slug: string }) => t.slug);
-  ensure(rows.length === expected.length && expected.every((slug) => rows.some((r) => r.slug === slug)), "48-topic coverage mismatch");
+  ensure(rows.length === expected.length && expected.every((slug) => rows.some((r) => r.slug === slug)), "Topic coverage mismatch");
   const dom = new JSDOM("<!doctype html><html><body></body></html>");
   Object.assign(globalThis, { window: dom.window, document: dom.window.document });
   const mermaid = (await import("mermaid")).default;
@@ -69,11 +69,19 @@ async function main() {
       create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$;`);
     for (const path of ["supabase/migrations/20261013000000_init_schema.sql", "supabase/migrations/20261013060132_interactive_learning.sql", "supabase/migrations/20261013062613_content_batch_atomic_write.sql", "supabase/migrations/20261014000000_content_batch_guarded_write.sql", "supabase/seed.sql", "supabase/quiz_seed.sql"])
       await db.exec(await readFile(path, "utf8"));
+    const expansionSql = await readFile("supabase/expansion_seed.sql", "utf8");
+    await db.exec(expansionSql);
+    await db.exec(expansionSql);
+    const taxonomy = (await db.query<{ domains: number; topics: number; edges: number }>(`select
+      (select count(*)::int from public.domains) domains,
+      (select count(*)::int from public.topics) topics,
+      (select count(*)::int from public.topic_prerequisites) edges`)).rows[0];
+    ensure(taxonomy.domains === catalog.domains.length && taxonomy.topics === catalog.topics.length && taxonomy.edges === catalog.prerequisites.length, "Expansion taxonomy/idempotency mismatch");
     const starters = JSON.parse(await readFile("content/starter-content.json", "utf8"));
     await db.query(librarySql(starters));
     const before = await db.query("select level_1_mental_model from public.articles a join public.topics t on t.id=a.topic_id where t.slug='processes-threads'");
     const result = await db.query<{ outcome: string }>(librarySql(rows));
-    ensure(result.rows.length === 48 && result.rows.every((x) => x.outcome === "inserted"), "Atomic insert incomplete");
+    ensure(result.rows.length === rows.length && result.rows.every((x) => x.outcome === "inserted"), "Atomic insert incomplete");
     const repeat = await db.query<{ outcome: string }>(librarySql(rows));
     ensure(repeat.rows.every((x) => x.outcome === "skipped_existing"), "Repeat changed existing content");
     const after = await db.query("select level_1_mental_model from public.articles a join public.topics t on t.id=a.topic_id where t.slug='processes-threads'");
@@ -82,7 +90,7 @@ async function main() {
       (select count(*)::int from public.articles where is_published) as articles,
       (select count(*)::int from public.quizzes) as quizzes,
       (select count(*)::int from public.topics t where (select count(distinct level) from public.quizzes q where q.topic_id=t.id)<>4) as uncovered`)).rows[0];
-    ensure(dbCounts.articles === 50 && dbCounts.quizzes === 208 && dbCounts.uncovered === 0, "Full library database counts mismatch");
+    ensure(dbCounts.articles === catalog.topics.length && dbCounts.quizzes === rows.length * 4 + 16 && dbCounts.uncovered === 0, "Full library database counts mismatch");
   } finally { await db.close(); }
 
   let references: Array<{ url: string; status: number | string }> = [];

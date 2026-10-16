@@ -11,6 +11,7 @@
     "db:verify": "node scripts/verify-schema.mjs",
     "content:generate": "node --import tsx scripts/generate-content.ts",
     "content:seed-starter": "node --import tsx scripts/seed-curated-content.ts",
+    "content:build-expansion": "node --import tsx scripts/build-expansion.ts",
     "content:build": "node --import tsx scripts/build-content-library.ts",
     "content:verify": "node --import tsx scripts/verify-content-library.ts",
     "content:seed-library": "node --import tsx scripts/seed-content-library.ts",

@@ -1,6 +1,6 @@
 # IT 지식 지도와 선수 학습 그래프
 
-이 문서는 **10개 도메인, 131개 토픽**의 초기 전체 체계다. `supabase/seed.sql`은 이 중 각 도메인 핵심 5개, 총 50개를 실제 DB에 등록하며, 아래 표의 `계획` 토픽 81개는 후속 시드 배치로 추가한다. 현재 SQL에는 핵심 토픽 간 선수 간선 78개가 들어 있다. 모든 slug는 전역 고유 ID이며, `A → B`는 A를 완료한 뒤 B를 학습한다는 뜻이다.
+현재 등록 범위는 **18개 분야·130개 토픽과 공개 글·197개 선수 관계**다. 기존 10개 분야의 핵심 50개는 `supabase/seed.sql`, 새 8개 분야의 80개는 `supabase/expansion_seed.sql`로 등록한다. 아래 1~10번 표의 `계획` 81개는 아직 등록하지 않은 확장 후보이며 공개 콘텐츠 수에 포함하지 않는다. 모든 slug는 전역 고유 ID이며, `A → B`는 A를 완료한 뒤 B를 학습한다는 뜻이다.
 
 ## 공통 학습 깊이
 
@@ -21,7 +21,7 @@
                            설계·DB → API/분산 시스템 → 클라우드/웹 보안/AI
 ```
 
-표의 선수 slug는 권장 직접 선수다. 시드 행은 `seed.sql` 간선과 정확히 같고, 계획 행은 앞으로 추가할 간선이다. `—`는 진입 토픽을 뜻한다.
+표의 선수 slug는 권장 직접 선수다. 1~10번의 시드 행은 `seed.sql` 간선과 정확히 같고, 계획 행은 앞으로 추가할 간선이다. `—`는 진입 토픽을 뜻한다.
 
 ## 1. 컴퓨터 하드웨어 & 연산 기초
 
@@ -224,6 +224,158 @@
 | AI 플랫폼 | `rag-evaluation` · RAG 검색 품질·평가·관측 | Expert | `llm-vector-infra`, `model-serving` | 계획 |
 | AI 플랫폼 | `ai-infrastructure-security` · 프롬프트 주입·데이터 경계·모델 보안 | Expert | `model-serving`, `web-security` | 계획 |
 
+## 11. 데이터 분석 & 데이터 업무
+
+지표·통계·실험·SQL·파이프라인을 통해 데이터를 업무 판단으로 연결합니다.
+
+| 토픽 slug · 제목 | 난이도 | 직접 선수 slug | 등록 |
+|---|---|---|---|
+| `data-literacy` · 데이터로 질문하고 지표 읽기 | Beginner | — | 공개 |
+| `descriptive-statistics` · 평균·중앙값·분산과 분포 | Beginner | `data-literacy` | 공개 |
+| `probability-bayes` · 확률·조건부 확률과 베이즈 사고 | Intermediate | `descriptive-statistics` | 공개 |
+| `sampling-confidence` · 표본·편향과 불확실성 | Intermediate | `probability-bayes` | 공개 |
+| `hypothesis-ab-testing` · 가설 검정과 A/B 실험 | Intermediate | `sampling-confidence` | 공개 |
+| `sql-analytics` · SQL 집계·조인·윈도 함수 | Intermediate | `data-literacy`, `relational-normalization` | 공개 |
+| `data-cleaning-quality` · 결측·중복·이상치와 데이터 품질 | Intermediate | `data-literacy` | 공개 |
+| `etl-data-pipelines` · ETL·ELT와 데이터 파이프라인 | Advanced | `data-cleaning-quality`, `sql-analytics` | 공개 |
+| `analytics-warehouses` · 웨어하우스·레이크와 분석 모델 | Advanced | `etl-data-pipelines` | 공개 |
+| `data-governance-lineage` · 데이터 소유권·계약·계보 | Advanced | `data-cleaning-quality` | 공개 |
+
+편집 원본: `content/expansion/data-analytics.json`
+
+## 12. AI & 머신러닝 기초
+
+AI의 역할부터 데이터 분할·피처·모델 평가·실험 설계까지 배웁니다.
+
+| 토픽 slug · 제목 | 난이도 | 직접 선수 slug | 등록 |
+|---|---|---|---|
+| `ai-ml-dl` · AI·머신러닝·딥러닝의 차이 | Beginner | — | 공개 |
+| `ml-problem-framing` · 머신러닝 문제 정의와 기준선 | Beginner | `ai-ml-dl`, `data-literacy` | 공개 |
+| `train-validation-test` · 학습·검증·테스트와 데이터 누출 | Intermediate | `ml-problem-framing`, `data-cleaning-quality` | 공개 |
+| `features-preprocessing` · 피처·인코딩·전처리 | Intermediate | `train-validation-test` | 공개 |
+| `regression-models` · 회귀·손실 함수와 예측 오차 | Intermediate | `features-preprocessing` | 공개 |
+| `classification-metrics` · 분류·정밀도·재현율과 임계값 | Intermediate | `train-validation-test`, `probability-bayes` | 공개 |
+| `decision-trees-ensembles` · 결정 트리·랜덤 포레스트·부스팅 | Intermediate | `features-preprocessing`, `classification-metrics` | 공개 |
+| `clustering-reduction` · 군집화·유사도와 차원 축소 | Intermediate | `features-preprocessing` | 공개 |
+| `overfitting-regularization` · 과적합·일반화·정규화 | Intermediate | `train-validation-test`, `regression-models` | 공개 |
+| `ml-experiment-design` · 모델 실험·재현성과 튜닝 | Advanced | `overfitting-regularization`, `classification-metrics` | 공개 |
+
+편집 원본: `content/expansion/ai-machine-learning.json`
+
+## 13. 딥러닝 & AI 모델 원리
+
+텐서·기울기·신경망에서 비전·언어·Transformer·생성 모델까지 원리를 따라갑니다.
+
+| 토픽 slug · 제목 | 난이도 | 직접 선수 slug | 등록 |
+|---|---|---|---|
+| `vectors-matrices-tensors` · 벡터·행렬·텐서와 차원 | Intermediate | `features-preprocessing` | 공개 |
+| `gradients-optimization` · 미분·경사하강법·학습률 | Intermediate | `vectors-matrices-tensors`, `regression-models` | 공개 |
+| `neural-networks-backprop` · 신경망·활성화 함수·역전파 | Intermediate | `gradients-optimization` | 공개 |
+| `training-loops-batching` · 학습 루프·미니배치·평가 모드 | Intermediate | `neural-networks-backprop` | 공개 |
+| `convolution-vision` · 컴퓨터 비전·합성곱·이미지 전처리 | Intermediate | `training-loops-batching` | 공개 |
+| `sequences-nlp` · 자연어 처리·시퀀스·마스킹 | Intermediate | `vectors-matrices-tensors`, `training-loops-batching` | 공개 |
+| `attention-transformers` · 어텐션·Transformer와 위치 정보 | Advanced | `sequences-nlp`, `neural-networks-backprop` | 공개 |
+| `transfer-learning` · 전이 학습·동결·미세조정 | Advanced | `training-loops-batching`, `overfitting-regularization` | 공개 |
+| `generative-diffusion` · 생성 모델·확산 모델의 직관 | Advanced | `gradients-optimization`, `convolution-vision` | 공개 |
+| `reinforcement-learning` · 강화학습·보상·정책 | Advanced | `ai-ml-dl`, `probability-bayes` | 공개 |
+
+편집 원본: `content/expansion/deep-learning.json`
+
+## 14. 생성형 AI & LLM 활용
+
+LLM·토큰·프롬프트·RAG·미세조정·평가를 업무 사례로 연결합니다.
+
+| 토픽 slug · 제목 | 난이도 | 직접 선수 slug | 등록 |
+|---|---|---|---|
+| `llm-pretraining` · LLM의 사전학습·후속 학습·추론 | Beginner | `ai-ml-dl` | 공개 |
+| `tokens-context-windows` · 토큰·문맥 창·잘림과 생성 길이 | Beginner | `llm-pretraining` | 공개 |
+| `prompting-instructions` · 프롬프트·지시·예시와 검증 | Beginner | `llm-pretraining` | 공개 |
+| `structured-outputs` · 구조화 출력·JSON Schema·의미 검증 | Intermediate | `prompting-instructions`, `type-systems` | 공개 |
+| `embeddings-similarity` · 임베딩·벡터 유사도와 검색 | Intermediate | `vectors-matrices-tensors` | 공개 |
+| `rag-retrieval` · RAG·검색 증강 생성의 전체 흐름 | Intermediate | `prompting-instructions`, `embeddings-similarity` | 공개 |
+| `finetuning-lora` · 미세조정·LoRA·데이터셋 설계 | Advanced | `transfer-learning`, `llm-pretraining` | 공개 |
+| `hallucination-grounding` · 환각·출처·모르는 답 처리 | Intermediate | `rag-retrieval` | 공개 |
+| `llm-evaluation` · LLM 평가셋·루브릭·사람 평가 | Advanced | `hallucination-grounding`, `ml-experiment-design` | 공개 |
+| `multimodal-models` · 멀티모달·이미지·음성·문서 이해 | Intermediate | `llm-pretraining`, `tokens-context-windows` | 공개 |
+
+편집 원본: `content/expansion/generative-ai.json`
+
+## 15. AI 앱·에이전트 & 업무 자동화
+
+AI API·RAG·MCP·도구 실행·메모리·승인·코딩과 업무 자동화를 설계합니다.
+
+| 토픽 slug · 제목 | 난이도 | 직접 선수 slug | 등록 |
+|---|---|---|---|
+| `ai-api-integration` · AI API·스트리밍·재시도·취소 | Intermediate | `llm-pretraining`, `rest-api` | 공개 |
+| `rag-document-ingestion` · RAG 문서 수집·청킹·권한·삭제 | Advanced | `rag-retrieval`, `etl-data-pipelines` | 공개 |
+| `retrieval-hybrid-reranking` · 하이브리드 검색·재랭킹·검색 평가 | Advanced | `rag-document-ingestion` | 공개 |
+| `tool-calling` · 도구 호출·MCP와 서버 검증 | Advanced | `ai-api-integration`, `structured-outputs` | 공개 |
+| `agent-workflows` · 워크플로·에이전트 루프·종료 조건 | Advanced | `tool-calling` | 공개 |
+| `agent-state-memory` · 에이전트 상태·메모리·세션 분리 | Advanced | `agent-workflows`, `caching-strategies` | 공개 |
+| `agent-permissions-hitl` · 에이전트 권한·사람 승인·감사 | Advanced | `tool-calling`, `web-auth` | 공개 |
+| `agent-evaluation-tracing` · 에이전트 평가·추적·실패 재현 | Advanced | `agent-workflows`, `llm-evaluation`, `observability` | 공개 |
+| `ai-coding-assistants` · AI 코딩 보조·코드 리뷰·검증 | Intermediate | `ai-ml-dl`, `testing-pyramid` | 공개 |
+| `ai-business-automation` · AI 업무 자동화·검토·중복 방지 | Intermediate | `agent-permissions-hitl`, `ml-problem-framing` | 공개 |
+
+편집 원본: `content/expansion/ai-engineering.json`
+
+## 16. AI 운영·보안 & 책임 있는 AI
+
+AI 배포·GPU·비용·드리프트·주입 공격·개인정보·위험·복구를 운영합니다.
+
+| 토픽 slug · 제목 | 난이도 | 직접 선수 slug | 등록 |
+|---|---|---|---|
+| `mlops-lifecycle` · MLOps·LLMOps와 모델 수명주기 | Advanced | `ml-experiment-design`, `cicd-pipelines` | 공개 |
+| `data-model-versioning` · 데이터·모델·프롬프트 버전 관리 | Advanced | `mlops-lifecycle` | 공개 |
+| `model-serving-batch-online` · 배치·온라인 추론과 서빙 계약 | Advanced | `mlops-lifecycle`, `rest-api` | 공개 |
+| `gpu-inference-optimization` · GPU·정밀도·양자화·KV 캐시 | Expert | `attention-transformers`, `model-serving-batch-online` | 공개 |
+| `llm-cost-latency` · LLM 비용·지연·캐시·모델 라우팅 | Advanced | `ai-api-integration`, `tokens-context-windows` | 공개 |
+| `drift-monitoring` · 데이터 드리프트·성능 저하·모니터링 | Advanced | `mlops-lifecycle`, `descriptive-statistics` | 공개 |
+| `ai-security-prompt-injection` · 프롬프트 주입·AI 보안 경계 | Advanced | `agent-permissions-hitl`, `rag-retrieval` | 공개 |
+| `ai-privacy-data-handling` · AI 입력·로그·보관과 개인정보 | Intermediate | `data-governance-lineage`, `ai-api-integration` | 공개 |
+| `responsible-ai-risk` · 책임 있는 AI·위험 평가·모델 카드 | Advanced | `ml-problem-framing`, `llm-evaluation` | 공개 |
+| `ai-release-operations` · AI 출시·카나리·장애 대응·롤백 | Expert | `mlops-lifecycle`, `agent-evaluation-tracing` | 공개 |
+
+편집 원본: `content/expansion/mlops-responsible-ai.json`
+
+## 17. IT·AI 프로젝트 관리
+
+목표와 범위에서 요구사항·일정·위험·출시까지, IT와 AI 프로젝트를 끝까지 운영하는 방법을 배웁니다.
+
+| 토픽 slug · 제목 | 난이도 | 직접 선수 slug | 등록 |
+|---|---|---|---|
+| `project-charter-scope` · 프로젝트 목표·범위·성공 기준 | Beginner | — | 공개 |
+| `stakeholders-raci` · 이해관계자·RACI·의사결정 기록 | Beginner | `project-charter-scope` | 공개 |
+| `requirements-user-stories` · 요구사항·사용자 스토리·인수 조건 | Beginner | `project-charter-scope` | 공개 |
+| `wbs-estimation` · 작업 분해·추정·불확실성 | Intermediate | `requirements-user-stories` | 공개 |
+| `scheduling-dependencies` · 일정·의존성·핵심 경로 | Intermediate | `wbs-estimation` | 공개 |
+| `agile-scrum` · 애자일·스크럼·회고 | Beginner | `project-charter-scope`, `requirements-user-stories` | 공개 |
+| `kanban-flow` · 칸반·진행 중 작업 제한·흐름 지표 | Intermediate | `project-charter-scope` | 공개 |
+| `project-risk-change` · 프로젝트 위험·이슈·변경 관리 | Intermediate | `project-charter-scope`, `scheduling-dependencies` | 공개 |
+| `delivery-quality-release` · 품질 게이트·출시·인수인계 | Advanced | `project-risk-change`, `requirements-user-stories` | 공개 |
+| `ai-project-management` · AI 프로젝트 기획·평가·사람 업무 설계 | Intermediate | `project-charter-scope`, `ml-problem-framing` | 공개 |
+
+편집 원본: `content/expansion/project-management.json`
+
+## 18. 제품·UX & IT 업무 전략
+
+사용자 문제와 제품 가치부터 접근성·협업·사업 타당성·구축과 구매·IT 전략까지 연결합니다.
+
+| 토픽 slug · 제목 | 난이도 | 직접 선수 slug | 등록 |
+|---|---|---|---|
+| `problem-discovery` · 문제 발견·사용자 가치·가설 | Beginner | — | 공개 |
+| `user-research-journey` · 사용자 인터뷰·여정 지도·업무 관찰 | Beginner | `problem-discovery` | 공개 |
+| `prioritization-roadmaps` · 우선순위·제품 로드맵·기술 부채 | Intermediate | `problem-discovery` | 공개 |
+| `mvp-experiments` · MVP·프로토타입·업무 실험 | Intermediate | `problem-discovery` | 공개 |
+| `product-metrics-funnels` · 제품 지표·퍼널·코호트·가드레일 | Intermediate | `data-literacy`, `problem-discovery` | 공개 |
+| `ux-accessibility` · UX·접근성·인지 부담 줄이기 | Intermediate | `user-research-journey` | 공개 |
+| `technical-communication` · 기술 문서·ADR·상태 공유·협업 | Beginner | — | 공개 |
+| `business-cases-tco` · 사업 타당성·총비용·AI 업무 효과 | Intermediate | `problem-discovery`, `data-literacy` | 공개 |
+| `vendor-build-buy` · 직접 구축·구매·외부 서비스 평가 | Advanced | `business-cases-tco` | 공개 |
+| `strategy-okr-learning` · IT·AI 전략·OKR·조직 학습 | Advanced | `problem-discovery`, `product-metrics-funnels` | 공개 |
+
+편집 원본: `content/expansion/product-business.json`
+
 ## 그래프와 콘텐츠 운영 규칙
 
 1. `topics.slug`는 제목 변경과 관계없이 유지한다. 명칭 변경은 `title`만 바꾼다. 도메인마다 `display_order`를 매기고, 실제 학습 순서는 DAG 위상 정렬과 사용자 완료 상태로 결정한다.
@@ -235,4 +387,4 @@
 
 ## 변경 관리와 범위
 
-이 지도의 131개 토픽은 지식 분류의 출발 버전이다. 분야별 세부 분야(예: 게임 엔진, 데이터 과학, 임베디드 실시간 시스템, 네트워크 프로토콜 심화)는 동일한 `domains → topics → topic_prerequisites` 모델에 slug와 간선을 추가해 확장한다. “모든 IT 지식”을 유한한 목록으로 고정할 수 없으므로, 운영 중 누락을 분기별로 검토하고 핵심/선택 선수 관계를 교정한다.
+초기 131개 분류 후보(등록 50개·계획 81개)에 이번 신규 80개를 더했다. 계획 81개는 공개 글 130개와 구분한다. 분야별 세부 분야(예: 게임 엔진, 데이터 과학, 임베디드 실시간 시스템, 네트워크 프로토콜 심화)는 동일한 `domains → topics → topic_prerequisites` 모델에 slug와 간선을 추가해 확장한다. “모든 IT 지식”을 유한한 목록으로 고정할 수 없으므로, 운영 중 누락을 분기별로 검토하고 핵심/선택 선수 관계를 교정한다.
