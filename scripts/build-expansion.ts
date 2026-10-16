@@ -7,7 +7,7 @@ const text = z.string().min(1);
 const Topic = z.object({
   slug: text.regex(/^[a-z0-9]+(-[a-z0-9]+)*$/), title: text,
   difficulty: z.enum(['beginner','intermediate','advanced','expert']), prerequisites: z.array(text),
-  summary: text.min(20), analogy: text.min(30), boundary: text.min(20),
+  summary: text.min(20), why: text.min(30), analogy: text.min(30), boundary: text.min(20),
   steps: z.array(text.min(10)).length(3), terms: z.array(z.tuple([text,text])).min(3),
   language: z.enum(['python','markdown','json','sql']), code: text, explanation: text.min(30),
   incident: z.tuple([text,text,text,text,text]),
@@ -43,7 +43,7 @@ async function main(){
       const quiz=t.quizzes.map((q,i)=>{const offset=(index+i)%4;const choices=[q[1],q[2],q[3],q[4]];const rotated=[...choices.slice(4-offset),...choices.slice(0,4-offset)];return {level:i+1,question:q[0],choices:rotated,answer_index:offset,explanation:q[5]};});
       const steps=t.steps.map((s,i)=>`${i+1}. ${s}`).join('\n');
       const diagram='flowchart TD\n '+t.steps.map((s,i)=>`${String.fromCharCode(65+i)}["${s.replaceAll('"','').replace(/[\[\]]/g,'').slice(0,65)}"]`).join(' --> ');
-      const l1=`# ${t.title}\n\n> **한 문장으로:** ${t.summary}\n\n## 왜 필요한가요?\n\n${t.explanation}\n\n## 일상에서 떠올려 보기\n\n${t.analogy}\n\n## 순서대로 따라가기\n\n${steps}\n\n\`\`\`mermaid\n${diagram}\n\`\`\`\n\n## 처음 만나는 용어\n\n${table(['용어','쉬운 뜻'],t.terms)}\n\n**비유의 한계:** ${t.boundary}\n\n## 스스로 확인\n\n${t.quizzes[0][0]}\n\n**답과 이유:** ${t.quizzes[0][1]} — ${t.quizzes[0][5]}`;
+      const l1=`# ${t.title}\n\n> **한 문장으로:** ${t.summary}\n\n## 왜 필요한가요?\n\n${t.why}\n\n## 일상에서 떠올려 보기\n\n${t.analogy}\n\n## 순서대로 따라가기\n\n${steps}\n\n\`\`\`mermaid\n${diagram}\n\`\`\`\n\n## 처음 만나는 용어\n\n${table(['용어','쉬운 뜻'],t.terms)}\n\n**비유의 한계:** ${t.boundary}\n\n## 스스로 확인\n\n${t.quizzes[0][0]}\n\n**답과 이유:** ${t.quizzes[0][1]} — ${t.quizzes[0][5]}`;
       const l2=`# ${t.title} — 실제 흐름 따라가기\n\n## 읽기 전 길잡이\n\n${t.summary} 아래 예제는 외부 시스템에 연결하지 않는 작은 학습용 사례입니다. 입력, 처리 조건, 결과를 순서대로 살펴보세요.\n\n${steps}\n\n## 예제로 확인하기\n\n\`\`\`${t.language}\n${t.code}\n\`\`\`\n\n## 결과를 해석하기\n\n${t.explanation}\n\n## 실무에 옮기기 전\n\n${t.boundary} 실제 업무에서는 ${t.decision}\n\n## 확인 질문\n\n${t.quizzes[1][0]}\n\n**답과 이유:** ${t.quizzes[1][5]}`;
       const l3=`# ${t.title} — 가상 사례로 문제 해결하기\n\n실제 고객의 장애 기록이 아닌 학습용 재현 시나리오입니다. 결과만 바꾸기 전에 관측한 증거와 원인 가설을 구분합니다.\n\n## 1. 어떤 문제가 생겼나요?\n\n${t.incident[0]}\n\n## 2. 먼저 확인할 증거\n\n${t.incident[1]}\n\n## 3. 원인 가설\n\n${t.incident[2]}\n\n## 4. 수정 방법\n\n${t.incident[3]}\n\n## 5. 재검증\n\n${t.incident[4]}\n\n## 놓치기 쉬운 조건\n\n${t.boundary}\n\n## 확인 질문\n\n${t.quizzes[2][0]}\n\n**답과 이유:** ${t.quizzes[2][5]}`;
       const l4=`# ${t.title} — 업무와 아키텍처의 선택\n\n## 읽기 전 길잡이\n\n같은 개념도 업무의 규모, 오류 비용, 운영 역량에 따라 적용 방식이 달라집니다. 아래 비교는 특정 제품의 성능 순위가 아닌 선택 기준입니다.\n\n${table(['선택','얻는 점','감수할 점'],t.options)}\n\n## 선택 기준\n\n${t.decision}\n\n## 도입과 운영에서 확인할 것\n\n${t.incident[3]} ${t.incident[4]}\n\n## 판단 연습\n\n${t.quizzes[3][0]}\n\n**판단의 근거:** ${t.quizzes[3][5]}\n\n참고: ${d.references.map(([title,url])=>`[${title}](${url})`).join(', ')}.`;

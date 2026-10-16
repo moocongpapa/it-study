@@ -528,5 +528,12 @@
     491,
     650
   ],
-  "referencesCheckedAt": "2026-10-16T00:45:17.623Z"
+  "referencesCheckedAt": "2026-10-16T00:45:17.623Z",
+  "beginnerPurposeRevision": {
+    "checkedAt": "2026-10-16T00:52:09.412Z",
+    "articles": 80,
+    "levels2to4Unchanged": true,
+    "quizzesUnchanged": true,
+    "allBodiesValidated": true
+  }
 }

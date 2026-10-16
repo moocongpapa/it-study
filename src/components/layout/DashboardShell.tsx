@@ -101,6 +101,13 @@ export function DashboardShell({ children, domains, isDemo, isAuthenticated }: D
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isRoadmap]);
 
+  function navigateFromMenu() {
+    setMobileOpen(false);
+    setQuery("");
+    setDifficulty("all");
+    setSelectedTrack("all");
+  }
+
   async function signOut() {
     await createClient().auth.signOut();
     router.refresh();
@@ -110,12 +117,12 @@ export function DashboardShell({ children, domains, isDemo, isAuthenticated }: D
   return (
     <FilterContext.Provider value={filterValue}>
       <div className="min-h-svh bg-slate-50">
-        <aside className="fixed inset-y-0 left-0 z-30 hidden w-60 border-r border-slate-200 bg-white lg:block"><SidebarContents domains={domains} pathname={pathname} /></aside>
+        <aside className="fixed inset-y-0 left-0 z-30 hidden w-60 border-r border-slate-200 bg-white lg:block"><SidebarContents domains={domains} pathname={pathname} onNavigate={navigateFromMenu} /></aside>
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
           <SheetContent side="left" className="max-w-[290px] p-0 lg:hidden">
             <SheetTitle className="sr-only">분야별 학습 메뉴</SheetTitle>
             <SheetDescription className="sr-only">학습 분야를 선택해 주제 목록으로 이동합니다.</SheetDescription>
-            <SidebarContents domains={domains} pathname={pathname} onNavigate={() => setMobileOpen(false)} />
+            <SidebarContents domains={domains} pathname={pathname} onNavigate={navigateFromMenu} />
           </SheetContent>
         </Sheet>
         <div className="lg:pl-60">

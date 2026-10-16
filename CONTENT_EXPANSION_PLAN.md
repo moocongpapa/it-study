@@ -37,3 +37,5 @@ Google ML Crash Course, scikit-learn, PyTorch, Hugging Face, 원저자 논문, O
 - 공식 참고 링크 125개가 HTTP 200 응답했다. 출처의 전체 내용을 복제하지 않고 독자적인 설명과 예제를 작성했다.
 - 공개 API로 글 130개의 네 단계와 퀴즈 528개를 원고와 비교했고, 정답 컬럼이 공개 응답에 노출되지 않음을 확인했다. 18개 분야 페이지도 HTTP 200이었다.
 - 검증 기록: `content/expansion-publishing-report.json`, `content/verification-report.json`, `content/live-verification-report.json`.
+
+모바일 읽기 검토 후 신규 80개 글의 Level 1 필요성 설명을 별도 편집했다. 계산 예제 해설이 입문 도입부에 먼저 나오지 않도록 `why` 필드를 분리했다. 운영 적용은 기존 본문 해시와 일치할 때만 변경하는 조건으로 수행했고 Level 2~4와 퀴즈는 보존했다.

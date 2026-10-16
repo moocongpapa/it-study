@@ -169,7 +169,7 @@ export function TopicList({ domain, allDomains, allTopics, allPrerequisites, ini
             {!domain ? (
               <div className="mb-2 flex items-center justify-between gap-3 px-1">
                 <h2 className="min-w-0 text-sm font-semibold text-slate-900">{group.domain.title}</h2>
-                <Link href={"/roadmap/" + group.domain.slug} className="inline-flex shrink-0 items-center gap-0.5 rounded text-xs text-slate-500 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500" aria-label={group.domain.title + " 전체 보기"}>전체 보기 <ChevronRight className="size-3" /></Link>
+                <Link href={"/roadmap/" + group.domain.slug} onClick={() => { setQuery(""); setDifficulty("all"); setSelectedTrack("all"); }} className="inline-flex shrink-0 items-center gap-0.5 rounded text-xs text-slate-500 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500" aria-label={group.domain.title + " 전체 보기"}>전체 보기 <ChevronRight className="size-3" /></Link>
               </div>
             ) : null}
             <ul className="divide-y divide-slate-100 overflow-hidden rounded-xl border border-slate-200 bg-white">
