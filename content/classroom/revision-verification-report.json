@@ -1,0 +1,9 @@
+{
+  "checkedAt": "2026-10-16T13:05:58.384Z",
+  "articles": 130,
+  "domainBatches": 18,
+  "concurrentEditRejected": true,
+  "domainAtomicity": true,
+  "repeatProducedNoUpdates": true,
+  "bodyHashesMatched": true
+}

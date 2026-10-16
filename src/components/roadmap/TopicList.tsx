@@ -161,7 +161,7 @@ export function TopicList({ domain, allDomains, allTopics, allPrerequisites, ini
         {currentTrack && currentTrack.id !== "all" ? currentTrack.description : domain?.description ?? "궁금한 분야의 주제를 골라 학습해 보세요."}
       </p>
       {isDemo && !domain ? (
-        <p role="status" className="mb-4 rounded-lg bg-blue-50 px-3 py-2 text-xs leading-5 text-blue-700">체험 화면입니다. 트랜지스터와 논리회로, 프로세스와 스레드 글을 읽어보세요.</p>
+        <p role="status" className="mb-4 rounded-lg bg-blue-50 px-3 py-2 text-xs leading-5 text-blue-700">체험 화면이에요. 모든 그림 수업을 둘러볼 수 있고, 확인 퀴즈는 일부 샘플 주제에서 체험할 수 있어요.</p>
       ) : null}
       <div className="space-y-6" aria-label="학습 주제 목록">
         {groups.map((group) => (

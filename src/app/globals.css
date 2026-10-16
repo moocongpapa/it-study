@@ -167,3 +167,36 @@ kbd {
     transition-duration: .01ms !important;
   }
 }
+
+/* Classroom controls stay in the reading flow, with touch/keyboard targets. */
+.lesson-control {
+  display: inline-flex;
+  min-height: 44px;
+  min-width: 44px;
+  align-items: center;
+  gap: .4rem;
+  border: 1px solid #cbd5e1;
+  border-radius: .8rem;
+  padding: .5rem .75rem;
+  background: #fff;
+  color: #334155;
+  font-size: .8125rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+.lesson-control:hover { border-color: #0f766e; background: #f0fdfa; }
+.lesson-control[aria-pressed="true"] { border-color: #0f766e; background: #ccfbf1; color: #115e59; }
+.lesson-control:disabled { cursor: default; opacity: .4; }
+.lesson-board button:focus-visible, .lesson-control:focus-visible {
+  outline: 2px solid #0f766e;
+  outline-offset: 3px;
+}
+.lesson-result { border-radius: 1rem; background: #eff9f6; border: 1px solid #cce9df; padding: .85rem 1rem; color: #115e59; line-height: 1.7; }
+.lesson-instruction { display: flex; align-items: flex-start; gap: .5rem; color: #475569; font-size: .8125rem; line-height: 1.8; }
+.reader-article .lesson-board p, .reader-article .not-prose p { margin-top: 0; }
+.reader-article :where(h2) { margin-top: 1.6em; margin-bottom: .7em; }
+.reader-article .classroom-reference :where(p, li) { font-size: .9375rem; }
+@keyframes lesson-progress { from { width: 0%; } to { width: 100%; } }
+.lesson-scene-progress { animation: lesson-progress 3.2s linear forwards; }
+@media (prefers-reduced-motion: reduce) { .lesson-scene-progress { animation: none; width: 100%; } }
+.lesson-token-control { min-width: 0; padding: .5rem .1rem; font-size: .75rem; white-space: nowrap; }

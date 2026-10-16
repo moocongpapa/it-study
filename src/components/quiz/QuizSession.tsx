@@ -96,16 +96,16 @@ export function QuizSession({ topic, level, locked, isDemo, onAvailability, onPr
   if (!quizzes.length) return <div className="mt-9 rounded-xl border border-dashed border-slate-200 p-5 text-center text-xs text-slate-500"><CircleHelp className="mx-auto mb-2 size-5" />이 레벨의 퀴즈를 준비하고 있어요.</div>;
 
   return (
-    <section className="mt-6 rounded-xl border border-blue-200 bg-white p-4 sm:p-5" aria-label={`레벨 ${level} 인출 퀴즈`}>
+    <section className="mt-6 rounded-xl border border-blue-200 bg-white p-4 sm:p-5" aria-label={`레벨 ${level} 확인 퀴즈`}>
       <div className="mb-5 flex items-center justify-between gap-3">
         <div className="flex items-center gap-2 text-xs font-semibold text-blue-700"><Sparkles className="size-4" />{level}단계 · 확인 퀴즈</div>
         <span className="text-[11px] tabular-nums text-slate-500">{passedIds.filter((id) => quizzes.some((item) => item.id === id)).length}/{quizzes.length} 통과</span>
       </div>
-      {locked ? <p className="mb-4 flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-700"><LockKeyhole className="size-4 shrink-0" />선수 토픽을 완료하면 답안을 제출할 수 있습니다.</p> : null}
+      {locked ? <p className="mb-4 flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-700"><LockKeyhole className="size-4 shrink-0" />먼저 알면 좋은 개념을 완료하면 풀 수 있어요. 그림과 연습 카드는 지금도 자유롭게 볼 수 있어요.</p> : null}
       {levelComplete ? (
         <div className="rounded-lg bg-emerald-50 p-4">
           <p className="flex items-center gap-2 text-sm font-semibold text-emerald-800"><Check className="size-4" />{level}단계 퀴즈 완료</p>
-          <p className="mt-1 text-xs leading-6 text-slate-600">핵심 내용을 확인했습니다. 다른 단계도 이어서 읽어보세요.</p>
+          <p className="mt-1 text-xs leading-6 text-slate-600">잘했어요! 이번 단계의 핵심을 확인했어요. 잠깐 쉬었다 다음 단계로 이어가도 좋아요.</p>
           {feedback?.passed ? (
             <div className="mt-4 rounded-xl border border-emerald-200 bg-white p-3.5 text-left text-sm leading-7 text-slate-700">
               <span className="font-semibold text-emerald-700">해설: </span>
@@ -166,7 +166,7 @@ export function QuizSession({ topic, level, locked, isDemo, onAvailability, onPr
             <div className={cn("mt-5 rounded-xl border p-4.5 shadow-sm transition-all", feedback.passed ? "border-emerald-200 bg-emerald-50" : "border-rose-200 bg-rose-50")} role="status">
               <p className={cn("flex items-center gap-2 text-xs font-bold", feedback.passed ? "text-emerald-700" : "text-rose-700")}>
                 {feedback.passed ? <Check className="size-4" strokeWidth={2.5} /> : <X className="size-4" strokeWidth={2.5} />}
-                {feedback.passed ? "정답입니다." : "다시 한 번 생각해 보세요."}
+                {feedback.passed ? "맞아요! 이유까지 살펴볼까요?" : "괜찮아요. 이 설명을 보고 다시 해봐요."}
               </p>
               {!feedback.passed ? <p className="mt-2 text-xs font-medium text-slate-800">정답: <span className="text-blue-700">{feedback.correctAnswer}</span></p> : null}
               <p className="mt-2 text-sm leading-7 text-slate-700">{feedback.explanation}</p>

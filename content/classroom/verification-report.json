@@ -1,0 +1,27 @@
+{
+  "checkedAt": "2026-10-16T13:02:01.975Z",
+  "articles": 130,
+  "chapters": 520,
+  "visualBlocks": 780,
+  "ssrViews": 780,
+  "retainedReferences": 390,
+  "unchangedQuizSets": 128,
+  "formats": {
+    "gate": 1,
+    "bits": 2,
+    "sequence": 57,
+    "compare": 35,
+    "sort": 25,
+    "capacity": 2,
+    "growth": 1,
+    "threshold": 1,
+    "distribution": 1,
+    "network": 1,
+    "attention": 1,
+    "vector": 1,
+    "schedule": 1,
+    "kanban": 1
+  },
+  "teachingModels": "truth tables, signed bits, queue conservation, classification boundary/monotonicity, mean/median, cosine similarity, gradient improvement, attention normalization, parallel schedule",
+  "unsafeReferenceFallbacks": 3
+}

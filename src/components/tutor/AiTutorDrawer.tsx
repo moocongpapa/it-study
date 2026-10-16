@@ -12,9 +12,9 @@ import type { Topic } from "@/types/roadmap";
 interface TutorMessage { role: "user" | "assistant"; content: string }
 
 const suggestions = [
-  "실무에서 이 구조를 쓰다 문제가 생긴 사례는?",
-  "면접에서 물어보면 어떻게 1분 요약하죠?",
-  "제가 이해한 흐름을 점검해 주세요.",
+  "학교생활에 빗대어 쉽게 설명해 주세요.",
+  "작은 예를 하나씩 같이 풀어볼까요?",
+  "제가 설명해 볼게요. 이해한 게 맞는지 봐주세요.",
 ];
 
 function plainText(children: ReactNode): string {

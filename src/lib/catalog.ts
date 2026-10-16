@@ -29,8 +29,13 @@ function demoCatalogResult(): Catalog {
   };
 }
 
-function demoArticle(topicSlug: string): Article | null {
+async function demoArticle(topicSlug: string, fullPreview = false): Promise<Article | null> {
   const topic = demo.topics.find((item) => item.slug === topicSlug);
+  if(fullPreview && topic) {
+    const library=(await import("../../content/readable-library.json")).default;
+    const row=library.find((item)=>item.slug===topicSlug);
+    if(row)return {id:`demo-${topicSlug}`,topic_id:topic.id,...row,is_published:true,created_at:"",updated_at:""};
+  }
   const existing = demo.articles.find((article) => article.topic_id === topic?.id);
   if (existing) return existing;
   const starter = starterContent.find((item) => item.slug === topicSlug);
@@ -93,7 +98,7 @@ export const getCatalog = cache(async (): Promise<Catalog> => {
 });
 
 export async function getArticle(topicSlug: string): Promise<Article | null> {
-  if (!isSupabaseConfigured) return demoArticle(topicSlug);
+  if (!isSupabaseConfigured) return demoArticle(topicSlug, true);
 
   try {
     const supabase = await createClient();

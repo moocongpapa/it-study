@@ -9,7 +9,7 @@ npm ci
 npm run dev
 ```
 
-`package-lock.json`으로 동일한 버전을 설치합니다. 기본 주소는 `http://localhost:3000/roadmap`입니다. DB 환경 변수가 없으면 18개 분야, 130개 토픽, 197개 선수 관계와 두 편의 샘플 아티클과 8개 체험용 퀴즈를 로컬 미리보기로 실행합니다. 미리보기의 완료·퀴즈·복습 상태는 해당 브라우저의 `localStorage`에 저장됩니다.
+`package-lock.json`으로 동일한 버전을 설치합니다. 기본 주소는 `http://localhost:3000/roadmap`입니다. DB 환경 변수가 없으면 18개 분야, 130개 토픽, 197개 선수 관계와 130개 그림 수업과 8개 체험용 퀴즈를 로컬 미리보기로 실행합니다. 미리보기의 완료·퀴즈·복습 상태는 해당 브라우저의 `localStorage`에 저장됩니다.
 
 ## 학습 화면
 
@@ -25,7 +25,7 @@ npm run dev
 4. AI 튜터를 쓰려면 `.env.local`에 `AI_GATEWAY_API_KEY`를 추가합니다. Vercel 환경에서는 OIDC 인증을 사용할 수도 있습니다. 기본 모델은 `AI_TUTOR_MODEL=openai/gpt-5.4-mini`이며 Vercel AI Gateway 모델 ID로 바꿀 수 있습니다.
 5. 개발 서버를 재시작합니다. 로그인한 사용자의 진도는 `user_node_progress`, 퀴즈 통과는 `user_quiz_passes`, 학습 일수는 `user_learning_days`에 저장됩니다. 정답 컬럼은 Data API에서 직접 읽을 수 없고, 채점 RPC가 사용자 ID와 선수 조건을 확인합니다.
 
-기본 SQL 시드에는 프로세스와 스레드 글이, `content/starter-content.json`에는 트랜지스터와 논리회로 글이 있습니다. 기존 48개와 추가 80개 토픽의 4단계 원고와 레벨별 퀴즈는 `content/topics/*.md`와 빌드 결과 `content/library.json`으로 관리합니다. 전체 라이브러리를 적용하면 공개 글 130개·퀴즈 528개가 됩니다. 체험 모드는 샘플 두 편을 표시하고, 운영 학습은 Supabase의 공개 글을 읽습니다.
+기본 SQL 시드에는 프로세스와 스레드 글이, `content/starter-content.json`에는 트랜지스터와 논리회로 글이 있습니다. 기존 48개와 추가 80개 토픽의 4단계 원고와 레벨별 퀴즈는 `content/topics/*.md`와 빌드 결과 `content/library.json`으로 관리합니다. 전체 라이브러리를 적용하면 공개 글 130개·퀴즈 528개가 됩니다. 체험 모드는 130개 그림 수업과 두 편의 샘플 퀴즈를 표시하고, 운영 학습은 Supabase의 공개 글을 읽습니다.
 
 ```bash
 npm run content:build-expansion
@@ -59,11 +59,34 @@ npm run content:verify-live -- --base-url https://it-study-two.vercel.app
 
 필터의 ‘학습 과정’에서 AI 입문·AI 앱·AI 운영·프로젝트 관리·제품 전략을 선택할 수 있습니다. 과정은 여러 분야의 추천 모음이며, 완료 기록의 선수 조건은 전체 DAG를 따릅니다. 원고는 어디서든 열어 읽을 수 있습니다. 범위와 검토 기준은 `CONTENT_EXPANSION_PLAN.md`, 검증 결과는 `content/verification-report.json` 및 `content/live-verification-report.json`에 기록합니다.
 
-## 비전공자용 원고 편집
+## 그림으로 배우는 과외식 수업
 
-기존 기초 원고 50개는 한 문장 요약, 필요한 이유, 일상 비유, 단계별 흐름, 작은 예, 용어 풀이, 답이 있는 확인 질문으로 구성합니다. 2~4단계에는 예제와 장애·설계 비교를 읽기 위한 길잡이가 있습니다. 편집 자료는 `content/readability-guides/*.json`, 기존 샘플 두 편의 수정 원고는 `content/foundations/*.md`, 기초 50개 수정 본문은 `content/readable-library.json`으로 관리합니다.
+전체 130개 주제를 중고등학생도 따라오는 **그림 수업 → 원리 실험 → 문제 탐정 → 선택 연습**으로 구성했습니다. 처음에는 질문과 조작하는 그림을 보고, 생활 비유·용어 카드·생각 확인으로 이어갑니다. 고정 영역은 도구 모음과 단계 탭뿐이며, 수업 안내와 퀴즈 이동을 한 줄에 배치했습니다.
 
-원고 재작성은 `npm run content:rewrite-readable` 다음에 `npm run content:build`를 실행합니다. 기존 본문을 편집할 때는 운영 DB에서 slug와 본문 해시를 JSON으로 저장하고 `npm run content:export-revisions -- --baseline-file <snapshot.json> --out-dir <sql-directory>`를 실행합니다. 생성 SQL은 해당 DB의 관리자 권한으로 실행합니다. 예상한 본문 해시 또는 이미 수정된 해시와 일치할 때만 변경하며, 동시 편집이 발견되면 도메인 묶음 전체를 중단합니다.
+14가지 시각 형식은 비트·논리 게이트, 단계 모션, 비교 도형, 분류 카드, 대기열, 복잡도 그래프, 평균·중앙값, 분류 임계값, 벡터, 뉴런 학습, Attention 지도, 칸반, 일정 그래프입니다. 한 주제에는 그 개념에 맞는 형식을 배정합니다. 모션은 재생·일시정지·장면 이동을 지원하고 기본으로 자동 재생하지 않습니다. 움직임 줄이기가 켜져 있으면 수동 장면 전환을 안내합니다. SVG 도형은 확대해도 선명하며 수식은 교육용 모형의 범위를 표시합니다.
+
+**운영 채점 퀴즈와 그림 연습은 별도입니다.** 그림에서의 선택은 점수나 진도를 바꾸지 않습니다. 기존 채점·선수 조건·학습 기록을 유지합니다. 길어진 코드·장애 사례·설계 비교와 출처는 해당 단계의 ‘자세히 보기’에 보존했습니다. AI 튜터도 쉬운 비유·작은 예·확인 질문 순서의 친절한 과외 선생님 말투를 사용합니다.
+
+편집은 `content/classroom/lesson-specs.json`(질문·형식·짧은 라벨·분류 사례), 기존 `content/readability-guides/`와 `content/expansion/`(비유·용어), `content/classroom/reference-library.json`(심화 원문)에서 합니다. `content:build-classroom`은 동일한 입력에서 같은 본문을 생성합니다. 기존 입문 재작성·확장 빌더를 실행한 경우에도 마지막에 classroom 빌더와 content 빌더를 실행합니다.
+
+```bash
+npm run content:build-classroom
+npm run content:build
+npm run content:verify-classroom
+npm run content:verify
+```
+
+`learning` Markdown 블록은 `{ "slug": "topic-slug", "view": "explore" }` 같은 참조만 포함합니다. 지원하는 view는 explore/trace/words/recall/debug/decide이며 임의 HTML·JS를 실행하지 않습니다. 시각 자료와 130개 수업 데이터는 별도 청크로 지연 로드합니다. 운영 DB 조회 오류·비공개 글에서 전체 로컬 수업으로 우회하지 않으며, 전체 미리보기는 Supabase 미설정 체험 모드에서만 사용합니다.
+
+DB 본문 수정은 실제 운영 본문의 slug·MD5 스냅샷을 받은 뒤 `content:export-revisions`로 생성합니다. 예상 해시나 이미 적용된 해시가 맞을 때만 도메인 단위로 갱신하며 동시 변경 시 중단합니다. 렌더러를 먼저 배포한 뒤 SQL을 적용합니다. 새 DB도 기본 시드·starter·library 적용 후 실제 본문 스냅샷으로 같은 절차를 사용해 두 골든 샘플까지 현재 원고로 맞춥니다. 원고와 DB 비교는 `content:verify-live`로 수행합니다.
+
+범위는 `LEARNING_EXPERIENCE_PLAN.md`, 구조·수식·780개 SSR 렌더 검사는 `content/classroom/verification-report.json`, SQL 재실행·동시 편집 보호는 `content/classroom/revision-verification-report.json`에 기록합니다.
+
+## 기존 비전공자용 원고 편집 자료
+
+기존 기초 원고 50개는 한 문장 요약, 필요한 이유, 일상 비유, 단계별 흐름, 작은 예, 용어 풀이, 답이 있는 확인 질문으로 구성합니다. 2~4단계에는 예제와 장애·설계 비교를 읽기 위한 길잡이가 있습니다. 편집 자료는 `content/readability-guides/*.json`, 기존 샘플 두 편의 수정 원고는 `content/foundations/*.md`, 원래 기초 50개 수정 자료를 보존합니다. 현재 `content/readable-library.json`은 과외식 수업 전체 130개 본문입니다.
+
+기존 입문 재작성 명령은 `npm run content:rewrite-readable`이며, 현재 수업 화면을 유지하려면 그 뒤 `npm run content:build-classroom`과 `npm run content:build`를 실행합니다. 기존 본문을 편집할 때는 운영 DB에서 slug와 본문 해시를 JSON으로 저장하고 `npm run content:export-revisions -- --baseline-file <snapshot.json> --out-dir <sql-directory>`를 실행합니다. 생성 SQL은 해당 DB의 관리자 권한으로 실행합니다. 예상한 본문 해시 또는 이미 수정된 해시와 일치할 때만 변경하며, 동시 편집이 발견되면 도메인 묶음 전체를 중단합니다.
 
 계획은 `CONTENT_READABILITY_PLAN.md`, 50개 입문 도표·용어·본문 수정 SQL 검증은 `content/readability-verification-report.json`, 실제 운영 본문의 일치 검사는 `content/live-verification-report.json`에 기록합니다.
 

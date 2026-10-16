@@ -28,7 +28,7 @@ async function main() {
     for (const row of rows) {
       const levels = levelKeys.map((key) => row[key]);
       ensure(levels.every((s) => s.length >= 300), `${row.slug}: article too short`);
-      ensure(levels[0].includes("```mermaid") && levels[0].includes("비유의 한계"), `${row.slug}: mental model incomplete`);
+      ensure((levels[0].includes("```mermaid") || levels[0].includes("```learning")) && levels[0].includes("비유의 한계"), `${row.slug}: mental model incomplete`);
       ensure(levels[1].includes("```"), `${row.slug}: engineering example missing`);
       ensure(/가상|재현/.test(levels[2]) && /재검증|수정 후 확인/.test(levels[2]), `${row.slug}: troubleshooting contract missing`);
       ensure(levels[3].includes("|---") && levels[3].includes("참고:"), `${row.slug}: tradeoffs or references missing`);

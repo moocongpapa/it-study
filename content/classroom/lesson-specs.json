@@ -1,0 +1,2197 @@
+[
+  {
+    "slug": "logic-gates",
+    "kind": "gate",
+    "hook": "두 스위치가 모두 켜져야 문이 열린다면?",
+    "labels": [
+      "신호 고르기",
+      "규칙 적용",
+      "문 열기"
+    ]
+  },
+  {
+    "slug": "binary-representation",
+    "kind": "bits",
+    "hook": "전등 네 개로 숫자 10을 만들 수 있을까?",
+    "labels": [
+      "자리 값",
+      "켜진 자리",
+      "숫자 읽기"
+    ]
+  },
+  {
+    "slug": "binary-arithmetic",
+    "kind": "bits",
+    "hook": "숫자를 담는 칸이 꽉 차면 어떻게 될까?",
+    "labels": [
+      "한 자리 더하기",
+      "자리올림",
+      "범위 확인"
+    ]
+  },
+  {
+    "slug": "von-neumann-cpu",
+    "kind": "sequence",
+    "hook": "컴퓨터는 명령을 어떤 순서로 따라갈까?",
+    "labels": [
+      "다음 위치",
+      "명령 읽기",
+      "계산·저장"
+    ]
+  },
+  {
+    "slug": "memory-hierarchy",
+    "kind": "compare",
+    "hook": "필통의 펜과 도서관 책 중 무엇을 빨리 꺼낼까?",
+    "labels": [
+      "캐시 찾기",
+      "메모리 찾기",
+      "다음에 재사용"
+    ],
+    "panels": [
+      {
+        "label": "가까운 캐시",
+        "meaning": "자주 쓰는 값을 가까이에 두어요.",
+        "caution": "작고 빠르지만 없는 값도 있어요."
+      },
+      {
+        "label": "큰 메모리",
+        "meaning": "더 많은 실행 자료를 보관해요.",
+        "caution": "가까운 캐시보다 접근에 시간이 더 들 수 있어요."
+      }
+    ]
+  },
+  {
+    "slug": "processes-threads",
+    "kind": "compare",
+    "hook": "주방 두 개와 한 주방의 요리사 두 명은 뭐가 다를까?",
+    "labels": [
+      "공간 만들기",
+      "작업자 실행",
+      "공유 규칙"
+    ],
+    "panels": [
+      {
+        "label": "프로세스 두 개",
+        "meaning": "기본적으로 각자 주소 공간을 가져요.",
+        "caution": "자료를 주고받는 경계를 설계해야 해요."
+      },
+      {
+        "label": "한 프로세스의 스레드",
+        "meaning": "같은 힙을 함께 쓰고 각자 스택을 가져요.",
+        "caution": "공유 값을 바꿀 때 순서를 맞춰야 해요."
+      }
+    ]
+  },
+  {
+    "slug": "context-switching",
+    "kind": "sequence",
+    "hook": "숙제와 채팅을 번갈아 하면 어디까지 했는지 어떻게 기억할까?",
+    "labels": [
+      "현재 기록",
+      "다음 기록 복원",
+      "작업 재개"
+    ]
+  },
+  {
+    "slug": "virtual-memory",
+    "kind": "sequence",
+    "hook": "각 프로그램이 자기만의 책상을 가진 것처럼 보이는 이유는?",
+    "labels": [
+      "프로그램 주소",
+      "주소 변환",
+      "실제 저장 공간"
+    ]
+  },
+  {
+    "slug": "synchronization-deadlocks",
+    "kind": "sort",
+    "hook": "친구 둘이 가위와 풀을 하나씩 잡고 기다린다면?",
+    "labels": [
+      "공유 구간",
+      "잠금 순서",
+      "기다림 확인"
+    ],
+    "buckets": [
+      "서로 기다림",
+      "안전한 순서"
+    ],
+    "items": [
+      {
+        "text": "A는 가위, B는 풀을 잡고 서로의 물건을 기다림",
+        "bucket": 0,
+        "explanation": "서로 가진 것을 놓지 않고 상대 자원을 기다리면 진행할 수 없어요."
+      },
+      {
+        "text": "둘 다 가위 다음에 풀을 얻도록 순서를 통일",
+        "bucket": 1,
+        "explanation": "모든 경로가 같은 획득 순서를 따르면 순환 대기의 한 조건을 막을 수 있어요."
+      }
+    ]
+  },
+  {
+    "slug": "syscalls-io",
+    "kind": "sequence",
+    "hook": "앱이 파일을 열 때 왜 운영체제에 부탁할까?",
+    "labels": [
+      "앱의 요청",
+      "권한·상태 확인",
+      "결과 받기"
+    ]
+  },
+  {
+    "slug": "osi-encapsulation",
+    "kind": "sequence",
+    "hook": "편지를 보내려면 내용 외에 무엇이 필요할까?",
+    "labels": [
+      "메시지",
+      "주소·전달 정보",
+      "신호로 보내기"
+    ]
+  },
+  {
+    "slug": "tcp-udp-handshake",
+    "kind": "sequence",
+    "hook": "전화처럼 서로 준비됐는지 확인하려면?",
+    "labels": [
+      "시작 SYN",
+      "확인 SYN-ACK",
+      "다시 확인 ACK"
+    ]
+  },
+  {
+    "slug": "dns-resolution",
+    "kind": "sequence",
+    "hook": "사이트 이름이 어떻게 컴퓨터의 주소가 될까?",
+    "labels": [
+      "기억된 주소",
+      "이름 조회",
+      "주소로 연결"
+    ]
+  },
+  {
+    "slug": "http-versions",
+    "kind": "compare",
+    "hook": "한 길로 여러 물건을 나눠 보내면 뭐가 달라질까?",
+    "labels": [
+      "요청과 응답",
+      "여러 흐름",
+      "QUIC 전송"
+    ],
+    "panels": [
+      {
+        "label": "HTTP/1.1·2",
+        "meaning": "HTTP/2는 요청 흐름을 한 TCP 연결에서 나눠요.",
+        "caution": "TCP 손실이 여러 흐름 전달에 영향을 줄 수 있어요."
+      },
+      {
+        "label": "HTTP/3",
+        "meaning": "QUIC으로 서로 다른 스트림 전달을 분리해요.",
+        "caution": "같은 스트림의 대기와 혼잡 제어까지 없어지지는 않아요."
+      }
+    ]
+  },
+  {
+    "slug": "load-balancing",
+    "kind": "capacity",
+    "hook": "급식 줄이 길어지면 창구를 늘리면 될까?",
+    "labels": [
+      "요청 도착",
+      "건강한 서버 선택",
+      "응답"
+    ]
+  },
+  {
+    "slug": "big-o",
+    "kind": "growth",
+    "hook": "학생 수가 열 배면 비교 횟수도 열 배일까?",
+    "labels": [
+      "입력 크기",
+      "작업 횟수",
+      "증가 모양"
+    ]
+  },
+  {
+    "slug": "arrays-linked-lists",
+    "kind": "compare",
+    "hook": "번호로 찾는 사물함과 쪽지를 따라가는 보물찾기는?",
+    "labels": [
+      "위치 계산",
+      "연결 따라가기",
+      "삽입·삭제"
+    ],
+    "panels": [
+      {
+        "label": "배열",
+        "meaning": "번호로 위치를 계산해 찾아가요.",
+        "caution": "중간 삽입에서는 뒤의 값을 옮길 수 있어요."
+      },
+      {
+        "label": "연결 리스트",
+        "meaning": "다음 위치를 따라 찾아가요.",
+        "caution": "연결을 바꾸기 전에 그 위치를 찾는 비용도 있어요."
+      }
+    ]
+  },
+  {
+    "slug": "trees-bst",
+    "kind": "sequence",
+    "hook": "스무고개처럼 찾을 범위를 반으로 줄일 수 있을까?",
+    "labels": [
+      "현재 값 비교",
+      "왼쪽·오른쪽",
+      "찾기·종료"
+    ]
+  },
+  {
+    "slug": "hash-tables",
+    "kind": "sequence",
+    "hook": "이름표를 서랍 번호로 바꾸면 빨리 찾을 수 있을까?",
+    "labels": [
+      "키 계산",
+      "서랍 확인",
+      "실제 키 비교"
+    ]
+  },
+  {
+    "slug": "graph-search",
+    "kind": "compare",
+    "hook": "미로에서 한 길을 끝까지 갈까, 가까운 곳부터 볼까?",
+    "labels": [
+      "출발·방문 표시",
+      "다음 장소",
+      "중복 방문 방지"
+    ],
+    "panels": [
+      {
+        "label": "DFS",
+        "meaning": "한 방향으로 깊이 들어가요.",
+        "caution": "되돌아오며 다른 길도 보고 방문 표시를 남겨요."
+      },
+      {
+        "label": "BFS",
+        "meaning": "먼저 발견한 가까운 곳부터 봐요.",
+        "caution": "모든 간선 비용이 같을 때 최소 간선 수 경로를 찾을 수 있어요."
+      }
+    ]
+  },
+  {
+    "slug": "compiler-interpreter",
+    "kind": "compare",
+    "hook": "외국어 책을 미리 번역할까, 읽으면서 통역할까?",
+    "labels": [
+      "코드 읽기",
+      "실행 형태 준비",
+      "실행"
+    ],
+    "panels": [
+      {
+        "label": "미리 번역",
+        "meaning": "실행할 형태를 먼저 준비해요.",
+        "caution": "번역 비용과 실행 환경을 고려해요."
+      },
+      {
+        "label": "실행 중 해석·번역",
+        "meaning": "실행하면서 처리할 수 있어요.",
+        "caution": "현실의 구현은 여러 방식을 함께 쓰기도 해요."
+      }
+    ]
+  },
+  {
+    "slug": "stack-heap-gc",
+    "kind": "compare",
+    "hook": "책갈피와 함께 쓰는 물건 창고는 어떻게 관리할까?",
+    "labels": [
+      "호출 기록",
+      "객체 만들기",
+      "도달 여부 확인"
+    ],
+    "panels": [
+      {
+        "label": "스택",
+        "meaning": "함수 호출의 실행 기록을 관리해요.",
+        "caution": "함수 호출의 순서와 수명이 중요해요."
+      },
+      {
+        "label": "힙과 GC",
+        "meaning": "객체와 참조 관계를 관리해요.",
+        "caution": "더 이상 도달하지 않는 객체를 회수 대상으로 봐요."
+      }
+    ]
+  },
+  {
+    "slug": "oop-principles",
+    "kind": "compare",
+    "hook": "자판기 내부를 몰라도 버튼으로 음료를 살 수 있는 이유는?",
+    "labels": [
+      "데이터·행동",
+      "공개한 통로",
+      "약속 지키기"
+    ],
+    "panels": [
+      {
+        "label": "내부 직접 변경",
+        "meaning": "저장된 값을 바깥에서 바로 바꿔요.",
+        "caution": "규칙을 여러 곳에서 지켜야 해요."
+      },
+      {
+        "label": "행동의 약속",
+        "meaning": "공개한 통로로 상태를 바꿔요.",
+        "caution": "내부를 바꿔도 약속을 지키는지 확인해요."
+      }
+    ]
+  },
+  {
+    "slug": "functional-programming",
+    "kind": "sort",
+    "hook": "계산 결과만 돌려주는 일과 바깥을 바꾸는 일은?",
+    "labels": [
+      "입력 받기",
+      "결과 계산",
+      "바깥 효과 분리"
+    ],
+    "buckets": [
+      "순수 계산",
+      "바깥 효과"
+    ],
+    "items": [
+      {
+        "text": "입력 3에 2를 더해 5를 반환",
+        "bucket": 0,
+        "explanation": "같은 입력에 같은 결과를 주고 바깥 상태를 바꾸지 않아요."
+      },
+      {
+        "text": "파일에 결과를 저장",
+        "bucket": 1,
+        "explanation": "프로그램 바깥의 상태를 바꾸므로 효과의 경계에서 다뤄요."
+      }
+    ]
+  },
+  {
+    "slug": "type-systems",
+    "kind": "sort",
+    "hook": "이 칸에는 숫자를 넣어야 한다는 약속을 언제 확인할까?",
+    "labels": [
+      "값의 형태",
+      "사용 방식 검사",
+      "외부 입력 검증"
+    ],
+    "buckets": [
+      "실행 전 검사",
+      "실제 입력 검사"
+    ],
+    "items": [
+      {
+        "text": "코드에서 숫자를 받는 함수에 문자열 전달을 검사",
+        "bucket": 0,
+        "explanation": "정적 타입 검사가 실행 전에 사용 관계를 확인할 수 있어요."
+      },
+      {
+        "text": "네트워크로 온 나이 값이 실제 숫자인지 확인",
+        "bucket": 1,
+        "explanation": "타입 선언이 외부 데이터의 실제 모양을 보장하지는 않아요."
+      }
+    ]
+  },
+  {
+    "slug": "solid",
+    "kind": "sequence",
+    "hook": "새 알림을 추가할 때 왜 결제 코드까지 고쳐야 할까?",
+    "labels": [
+      "변경 이유",
+      "역할의 약속",
+      "구현 바꾸기"
+    ]
+  },
+  {
+    "slug": "design-patterns",
+    "kind": "sort",
+    "hook": "물건 만들기와 새 소식 알리기는 같은 문제일까?",
+    "labels": [
+      "문제 찾기",
+      "책임 나누기",
+      "실제 조건 확인"
+    ],
+    "buckets": [
+      "Factory의 문제",
+      "Observer의 문제"
+    ],
+    "items": [
+      {
+        "text": "종류에 맞는 객체를 만드는 책임을 모으기",
+        "bucket": 0,
+        "explanation": "생성 결정을 분리하는 문제가 Factory와 연결돼요."
+      },
+      {
+        "text": "구독한 화면들에게 새 상태 알리기",
+        "bucket": 1,
+        "explanation": "상태 변화를 구독자에게 전달하는 문제가 Observer와 연결돼요."
+      }
+    ]
+  },
+  {
+    "slug": "clean-code-refactoring",
+    "kind": "sequence",
+    "hook": "맛은 그대로 두고 조리대를 정리하려면?",
+    "labels": [
+      "현재 동작 확인",
+      "작게 바꾸기",
+      "다시 확인"
+    ]
+  },
+  {
+    "slug": "testing-pyramid",
+    "kind": "sort",
+    "hook": "부품 검사와 자전거 시운전은 무엇을 다르게 볼까?",
+    "labels": [
+      "작은 규칙",
+      "연결 확인",
+      "전체 사용 흐름"
+    ],
+    "buckets": [
+      "작은 규칙",
+      "연결·사용 흐름"
+    ],
+    "items": [
+      {
+        "text": "할인 금액 계산 함수만 확인",
+        "bucket": 0,
+        "explanation": "작은 계산을 독립적으로 확인하는 단위 테스트의 예예요."
+      },
+      {
+        "text": "DB 연결로 주문을 저장하고 다시 읽기",
+        "bucket": 1,
+        "explanation": "실제 의존성과의 연결을 보는 통합 테스트의 예예요."
+      },
+      {
+        "text": "브라우저에서 주문하고 완료 화면 확인",
+        "bucket": 1,
+        "explanation": "사용자 흐름 끝까지 보는 E2E 테스트의 예예요."
+      }
+    ]
+  },
+  {
+    "slug": "architecture-decisions",
+    "kind": "compare",
+    "hook": "그때 왜 그 방법을 골랐는지 한 달 뒤에도 알 수 있을까?",
+    "labels": [
+      "문제·조건",
+      "대안 비교",
+      "선택·재검토"
+    ],
+    "panels": [
+      {
+        "label": "선택 이름만 기록",
+        "meaning": "어떤 도구를 골랐는지 알 수 있어요.",
+        "caution": "다음 사람은 이유와 조건을 알기 어려워요."
+      },
+      {
+        "label": "이유와 대안도 기록",
+        "meaning": "당시 제약과 감수한 부담을 알 수 있어요.",
+        "caution": "상황이 바뀌면 다시 검토해야 해요."
+      }
+    ]
+  },
+  {
+    "slug": "relational-normalization",
+    "kind": "compare",
+    "hook": "친구 주소를 열 장에 써 두면 이사할 때 어떨까?",
+    "labels": [
+      "대상 구분",
+      "한 곳의 사실",
+      "시점 구분"
+    ],
+    "panels": [
+      {
+        "label": "한 사실을 여러 곳에",
+        "meaning": "읽을 때 편할 수 있어요.",
+        "caution": "바뀌면 여러 사본을 맞춰야 해요."
+      },
+      {
+        "label": "기준 사실을 한 곳에",
+        "meaning": "연결해서 필요한 정보를 읽어요.",
+        "caution": "조회 방식에 따라 결합 비용이 생겨요."
+      }
+    ]
+  },
+  {
+    "slug": "btree-indexes",
+    "kind": "sequence",
+    "hook": "두꺼운 사전에서 단어를 처음부터 읽어 찾아야 할까?",
+    "labels": [
+      "정렬된 키",
+      "구간 좁히기",
+      "자료 위치"
+    ]
+  },
+  {
+    "slug": "transactions-isolation",
+    "kind": "sequence",
+    "hook": "돈을 빼기만 하고 보내지 못했다면?",
+    "labels": [
+      "묶어서 시작",
+      "검사·변경",
+      "확정·되돌리기"
+    ]
+  },
+  {
+    "slug": "nosql-cap",
+    "kind": "compare",
+    "hook": "연결이 끊긴 두 매장은 같은 재고를 어떻게 약속할까?",
+    "labels": [
+      "조회 목적",
+      "복사본 규칙",
+      "통신 단절 대응"
+    ],
+    "panels": [
+      {
+        "label": "최신 상태 보장 우선",
+        "meaning": "통신이 끊기면 일부 요청을 기다리거나 거부할 수 있어요.",
+        "caution": "응답 가능성이 줄 수 있어요."
+      },
+      {
+        "label": "정상 노드의 응답 우선",
+        "meaning": "통신이 끊겨도 응답하도록 설계할 수 있어요.",
+        "caution": "한 사본이 최신 상태가 아닐 수 있어요."
+      }
+    ]
+  },
+  {
+    "slug": "replication-sharding",
+    "kind": "sort",
+    "hook": "노트를 복사하는 것과 나눠 맡는 것은 어떻게 다를까?",
+    "labels": [
+      "같은 자료 복사",
+      "자료 나눠 맡기",
+      "장애·이동 대응"
+    ],
+    "buckets": [
+      "복제",
+      "샤딩"
+    ],
+    "items": [
+      {
+        "text": "같은 주문 자료의 사본을 다른 서버에 둠",
+        "bucket": 0,
+        "explanation": "동일한 자료를 여러 곳에 갖는 것이 복제예요."
+      },
+      {
+        "text": "고객 번호에 따라 담당 서버를 나눔",
+        "bucket": 1,
+        "explanation": "자료의 담당 위치를 분할하는 것이 샤딩이에요."
+      }
+    ]
+  },
+  {
+    "slug": "rest-api",
+    "kind": "sequence",
+    "hook": "도서관에 책을 빌려 달라고 어떻게 요청할까?",
+    "labels": [
+      "대상 주소",
+      "요청의 의미",
+      "결과·오류"
+    ]
+  },
+  {
+    "slug": "caching-strategies",
+    "kind": "sequence",
+    "hook": "자주 찾는 답을 옆에 적어 두면 언제 문제가 될까?",
+    "labels": [
+      "사본 확인",
+      "원본 읽기",
+      "갱신·만료"
+    ]
+  },
+  {
+    "slug": "message-queues",
+    "kind": "sequence",
+    "hook": "주문표를 남겨 두면 요리사와 손님이 동시에 기다리지 않아도 될까?",
+    "labels": [
+      "할 일 남기기",
+      "작업자가 처리",
+      "완료·재시도"
+    ]
+  },
+  {
+    "slug": "monolith-vs-msa",
+    "kind": "compare",
+    "hook": "한 팀의 부서로 나눌까, 여러 가게로 나눌까?",
+    "labels": [
+      "역할 경계",
+      "배포 단위",
+      "통신·실패 약속"
+    ],
+    "panels": [
+      {
+        "label": "모듈로 나눈 한 앱",
+        "meaning": "함께 배포하며 내부 호출을 써요.",
+        "caution": "커져도 역할 경계를 잘 관리해야 해요."
+      },
+      {
+        "label": "별도 서비스들",
+        "meaning": "독립 배포와 자원 조정이 가능해요.",
+        "caution": "네트워크 실패와 데이터 일관성이 새 과제가 돼요."
+      }
+    ]
+  },
+  {
+    "slug": "saga-transactions",
+    "kind": "sequence",
+    "hook": "여행 예약 세 개 중 하나만 실패하면 어떻게 할까?",
+    "labels": [
+      "단계별 예약",
+      "상태 기록",
+      "실패 확인·보상"
+    ]
+  },
+  {
+    "slug": "vm-vs-containers",
+    "kind": "compare",
+    "hook": "독립된 집과 공용 설비를 쓰는 방은 뭐가 다를까?",
+    "labels": [
+      "VM의 운영체제",
+      "컨테이너의 공유 커널",
+      "자원·권한"
+    ],
+    "panels": [
+      {
+        "label": "VM",
+        "meaning": "가상 하드웨어 위에 별도 운영체제를 실행해요.",
+        "caution": "운영체제까지 관리하는 자원이 필요해요."
+      },
+      {
+        "label": "컨테이너",
+        "meaning": "보통 호스트 커널을 공유하며 앱을 격리해요.",
+        "caution": "권한과 공유 커널의 보안 경계를 고려해요."
+      }
+    ]
+  },
+  {
+    "slug": "kubernetes-basics",
+    "kind": "sequence",
+    "hook": "원하는 앱 세 개 중 하나가 멈추면 누가 다시 채울까?",
+    "labels": [
+      "원하는 상태",
+      "실제 상태",
+      "차이 줄이기"
+    ]
+  },
+  {
+    "slug": "cicd-pipelines",
+    "kind": "sequence",
+    "hook": "숙제를 고칠 때마다 검사하고 배포까지 이어갈 수 있을까?",
+    "labels": [
+      "변경 검사",
+      "산출물 만들기",
+      "배포·관찰"
+    ]
+  },
+  {
+    "slug": "iac",
+    "kind": "sequence",
+    "hook": "컴퓨터 환경도 조립 설명서처럼 남길 수 있을까?",
+    "labels": [
+      "필요한 환경",
+      "변경 계획",
+      "적용·확인"
+    ]
+  },
+  {
+    "slug": "observability",
+    "kind": "sort",
+    "hook": "느리다는 말만 듣고 어디가 막혔는지 알 수 있을까?",
+    "labels": [
+      "사건 기록",
+      "변화 관찰",
+      "요청 경로 추적"
+    ],
+    "buckets": [
+      "지표",
+      "개별 기록·경로"
+    ],
+    "items": [
+      {
+        "text": "1분 동안의 오류율",
+        "bucket": 0,
+        "explanation": "집계한 수의 변화를 보여 주는 지표예요."
+      },
+      {
+        "text": "요청 ID로 여러 서버의 처리 단계를 연결",
+        "bucket": 1,
+        "explanation": "한 요청의 경로를 따라가는 추적과 연결돼요."
+      }
+    ]
+  },
+  {
+    "slug": "browser-rendering",
+    "kind": "sequence",
+    "hook": "코드가 어떤 과정을 거쳐 화면의 그림이 될까?",
+    "labels": [
+      "구조·스타일",
+      "크기·위치",
+      "그리기·합성"
+    ]
+  },
+  {
+    "slug": "web-auth",
+    "kind": "sort",
+    "hook": "학생증이 있어도 모든 사물함을 열 수 있을까?",
+    "labels": [
+      "누구인지",
+      "로그인 상태",
+      "이 자료의 권한"
+    ],
+    "buckets": [
+      "인증",
+      "인가"
+    ],
+    "items": [
+      {
+        "text": "로그인으로 누구인지 확인",
+        "bucket": 0,
+        "explanation": "사용자의 신원을 확인하는 것이 인증이에요."
+      },
+      {
+        "text": "이 성적표가 이 학생의 것인지 서버가 확인",
+        "bucket": 1,
+        "explanation": "자료와 행동의 권한을 확인하는 것이 인가예요."
+      }
+    ]
+  },
+  {
+    "slug": "web-security",
+    "kind": "sort",
+    "hook": "입력한 글이 명령으로 실행되면 어떤 일이 생길까?",
+    "labels": [
+      "입력의 위치",
+      "맞는 방어",
+      "권한·예외 확인"
+    ],
+    "buckets": [
+      "출력 위치의 방어",
+      "DB·요청의 방어"
+    ],
+    "items": [
+      {
+        "text": "입력한 글을 화면에서 안전한 텍스트로 표시",
+        "bucket": 0,
+        "explanation": "문자열을 실행 코드로 읽지 않도록 위치에 맞게 인코딩해요."
+      },
+      {
+        "text": "SQL 값에 파라미터 바인딩 사용",
+        "bucket": 1,
+        "explanation": "명령의 구조와 입력값을 구분하는 방어예요."
+      },
+      {
+        "text": "상태 변경 요청의 CSRF 조건 검증",
+        "bucket": 1,
+        "explanation": "사용자의 의도와 요청 경계를 검증하는 방어예요."
+      }
+    ]
+  },
+  {
+    "slug": "web-performance",
+    "kind": "sequence",
+    "hook": "화면이 늦게 뜨는 이유를 세 구간으로 나눠 볼까?",
+    "labels": [
+      "서버·전송·화면",
+      "큰 병목 측정",
+      "바꾼 뒤 확인"
+    ]
+  },
+  {
+    "slug": "llm-vector-infra",
+    "kind": "sequence",
+    "hook": "AI에게 우리 반 규칙을 찾아 보여 준다면?",
+    "labels": [
+      "문서의 숫자 표현",
+      "후보 검색·권한",
+      "근거로 답하기"
+    ]
+  },
+  {
+    "slug": "data-literacy",
+    "kind": "sort",
+    "hook": "같은 50%인데 왜 서로 다른 말을 할까?",
+    "labels": [
+      "질문과 대상",
+      "단위·기간",
+      "비교 기준"
+    ],
+    "buckets": [
+      "분모가 대상 전체",
+      "분모가 참여자"
+    ],
+    "items": [
+      {
+        "text": "학생 100명 중 신청한 30명",
+        "bucket": 0,
+        "explanation": "전체 100명을 분모로 하면 30%예요."
+      },
+      {
+        "text": "신청한 30명 중 실제 온 15명",
+        "bucket": 1,
+        "explanation": "신청자 30명을 분모로 하면 50%예요. 전체 학생 기준은 15%예요."
+      }
+    ]
+  },
+  {
+    "slug": "descriptive-statistics",
+    "kind": "distribution",
+    "hook": "평균이 같으면 우리 반의 점수 모습도 같을까?",
+    "labels": [
+      "중심 값",
+      "흩어진 정도",
+      "특이한 값"
+    ]
+  },
+  {
+    "slug": "probability-bayes",
+    "kind": "sequence",
+    "hook": "새 힌트를 얻으면 처음 생각을 어떻게 고칠까?",
+    "labels": [
+      "원래 가능성",
+      "새 증거",
+      "갱신한 판단"
+    ]
+  },
+  {
+    "slug": "sampling-confidence",
+    "kind": "compare",
+    "hook": "친한 친구 다섯 명에게만 물어봐도 될까?",
+    "labels": [
+      "조사 대상",
+      "표본의 차이",
+      "불확실성"
+    ],
+    "panels": [
+      {
+        "label": "편한 사람만 조사",
+        "meaning": "빠르고 쉽지만 한쪽으로 치우칠 수 있어요.",
+        "caution": "표본을 늘려도 선택 편향이 남을 수 있어요."
+      },
+      {
+        "label": "대상에 맞게 표본 설계",
+        "meaning": "알고 싶은 집단을 고르게 대표하려고 해요.",
+        "caution": "추출 방법과 불확실성을 함께 설명해요."
+      }
+    ]
+  },
+  {
+    "slug": "hypothesis-ab-testing",
+    "kind": "compare",
+    "hook": "새 버튼 때문에 좋아진 걸까, 그냥 운이었을까?",
+    "labels": [
+      "비교 조건",
+      "무작위 배정",
+      "효과와 불확실성"
+    ],
+    "panels": [
+      {
+        "label": "변경 전후만 비교",
+        "meaning": "차이를 관찰할 수 있어요.",
+        "caution": "계절·다른 변경의 영향을 분리하기 어려워요."
+      },
+      {
+        "label": "같은 기간의 비교 실험",
+        "meaning": "조건을 맞추고 무작위 배정을 검토해요.",
+        "caution": "표본과 간섭·윤리 조건도 확인해야 해요."
+      }
+    ]
+  },
+  {
+    "slug": "sql-analytics",
+    "kind": "sequence",
+    "hook": "기록이 많은 표에 어떻게 질문을 던질까?",
+    "labels": [
+      "자료 고르기",
+      "묶고 계산",
+      "결과 해석"
+    ]
+  },
+  {
+    "slug": "data-cleaning-quality",
+    "kind": "sort",
+    "hook": "빈칸과 중복이 섞인 점수표로 평균을 내도 될까?",
+    "labels": [
+      "규칙 확인",
+      "이상한 값",
+      "수정·기록"
+    ],
+    "buckets": [
+      "먼저 확인",
+      "근거 없이 변경"
+    ],
+    "items": [
+      {
+        "text": "빈칸이 미응답인지 0점인지 확인",
+        "bucket": 0,
+        "explanation": "같은 빈칸도 뜻이 다를 수 있어 규칙부터 확인해요."
+      },
+      {
+        "text": "빈칸을 전부 0점으로 바꾸기",
+        "bucket": 1,
+        "explanation": "의미를 확인하지 않으면 없는 사실을 만들어 분석을 바꿀 수 있어요."
+      }
+    ]
+  },
+  {
+    "slug": "etl-data-pipelines",
+    "kind": "sequence",
+    "hook": "여러 파일을 매일 손으로 합치지 않으려면?",
+    "labels": [
+      "가져오기",
+      "정리하기",
+      "저장·재시도"
+    ]
+  },
+  {
+    "slug": "analytics-warehouses",
+    "kind": "compare",
+    "hook": "주문받는 책상과 분석하는 책상을 나누는 이유는?",
+    "labels": [
+      "업무 기록",
+      "분석용 저장",
+      "최신성·비용"
+    ],
+    "panels": [
+      {
+        "label": "업무 처리 저장소",
+        "meaning": "주문 같은 현재 일을 안정적으로 처리해요.",
+        "caution": "무거운 분석이 업무에 부담을 줄 수 있어요."
+      },
+      {
+        "label": "분석용 저장소",
+        "meaning": "자료를 모아 여러 시점과 집단을 비교해요.",
+        "caution": "복사 비용과 최신성 차이가 생겨요."
+      }
+    ]
+  },
+  {
+    "slug": "data-governance-lineage",
+    "kind": "sequence",
+    "hook": "이 숫자가 어디서 왔는지 따라갈 수 있을까?",
+    "labels": [
+      "원본·담당자",
+      "이동·변경",
+      "권한·추적"
+    ]
+  },
+  {
+    "slug": "ai-ml-dl",
+    "kind": "sort",
+    "hook": "AI라는 말이 붙으면 모두 거대한 신경망일까?",
+    "labels": [
+      "해결할 과제",
+      "규칙과 학습",
+      "새 자료 평가"
+    ],
+    "buckets": [
+      "명시적 규칙",
+      "데이터로 학습"
+    ],
+    "items": [
+      {
+        "text": "정해 둔 조건으로 문을 여는 규칙",
+        "bucket": 0,
+        "explanation": "사람이 조건을 직접 정한 방식이에요. AI의 모든 방식이 학습은 아니에요."
+      },
+      {
+        "text": "예시 메일로 스팸 판단 기준을 조정",
+        "bucket": 1,
+        "explanation": "자료를 통해 모델을 조정하는 머신러닝의 예예요."
+      }
+    ]
+  },
+  {
+    "slug": "ml-problem-framing",
+    "kind": "sequence",
+    "hook": "AI로 무엇을 잘하게 만들고 싶은 걸까?",
+    "labels": [
+      "업무의 결정",
+      "입력·정답",
+      "기준선 비교"
+    ]
+  },
+  {
+    "slug": "train-validation-test",
+    "kind": "sort",
+    "hook": "시험지를 미리 보고 공부했다면 공정한 시험일까?",
+    "labels": [
+      "연습 자료",
+      "방법 조정",
+      "마지막 평가"
+    ],
+    "buckets": [
+      "학습·방법 조정",
+      "최종 독립 평가"
+    ],
+    "items": [
+      {
+        "text": "학습 자료로 내부 수치를 갱신",
+        "bucket": 0,
+        "explanation": "학습 자료는 모델을 맞추는 데 써요."
+      },
+      {
+        "text": "검증 자료로 설정을 비교",
+        "bucket": 0,
+        "explanation": "검증도 방법 선택에 쓰였으므로 최종 독립 평가와 구분해요."
+      },
+      {
+        "text": "마지막에 따로 둔 테스트 자료로 한 번 평가",
+        "bucket": 1,
+        "explanation": "선택에 쓰지 않은 자료여야 마지막 평가의 의미를 지킬 수 있어요."
+      }
+    ]
+  },
+  {
+    "slug": "features-preprocessing",
+    "kind": "sequence",
+    "hook": "모델에게 날짜와 빈칸을 어떻게 보여 줄까?",
+    "labels": [
+      "사용 시점 확인",
+      "값 정리",
+      "같은 규칙 적용"
+    ]
+  },
+  {
+    "slug": "regression-models",
+    "kind": "compare",
+    "hook": "내일 필요한 빵 개수를 숫자로 예상하려면?",
+    "labels": [
+      "입력 특징",
+      "숫자 예측",
+      "오차 확인"
+    ],
+    "panels": [
+      {
+        "label": "입력",
+        "meaning": "공부 시간처럼 예상에 쓸 정보를 정해요.",
+        "caution": "관련이 있다는 것만으로 원인은 아니에요."
+      },
+      {
+        "label": "예측한 숫자",
+        "meaning": "다음 수요나 시간을 숫자로 예상해요.",
+        "caution": "새 자료의 오차와 조건을 확인해요."
+      }
+    ]
+  },
+  {
+    "slug": "classification-metrics",
+    "kind": "threshold",
+    "hook": "놓친 불량과 멀쩡한 물건의 오해 중 무엇이 더 아플까?",
+    "labels": [
+      "점수",
+      "판단 경계",
+      "오탐과 놓침"
+    ],
+    "terms": [
+      [
+        "정밀도",
+        "불량이라고 골라낸 것 중 진짜 불량이 얼마나 되는지 보는 비율이에요."
+      ],
+      [
+        "재현율",
+        "실제로 불량인 것 중 우리가 얼마나 찾아냈는지 보는 비율이에요."
+      ],
+      [
+        "판단 경계(임계값)",
+        "이 점수 이상이면 불량이라고 판단하겠다는 기준선이에요."
+      ],
+      [
+        "오탐·놓침",
+        "정상을 불량이라고 잘못 경고하는 일과, 불량을 정상으로 보내는 일이에요."
+      ]
+    ]
+  },
+  {
+    "slug": "decision-trees-ensembles",
+    "kind": "compare",
+    "hook": "질문 나무 하나와 여러 나무의 투표는 뭐가 다를까?",
+    "labels": [
+      "조건 질문",
+      "여러 판단",
+      "새 자료 평가"
+    ],
+    "panels": [
+      {
+        "label": "나무 하나",
+        "meaning": "조건을 나눠 결론으로 가요.",
+        "caution": "자료가 조금 바뀌면 나무가 크게 달라질 수 있어요."
+      },
+      {
+        "label": "여러 나무",
+        "meaning": "여러 판단을 결합해요.",
+        "caution": "조합 방식·복잡성과 새 자료 평가가 중요해요."
+      }
+    ]
+  },
+  {
+    "slug": "clustering-reduction",
+    "kind": "compare",
+    "hook": "이름표 없는 사진들을 비슷한 것끼리 모을 수 있을까?",
+    "labels": [
+      "표현과 거리",
+      "묶음·축소",
+      "사람의 해석"
+    ],
+    "panels": [
+      {
+        "label": "비슷한 것끼리 묶기",
+        "meaning": "정한 표현과 거리로 묶음을 만들어요.",
+        "caution": "묶음이 정답 집단이나 원인을 뜻하지는 않아요."
+      },
+      {
+        "label": "적은 축으로 나타내기",
+        "meaning": "복잡한 자료를 보기 쉽게 줄여요.",
+        "caution": "줄이는 동안 일부 정보가 사라질 수 있어요."
+      }
+    ]
+  },
+  {
+    "slug": "overfitting-regularization",
+    "kind": "compare",
+    "hook": "연습 문제만 외운 친구와 원리를 안 친구는?",
+    "labels": [
+      "학습 점수",
+      "새 문제 점수",
+      "복잡성 조절"
+    ],
+    "panels": [
+      {
+        "label": "연습 자료의 점수",
+        "meaning": "외운 문제를 잘 맞힐 수 있어요.",
+        "caution": "처음 보는 문제의 성능을 보장하지 않아요."
+      },
+      {
+        "label": "새 자료의 점수",
+        "meaning": "실제로 일반화하는지 확인해요.",
+        "caution": "같은 검증 자료에 반복 적응하는 것도 조심해요."
+      }
+    ]
+  },
+  {
+    "slug": "ml-experiment-design",
+    "kind": "sequence",
+    "hook": "모델이 좋아진 진짜 이유를 찾으려면?",
+    "labels": [
+      "비교 가설",
+      "같은 평가 조건",
+      "기록·재현"
+    ]
+  },
+  {
+    "slug": "vectors-matrices-tensors",
+    "kind": "compare",
+    "hook": "숫자 줄·표·사진 묶음은 모양이 어떻게 다를까?",
+    "labels": [
+      "크기와 방향",
+      "배열의 연산",
+      "모양 확인"
+    ],
+    "panels": [
+      {
+        "label": "한 줄·두 축",
+        "meaning": "벡터는 수의 묶음, 행렬은 두 축의 배열이에요.",
+        "caution": "각 축이 무엇을 뜻하는지 정해야 해요."
+      },
+      {
+        "label": "여러 축",
+        "meaning": "사진 여러 장처럼 더 많은 축으로 묶을 수 있어요.",
+        "caution": "숫자가 같아도 모양과 축 순서가 다르면 연산이 달라요."
+      }
+    ]
+  },
+  {
+    "slug": "gradients-optimization",
+    "kind": "sequence",
+    "hook": "안개 낀 언덕에서 낮은 곳으로 조금씩 가려면?",
+    "labels": [
+      "현재 오차",
+      "바뀌는 방향",
+      "조금 조정"
+    ]
+  },
+  {
+    "slug": "neural-networks-backprop",
+    "kind": "network",
+    "hook": "틀렸다는 소식이 신경망의 앞쪽까지 어떻게 갈까?",
+    "labels": [
+      "앞으로 계산",
+      "정답과 비교",
+      "뒤로 조정"
+    ],
+    "terms": [
+      [
+        "가중치",
+        "어떤 입력을 얼마나 반영할지 정하는 연결의 수치예요. 그림의 선 위에 적혀 있어요."
+      ],
+      [
+        "오차",
+        "원하는 목표와 지금 출력이 얼마나 다른지 보여 주는 값이에요."
+      ],
+      [
+        "역전파",
+        "결과의 오차를 앞쪽 계산으로 거슬러 전달하며 어떤 연결 수치를 조정할지 구하는 방법이에요."
+      ]
+    ]
+  },
+  {
+    "slug": "training-loops-batching",
+    "kind": "sequence",
+    "hook": "문제집을 나눠 풀고 여러 번 복습하는 이유는?",
+    "labels": [
+      "배치 묶음",
+      "학습·갱신",
+      "평가·반복"
+    ]
+  },
+  {
+    "slug": "convolution-vision",
+    "kind": "sequence",
+    "hook": "사진의 작은 부분을 훑으면 무엇을 찾을 수 있을까?",
+    "labels": [
+      "작은 영역",
+      "특징 지도",
+      "모아서 판단"
+    ]
+  },
+  {
+    "slug": "sequences-nlp",
+    "kind": "sequence",
+    "hook": "같은 단어도 순서가 바뀌면 뜻이 달라질까?",
+    "labels": [
+      "순서 있는 입력",
+      "문맥 표현",
+      "평가"
+    ]
+  },
+  {
+    "slug": "attention-transformers",
+    "kind": "attention",
+    "hook": "지금 단어와 관련 있는 다른 단어는 무엇일까?",
+    "labels": [
+      "질문과 키 비교",
+      "관련 정보 섞기",
+      "다음 표현"
+    ],
+    "terms": [
+      [
+        "Attention",
+        "현재 위치의 표현을 만들 때 다른 위치의 정보를 얼마나 섞을지 계산하는 방법이에요."
+      ],
+      [
+        "가중치",
+        "각 위치의 정보를 반영하는 정도예요. 지금 그림의 한 행은 합이 1이 되도록 정했어요."
+      ],
+      [
+        "Transformer",
+        "Attention 등을 여러 층에서 사용하는 모델 구조예요. 실제로는 위치 정보와 여러 계산이 함께 필요해요."
+      ]
+    ]
+  },
+  {
+    "slug": "transfer-learning",
+    "kind": "compare",
+    "hook": "이미 배운 것을 새 문제에 가져다 쓸 수 있을까?",
+    "labels": [
+      "기존 표현",
+      "업무 적응",
+      "별도 평가"
+    ],
+    "panels": [
+      {
+        "label": "처음부터 학습",
+        "meaning": "표현과 판단을 새로 학습해요.",
+        "caution": "자료와 연산이 많이 필요할 수 있어요."
+      },
+      {
+        "label": "배운 표현 활용",
+        "meaning": "기존 모델을 새 업무에 적응시켜요.",
+        "caution": "원래 자료와 새 업무의 차이를 평가해요."
+      }
+    ]
+  },
+  {
+    "slug": "generative-diffusion",
+    "kind": "sequence",
+    "hook": "뿌연 그림에서 잡음을 조금씩 덜어 낸다면?",
+    "labels": [
+      "잡음과 학습",
+      "단계별 복원",
+      "결과 확인"
+    ]
+  },
+  {
+    "slug": "reinforcement-learning",
+    "kind": "sequence",
+    "hook": "게임을 하며 어떤 행동이 좋았는지 배운다면?",
+    "labels": [
+      "상태와 행동",
+      "보상",
+      "다음 전략"
+    ]
+  },
+  {
+    "slug": "llm-pretraining",
+    "kind": "sequence",
+    "hook": "챗봇은 대화할 때마다 교과서를 새로 외울까?",
+    "labels": [
+      "사전학습",
+      "후속 학습",
+      "문맥으로 추론"
+    ]
+  },
+  {
+    "slug": "tokens-context-windows",
+    "kind": "compare",
+    "hook": "AI의 책상에도 펼칠 수 있는 종이 수가 정해져 있을까?",
+    "labels": [
+      "토큰으로 나누기",
+      "문맥 예산",
+      "잘림·생성"
+    ],
+    "panels": [
+      {
+        "label": "입력의 자리",
+        "meaning": "현재 요청에 담을 수 있는 양에 한계가 있어요.",
+        "caution": "중요한 자료와 생성할 답의 자리를 함께 생각해요."
+      },
+      {
+        "label": "생성할 답",
+        "meaning": "답변도 출력 길이 제한을 따라요.",
+        "caution": "문맥에 들어갔다고 모든 자료를 정확히 쓰는 보장은 아니에요."
+      }
+    ]
+  },
+  {
+    "slug": "prompting-instructions",
+    "kind": "sequence",
+    "hook": "친구에게 부탁할 때 무엇을 알려 주면 좋을까?",
+    "labels": [
+      "과제와 입력",
+      "기준과 예시",
+      "실제 결과 확인"
+    ]
+  },
+  {
+    "slug": "structured-outputs",
+    "kind": "sort",
+    "hook": "칸을 맞춰 쓴 답이면 내용도 반드시 맞을까?",
+    "labels": [
+      "형식의 약속",
+      "구조 검사",
+      "의미 검사"
+    ],
+    "buckets": [
+      "형식 검사",
+      "의미 검사"
+    ],
+    "items": [
+      {
+        "text": "JSON에 필수 필드가 있는지 확인",
+        "bucket": 0,
+        "explanation": "정해진 모양을 따르는지 보는 검사예요."
+      },
+      {
+        "text": "종료 시간이 시작 시간보다 늦은지 확인",
+        "bucket": 1,
+        "explanation": "형식이 맞아도 업무 규칙과 값의 관계를 따로 확인해야 해요."
+      }
+    ]
+  },
+  {
+    "slug": "embeddings-similarity",
+    "kind": "vector",
+    "hook": "비슷한 뜻을 지도 위 가까운 점처럼 놓는다면?",
+    "labels": [
+      "숫자 표현",
+      "가까운 후보",
+      "사실·권한 확인"
+    ],
+    "terms": [
+      [
+        "임베딩",
+        "문서나 단어 같은 자료를 비교하기 좋게 숫자 묶음으로 표현하는 방법이에요."
+      ],
+      [
+        "벡터",
+        "숫자를 정해진 순서로 묶은 것이에요. 여기서는 화살표로 그릴 수 있는 숫자 두 개를 써요."
+      ],
+      [
+        "코사인 유사도",
+        "두 숫자 화살표의 방향이 얼마나 비슷한지 계산한 값이에요. 정답 확률은 아니에요."
+      ]
+    ]
+  },
+  {
+    "slug": "rag-retrieval",
+    "kind": "sequence",
+    "hook": "AI가 책을 찾아 펴 놓고 답하게 하려면?",
+    "labels": [
+      "필요 자료 검색",
+      "문맥에 넣기",
+      "근거 확인"
+    ]
+  },
+  {
+    "slug": "finetuning-lora",
+    "kind": "compare",
+    "hook": "새 사실을 찾아 주는 일과 말하는 습관을 바꾸는 일은?",
+    "labels": [
+      "학습 사례",
+      "작은 변화량",
+      "독립 평가"
+    ],
+    "panels": [
+      {
+        "label": "검색으로 근거 제공",
+        "meaning": "필요한 최신 문서를 문맥에 넣어요.",
+        "caution": "문서 선택과 근거 확인이 필요해요."
+      },
+      {
+        "label": "미세조정·LoRA",
+        "meaning": "출력 패턴에 맞게 가중치를 적응시켜요.",
+        "caution": "정확한 최신 사실을 항상 기억시키는 보장은 아니에요."
+      }
+    ]
+  },
+  {
+    "slug": "hallucination-grounding",
+    "kind": "sort",
+    "hook": "자연스럽게 말하면 믿어도 될까?",
+    "labels": [
+      "주장 나누기",
+      "근거 확인",
+      "모르면 유보"
+    ],
+    "buckets": [
+      "근거 확인",
+      "근거 없는 확신"
+    ],
+    "items": [
+      {
+        "text": "인용 문서에 해당 주장을 실제로 뒷받침하는 구간 확인",
+        "bucket": 0,
+        "explanation": "출처가 있다는 것과 주장을 뒷받침한다는 것은 달라요."
+      },
+      {
+        "text": "문장이 자연스러우니 확인하지 않고 발송",
+        "bucket": 1,
+        "explanation": "유창함만으로 사실성을 판단할 수 없어요."
+      }
+    ]
+  },
+  {
+    "slug": "llm-evaluation",
+    "kind": "sequence",
+    "hook": "질문 세 개에 잘 답했다고 전 과목을 잘할까?",
+    "labels": [
+      "대표 문제",
+      "같은 채점 기준",
+      "실패·편향 점검"
+    ]
+  },
+  {
+    "slug": "multimodal-models",
+    "kind": "compare",
+    "hook": "사진과 음성을 넣으면 모두 정확히 읽어 낼까?",
+    "labels": [
+      "형식별 입력",
+      "표현 연결",
+      "원본과 확인"
+    ],
+    "panels": [
+      {
+        "label": "글 입력",
+        "meaning": "문자로 표현된 정보를 읽어요.",
+        "caution": "문서에서 변환할 때 누락될 수 있어요."
+      },
+      {
+        "label": "이미지·음성 입력",
+        "meaning": "시각·청각 자료도 함께 처리해요.",
+        "caution": "해상도·잘림·인식 오류를 원본으로 확인해요."
+      }
+    ]
+  },
+  {
+    "slug": "ai-api-integration",
+    "kind": "sequence",
+    "hook": "우리 앱의 버튼과 AI 답변은 어떻게 연결될까?",
+    "labels": [
+      "검증한 요청",
+      "모델 응답",
+      "실패·중단 처리"
+    ]
+  },
+  {
+    "slug": "rag-document-ingestion",
+    "kind": "sequence",
+    "hook": "AI의 참고서를 검색하기 좋게 정리하려면?",
+    "labels": [
+      "문서·권한",
+      "분할·색인",
+      "갱신·삭제"
+    ]
+  },
+  {
+    "slug": "retrieval-hybrid-reranking",
+    "kind": "compare",
+    "hook": "비슷한 뜻과 정확한 제품 번호를 함께 찾으려면?",
+    "labels": [
+      "여러 검색",
+      "후보 합치기",
+      "다시 순서 매기기"
+    ],
+    "panels": [
+      {
+        "label": "키워드 검색",
+        "meaning": "정확한 이름과 제품 번호를 찾기 좋아요.",
+        "caution": "다른 말로 표현한 뜻을 놓칠 수 있어요."
+      },
+      {
+        "label": "의미 검색과 재정렬",
+        "meaning": "비슷한 표현을 찾고 후보를 다시 비교해요.",
+        "caution": "정확도·지연·권한 조건을 평가해요."
+      }
+    ]
+  },
+  {
+    "slug": "tool-calling",
+    "kind": "sequence",
+    "hook": "AI가 도구를 쓰자고 말하면 바로 실행해도 될까?",
+    "labels": [
+      "도구 제안",
+      "서버 검증",
+      "허용된 실행"
+    ]
+  },
+  {
+    "slug": "agent-workflows",
+    "kind": "compare",
+    "hook": "순서가 정해진 일과 다음 행동을 골라야 하는 일은?",
+    "labels": [
+      "정해진 흐름",
+      "모델의 선택",
+      "제한과 종료"
+    ],
+    "panels": [
+      {
+        "label": "정해진 흐름",
+        "meaning": "순서와 분기를 미리 정해요.",
+        "caution": "예측과 검증이 쉽지만 유연성에 한계가 있어요."
+      },
+      {
+        "label": "모델이 고르는 흐름",
+        "meaning": "상황에 맞게 다음 행동을 제안해요.",
+        "caution": "권한·시간·비용·종료 조건을 제한해요."
+      }
+    ]
+  },
+  {
+    "slug": "agent-state-memory",
+    "kind": "compare",
+    "hook": "대화 기록과 현재 작업의 상태는 같은 걸까?",
+    "labels": [
+      "작업 상태",
+      "필요한 기억",
+      "사용자별 경계"
+    ],
+    "panels": [
+      {
+        "label": "현재 작업 상태",
+        "meaning": "지금 어디까지 했는지 기록해요.",
+        "caution": "중단 후 재시작과 중복 처리를 생각해요."
+      },
+      {
+        "label": "다음에 쓸 기억",
+        "meaning": "필요한 이전 정보를 골라 보관해요.",
+        "caution": "사용자 격리·만료·삭제와 정확성을 관리해요."
+      }
+    ]
+  },
+  {
+    "slug": "agent-permissions-hitl",
+    "kind": "sort",
+    "hook": "답변 작성과 실제 메일 발송은 같은 권한일까?",
+    "labels": [
+      "도구의 영향",
+      "권한 검사",
+      "사람 승인"
+    ],
+    "buckets": [
+      "낮은 영향의 조회",
+      "승인이 필요한 실행"
+    ],
+    "items": [
+      {
+        "text": "허용된 문서만 검색",
+        "bucket": 0,
+        "explanation": "조회도 자료 권한을 검사하되 외부 변경과는 영향이 달라요."
+      },
+      {
+        "text": "고객에게 환불을 실제 실행",
+        "bucket": 1,
+        "explanation": "비용과 되돌리기 어려운 영향이 있어 업무 정책에 맞는 승인이 필요해요."
+      }
+    ]
+  },
+  {
+    "slug": "agent-evaluation-tracing",
+    "kind": "sequence",
+    "hook": "AI 작업의 어느 단계에서 틀렸는지 찾으려면?",
+    "labels": [
+      "단계 기록",
+      "결과 평가",
+      "실패 경로 추적"
+    ]
+  },
+  {
+    "slug": "ai-coding-assistants",
+    "kind": "sort",
+    "hook": "AI가 만든 숙제 답안을 실행도 안 하고 믿어도 될까?",
+    "labels": [
+      "요구 설명",
+      "변경 검토",
+      "테스트·보호"
+    ],
+    "buckets": [
+      "검증하는 사용",
+      "검증 없는 신뢰"
+    ],
+    "items": [
+      {
+        "text": "변경 내용을 읽고 요구에 맞는 테스트 실행",
+        "bucket": 0,
+        "explanation": "생성된 코드를 초안으로 보고 실제 결과와 영향을 확인해요."
+      },
+      {
+        "text": "그럴듯한 설명만 읽고 바로 배포",
+        "bucket": 1,
+        "explanation": "설명과 실제 동작은 다를 수 있고 취약점이나 누락이 남을 수 있어요."
+      }
+    ]
+  },
+  {
+    "slug": "ai-business-automation",
+    "kind": "sequence",
+    "hook": "자동화하면 남은 사람의 일도 정말 줄어들까?",
+    "labels": [
+      "반복과 예외",
+      "승인·중복 방지",
+      "순효과 평가"
+    ]
+  },
+  {
+    "slug": "mlops-lifecycle",
+    "kind": "sequence",
+    "hook": "노트북에서 잘되던 모델을 매일 운영하려면?",
+    "labels": [
+      "학습·검증",
+      "배포",
+      "관찰·개선"
+    ]
+  },
+  {
+    "slug": "data-model-versioning",
+    "kind": "sequence",
+    "hook": "어제와 답이 달라졌다면 무엇이 바뀌었을까?",
+    "labels": [
+      "자료·설정 버전",
+      "실행과 연결",
+      "같은 조건 재현"
+    ]
+  },
+  {
+    "slug": "model-serving-batch-online",
+    "kind": "compare",
+    "hook": "밤에 묶어서 할 일과 지금 답해야 할 일은?",
+    "labels": [
+      "배치 처리",
+      "즉시 응답",
+      "비용·최신성"
+    ],
+    "panels": [
+      {
+        "label": "배치",
+        "meaning": "자료를 모아 정해진 때 처리해요.",
+        "caution": "즉시 필요한 답에는 늦을 수 있어요."
+      },
+      {
+        "label": "온라인",
+        "meaning": "요청이 오면 답을 계산해요.",
+        "caution": "응답 지연·용량·장애를 관리해야 해요."
+      }
+    ]
+  },
+  {
+    "slug": "gpu-inference-optimization",
+    "kind": "capacity",
+    "hook": "주문을 많이 모으면 빠르기만 할까?",
+    "labels": [
+      "계산·메모리",
+      "배치와 대기",
+      "품질·지연 확인"
+    ]
+  },
+  {
+    "slug": "llm-cost-latency",
+    "kind": "compare",
+    "hook": "질문 한 번에도 왜 여러 번 비용이 들까?",
+    "labels": [
+      "입출력 사용량",
+      "재시도·도구",
+      "업무당 전체 비용"
+    ],
+    "panels": [
+      {
+        "label": "한 번의 모델 호출",
+        "meaning": "입력과 출력의 사용량을 함께 봐요.",
+        "caution": "표시된 단가만으로 전체 업무 비용을 알 수는 없어요."
+      },
+      {
+        "label": "하나의 업무 전체",
+        "meaning": "검색·모델·도구·재시도와 검토까지 이어서 봐요.",
+        "caution": "작은 호출이 여러 번 반복되면 총비용과 대기가 커질 수 있어요."
+      }
+    ]
+  },
+  {
+    "slug": "drift-monitoring",
+    "kind": "sequence",
+    "hook": "어제 잘 맞던 모델이 오늘 틀리기 시작하면?",
+    "labels": [
+      "입력 변화",
+      "실제 품질",
+      "조사·대응"
+    ]
+  },
+  {
+    "slug": "ai-security-prompt-injection",
+    "kind": "sort",
+    "hook": "책 안의 지시가 선생님의 지시를 덮어써도 될까?",
+    "labels": [
+      "신뢰 경계",
+      "실행 권한",
+      "공격 사례 점검"
+    ],
+    "buckets": [
+      "지켜야 할 지시",
+      "처리할 자료"
+    ],
+    "items": [
+      {
+        "text": "운영자가 정한 도구 권한 정책",
+        "bucket": 0,
+        "explanation": "시스템이 신뢰하는 경계에서 정한 정책을 따르게 설계해요."
+      },
+      {
+        "text": "검색 문서 속 비밀번호를 보내라는 문장",
+        "bucket": 1,
+        "explanation": "자료 안의 지시를 실행 권한으로 승격하면 안 돼요."
+      }
+    ]
+  },
+  {
+    "slug": "ai-privacy-data-handling",
+    "kind": "sort",
+    "hook": "AI에게 꼭 필요한 정보만 보내고 있을까?",
+    "labels": [
+      "정보의 경로",
+      "최소 입력·기록",
+      "보관·삭제"
+    ],
+    "buckets": [
+      "필요한 정보만",
+      "불필요한 확산"
+    ],
+    "items": [
+      {
+        "text": "질문에 필요 없는 전화번호를 입력에서 제거",
+        "bucket": 0,
+        "explanation": "업무에 필요한 최소 정보만 처리하는 출발점이에요."
+      },
+      {
+        "text": "전체 대화와 원본 개인정보를 무기한 로그에 저장",
+        "bucket": 1,
+        "explanation": "보관 목적·권한·기간 없이 복제하면 노출 범위가 커져요."
+      }
+    ]
+  },
+  {
+    "slug": "responsible-ai-risk",
+    "kind": "compare",
+    "hook": "평균 점수가 좋아도 누군가는 계속 손해 볼 수 있을까?",
+    "labels": [
+      "업무의 영향",
+      "집단·실패 평가",
+      "검토·구제"
+    ],
+    "panels": [
+      {
+        "label": "전체 평균",
+        "meaning": "전체적인 경향을 요약해요.",
+        "caution": "특정 집단의 큰 실패가 가려질 수 있어요."
+      },
+      {
+        "label": "상황과 집단별 확인",
+        "meaning": "누가 어떤 영향을 받는지 나눠 봐요.",
+        "caution": "표본 부족과 개인정보·이의 제기 절차도 살펴요."
+      }
+    ]
+  },
+  {
+    "slug": "ai-release-operations",
+    "kind": "sequence",
+    "hook": "모델을 바꿨다가 문제가 생기면 어디로 돌아갈까?",
+    "labels": [
+      "함께 묶은 버전",
+      "점진 공개",
+      "중단·복구"
+    ]
+  },
+  {
+    "slug": "project-charter-scope",
+    "kind": "compare",
+    "hook": "학교 축제 준비에서 무엇을 이번에 안 할지도 정해야 할까?",
+    "labels": [
+      "문제와 목표",
+      "범위와 제약",
+      "성공·승인"
+    ],
+    "panels": [
+      {
+        "label": "할 일 목록",
+        "meaning": "만들 결과물과 작업을 적어요.",
+        "caution": "목적과 성공 기준이 없으면 범위만 커질 수 있어요."
+      },
+      {
+        "label": "목표·범위 합의",
+        "meaning": "왜 하는지와 이번에 제외할 일을 정해요.",
+        "caution": "변경 요청이 오면 영향을 다시 결정해요."
+      }
+    ]
+  },
+  {
+    "slug": "stakeholders-raci",
+    "kind": "sort",
+    "hook": "일하는 사람과 최종 결정하는 사람은 같아야 할까?",
+    "labels": [
+      "영향받는 사람",
+      "실행·결정 역할",
+      "결정 기록"
+    ],
+    "buckets": [
+      "실행 책임",
+      "최종 결정"
+    ],
+    "items": [
+      {
+        "text": "개발 담당자가 승인 화면 구현",
+        "bucket": 0,
+        "explanation": "업무를 수행하는 역할이에요."
+      },
+      {
+        "text": "지원 책임자가 출시 여부 결정",
+        "bucket": 1,
+        "explanation": "이 결정의 최종 책임과 권한을 가진 역할이에요."
+      }
+    ]
+  },
+  {
+    "slug": "requirements-user-stories",
+    "kind": "sequence",
+    "hook": "맛있는 것을 만들어 줘라는 부탁만으로 충분할까?",
+    "labels": [
+      "누구의 어떤 일",
+      "성공·실패 조건",
+      "같은 예시로 합의"
+    ]
+  },
+  {
+    "slug": "wbs-estimation",
+    "kind": "sequence",
+    "hook": "축제 준비 사흘이라는 예상에는 무엇이 들어 있을까?",
+    "labels": [
+      "작게 나누기",
+      "가정과 범위",
+      "조사 후 갱신"
+    ]
+  },
+  {
+    "slug": "scheduling-dependencies",
+    "kind": "schedule",
+    "hook": "밥과 반찬을 만들 때 시간을 전부 더해야 할까?",
+    "labels": [
+      "먼저 할 일",
+      "동시 가능한 일",
+      "병목과 인력"
+    ]
+  },
+  {
+    "slug": "agile-scrum",
+    "kind": "sequence",
+    "hook": "처음 계획을 끝까지 지키는 것만이 좋은 개발일까?",
+    "labels": [
+      "제품 목표",
+      "짧은 실행",
+      "결과와 방식 점검"
+    ]
+  },
+  {
+    "slug": "kanban-flow",
+    "kind": "kanban",
+    "hook": "동시에 시작한 일이 많으면 더 많이 끝날까?",
+    "labels": [
+      "흐름 정의",
+      "진행 중 제한",
+      "대기와 완료"
+    ]
+  },
+  {
+    "slug": "project-risk-change",
+    "kind": "sort",
+    "hook": "비가 올 가능성과 이미 내리는 비는 어떻게 다를까?",
+    "labels": [
+      "위험과 이슈",
+      "신호·담당·대안",
+      "변경 영향"
+    ],
+    "buckets": [
+      "아직 발생 전",
+      "이미 발생한 이슈"
+    ],
+    "items": [
+      {
+        "text": "축제 당일 비가 올 수 있음",
+        "bucket": 0,
+        "explanation": "앞으로 목표에 영향을 줄 수 있는 불확실한 사건이에요."
+      },
+      {
+        "text": "행사 시작 때 실제로 비가 내림",
+        "bucket": 1,
+        "explanation": "이미 발생했으므로 대응과 결정이 필요한 이슈예요."
+      }
+    ]
+  },
+  {
+    "slug": "delivery-quality-release",
+    "kind": "sequence",
+    "hook": "완성한 앱을 내보내기 전에 무엇을 더 확인할까?",
+    "labels": [
+      "품질·운영 준비",
+      "점진 공개",
+      "관찰·복구"
+    ]
+  },
+  {
+    "slug": "ai-project-management",
+    "kind": "compare",
+    "hook": "AI 시연 성공과 실제 업무 성공은 어떻게 다를까?",
+    "labels": [
+      "현재 기준선",
+      "자료·평가·검토",
+      "시범의 순효과"
+    ],
+    "panels": [
+      {
+        "label": "멋진 시연",
+        "meaning": "한두 사례에서 가능성을 보여 줘요.",
+        "caution": "대표 업무의 품질과 운영 비용은 아직 몰라요."
+      },
+      {
+        "label": "제한된 업무 시범",
+        "meaning": "평가·검토·오류·순효과를 함께 확인해요.",
+        "caution": "확대할 때 조건을 다시 검토해요."
+      }
+    ]
+  },
+  {
+    "slug": "problem-discovery",
+    "kind": "sequence",
+    "hook": "우산 앱을 만들기 전에 어떤 불편을 알아봐야 할까?",
+    "labels": [
+      "사람과 상황",
+      "사실과 가설",
+      "작게 확인"
+    ]
+  },
+  {
+    "slug": "user-research-journey",
+    "kind": "sort",
+    "hook": "좋죠라는 질문과 마지막 경험을 묻는 질문은?",
+    "labels": [
+      "조사 목적·동의",
+      "실제 경험",
+      "증거·한계"
+    ],
+    "buckets": [
+      "열린 질문",
+      "유도 질문"
+    ],
+    "items": [
+      {
+        "text": "마지막으로 그 일을 했던 과정을 설명해 주세요",
+        "bucket": 0,
+        "explanation": "원하는 답을 미리 제시하지 않고 실제 경험을 물어요."
+      },
+      {
+        "text": "이 AI 기능이 정말 편하겠죠",
+        "bucket": 1,
+        "explanation": "긍정 답변을 기대한다는 단서가 들어 있어요."
+      }
+    ]
+  },
+  {
+    "slug": "prioritization-roadmaps",
+    "kind": "sort",
+    "hook": "벽지 교체와 누수 수리 중 무엇부터 할까?",
+    "labels": [
+      "목표와 근거",
+      "위험·노력",
+      "선택·갱신"
+    ],
+    "buckets": [
+      "필수 위험 대응",
+      "효과를 더 조사"
+    ],
+    "items": [
+      {
+        "text": "권한 없는 자료가 노출되는 결함 수정",
+        "bucket": 0,
+        "explanation": "영향이 큰 보호 조건은 일반 기능 점수와 단순 교환하지 않아요."
+      },
+      {
+        "text": "말투를 바꾸면 모두 만족할 것이라는 아이디어",
+        "bucket": 1,
+        "explanation": "실제 사용자 가치의 근거와 노력·영향을 먼저 비교해요."
+      }
+    ]
+  },
+  {
+    "slug": "mvp-experiments",
+    "kind": "sequence",
+    "hook": "앱을 다 만들기 전에 중요한 생각을 시험할 수 있을까?",
+    "labels": [
+      "위험한 가정",
+      "작은 실험",
+      "확대·수정·중단"
+    ]
+  },
+  {
+    "slug": "product-metrics-funnels",
+    "kind": "sequence",
+    "hook": "방문자가 늘었다고 필요한 일을 끝낸 걸까?",
+    "labels": [
+      "대상·분모",
+      "단계별 변화",
+      "오류·원인"
+    ]
+  },
+  {
+    "slug": "ux-accessibility",
+    "kind": "sort",
+    "hook": "색을 못 구분하거나 마우스를 못 써도 배울 수 있을까?",
+    "labels": [
+      "핵심 과업",
+      "여러 조작 방법",
+      "실제 환경 검증"
+    ],
+    "buckets": [
+      "여러 방식으로 전달",
+      "한 방식에만 의존"
+    ],
+    "items": [
+      {
+        "text": "완료를 색·아이콘·글자로 함께 표시",
+        "bucket": 0,
+        "explanation": "색을 구분하기 어려워도 상태를 이해할 수 있어요."
+      },
+      {
+        "text": "아이콘 버튼에 이름 없이 그림만 표시",
+        "bucket": 1,
+        "explanation": "화면낭독기로 기능을 알기 어려우므로 접근 가능한 이름이 필요해요."
+      }
+    ]
+  },
+  {
+    "slug": "technical-communication",
+    "kind": "sequence",
+    "hook": "설명을 많이 했는데 왜 다음 행동을 모를까?",
+    "labels": [
+      "독자와 목적",
+      "사실·이유·결정",
+      "담당·기한"
+    ]
+  },
+  {
+    "slug": "business-cases-tco",
+    "kind": "compare",
+    "hook": "프린터 가격만 보면 정말 싼지 알 수 있을까?",
+    "labels": [
+      "현재 비용",
+      "도입부터 종료",
+      "가정 바꿔 비교"
+    ],
+    "panels": [
+      {
+        "label": "도입 가격",
+        "meaning": "처음 구매하는 금액을 봐요.",
+        "caution": "운영·검토·수정·종료 비용은 빠질 수 있어요."
+      },
+      {
+        "label": "총비용과 순효과",
+        "meaning": "같은 기간의 비용과 남은 사람 일을 같이 봐요.",
+        "caution": "가정이 바뀌는 범위도 비교해요."
+      }
+    ]
+  },
+  {
+    "slug": "vendor-build-buy",
+    "kind": "compare",
+    "hook": "직접 요리할까, 사 먹을까를 기술에도 물어볼까?",
+    "labels": [
+      "필수 조건",
+      "구축·구매·혼합",
+      "장애·교체 검증"
+    ],
+    "panels": [
+      {
+        "label": "직접 구축",
+        "meaning": "특수 요구와 데이터 흐름을 세밀히 정해요.",
+        "caution": "개발·보안·장애 대응도 맡아야 해요."
+      },
+      {
+        "label": "외부 서비스 구매",
+        "meaning": "초기 도입을 빠르게 할 수 있어요.",
+        "caution": "한도·정책·가격·교체 조건을 검토해요."
+      }
+    ]
+  },
+  {
+    "slug": "strategy-okr-learning",
+    "kind": "sort",
+    "hook": "많이 만들었다는 말과 도움이 됐다는 말은 같을까?",
+    "labels": [
+      "집중할 문제",
+      "결과와 안전 기준",
+      "배우고 조정"
+    ],
+    "buckets": [
+      "활동·산출물",
+      "사용자 결과"
+    ],
+    "items": [
+      {
+        "text": "AI 교육 열 번 개최",
+        "bucket": 0,
+        "explanation": "한 활동의 양이지 업무가 좋아졌다는 증거는 아니에요."
+      },
+      {
+        "text": "같은 문의의 순처리 시간과 오류가 개선",
+        "bucket": 1,
+        "explanation": "정의한 대상과 기준선에서 실제 변화를 확인하는 결과에 가까워요."
+      }
+    ]
+  }
+]

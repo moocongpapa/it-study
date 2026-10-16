@@ -1,0 +1,522 @@
+[
+  {
+    "slug": "logic-gates",
+    "body_hash": "a3625f777430714ede5397e011c5b377"
+  },
+  {
+    "slug": "binary-representation",
+    "body_hash": "18fdbf5c23c8db22facb8bb1673a3a0a"
+  },
+  {
+    "slug": "binary-arithmetic",
+    "body_hash": "96e9b8ec9a9e5fab22f93c3010b5c96f"
+  },
+  {
+    "slug": "von-neumann-cpu",
+    "body_hash": "2bb00333ee3a7a1bd3cf150cd0985e51"
+  },
+  {
+    "slug": "memory-hierarchy",
+    "body_hash": "77c81f4563bdd5260341ac6b2b53a89a"
+  },
+  {
+    "slug": "processes-threads",
+    "body_hash": "5267a42fbc7e1d674b3df9a8aa2b98a1"
+  },
+  {
+    "slug": "virtual-memory",
+    "body_hash": "7b8703ff5bbcd3be2aacd1c00b4bb8e0"
+  },
+  {
+    "slug": "context-switching",
+    "body_hash": "5e39c6d8603242197008383a9f7486bc"
+  },
+  {
+    "slug": "synchronization-deadlocks",
+    "body_hash": "27ad016064a5ddcf17b023c00f39bc39"
+  },
+  {
+    "slug": "syscalls-io",
+    "body_hash": "bbdf8d3d2c9cfa96eb8af1685909ad90"
+  },
+  {
+    "slug": "osi-encapsulation",
+    "body_hash": "7eb230f54b96cb5bb6b988c70f20afed"
+  },
+  {
+    "slug": "tcp-udp-handshake",
+    "body_hash": "404c6e337e784fb723c37cfc31063bfc"
+  },
+  {
+    "slug": "dns-resolution",
+    "body_hash": "abeb20636856f0fd27a5b1cdc8b09a80"
+  },
+  {
+    "slug": "http-versions",
+    "body_hash": "f13df40d2803fc0604443e3be3640a9b"
+  },
+  {
+    "slug": "load-balancing",
+    "body_hash": "a3de7e3091ed348a77976bcf60141841"
+  },
+  {
+    "slug": "big-o",
+    "body_hash": "cf8621091e70e17952773214d3ca06b1"
+  },
+  {
+    "slug": "arrays-linked-lists",
+    "body_hash": "0edb73f985181c337c93d37a797f4e5f"
+  },
+  {
+    "slug": "hash-tables",
+    "body_hash": "b67de5bba1828e1e852eb7bec3ef1b9d"
+  },
+  {
+    "slug": "trees-bst",
+    "body_hash": "b4e9521ddbc3433d222a57539f1b5376"
+  },
+  {
+    "slug": "graph-search",
+    "body_hash": "adfa18a58023d2fed3212128ca25cf8f"
+  },
+  {
+    "slug": "compiler-interpreter",
+    "body_hash": "452be8a90936acce9cb3861a3a8ca038"
+  },
+  {
+    "slug": "stack-heap-gc",
+    "body_hash": "6a739ebad27d031fc4e042a2512130bb"
+  },
+  {
+    "slug": "oop-principles",
+    "body_hash": "0d7273050af1d7f5c6d9c34ce963fd13"
+  },
+  {
+    "slug": "functional-programming",
+    "body_hash": "2347f34a26a04bf9d26334256b91160e"
+  },
+  {
+    "slug": "type-systems",
+    "body_hash": "820a9a07e7e2120df040e79c63ea456a"
+  },
+  {
+    "slug": "solid",
+    "body_hash": "3833c39d68f2dcd9ecd39e64e9485b65"
+  },
+  {
+    "slug": "design-patterns",
+    "body_hash": "8da75a0f121ee74000f644e974cce162"
+  },
+  {
+    "slug": "clean-code-refactoring",
+    "body_hash": "366e1402c4f7797f77c94c037286ae79"
+  },
+  {
+    "slug": "testing-pyramid",
+    "body_hash": "9fbb903dfd8b289d87230aa230d488b5"
+  },
+  {
+    "slug": "architecture-decisions",
+    "body_hash": "6ade7a56579d662dd895ae1aec530504"
+  },
+  {
+    "slug": "relational-normalization",
+    "body_hash": "cfa011f5411b9e86e9ddb527c40a0b50"
+  },
+  {
+    "slug": "btree-indexes",
+    "body_hash": "bf5fa2a5464484a7c61123e60b4bb5d9"
+  },
+  {
+    "slug": "transactions-isolation",
+    "body_hash": "8ddb87afc0dd8e6a2a52277dd07dad75"
+  },
+  {
+    "slug": "nosql-cap",
+    "body_hash": "e6a215d3c32f3df96257346a2d079eef"
+  },
+  {
+    "slug": "replication-sharding",
+    "body_hash": "4f430a063814421078fee7cd92b11d4f"
+  },
+  {
+    "slug": "rest-api",
+    "body_hash": "aa9ac0f9be4a7d82b8236d680658ae94"
+  },
+  {
+    "slug": "caching-strategies",
+    "body_hash": "0d10d194c71e3c4fee363073f4ea52e3"
+  },
+  {
+    "slug": "message-queues",
+    "body_hash": "fc72f6e36fd185d5f373e96f95680a65"
+  },
+  {
+    "slug": "monolith-vs-msa",
+    "body_hash": "9ca80e508a9eaf8c5ba2d89bdc5d083e"
+  },
+  {
+    "slug": "saga-transactions",
+    "body_hash": "a0ac389eb4f6557df8e0077b97366ef9"
+  },
+  {
+    "slug": "vm-vs-containers",
+    "body_hash": "4fa85ae50df2442c0f360e3f1e5b508e"
+  },
+  {
+    "slug": "kubernetes-basics",
+    "body_hash": "7ea0c140f29189267df859f109b0a074"
+  },
+  {
+    "slug": "cicd-pipelines",
+    "body_hash": "93cc512e560baf7505b9a800b3cf52af"
+  },
+  {
+    "slug": "iac",
+    "body_hash": "7f692d6a8b9fb60398ce1c9219411e14"
+  },
+  {
+    "slug": "observability",
+    "body_hash": "9cca938ddb670acf78c3bdd5ca52a666"
+  },
+  {
+    "slug": "browser-rendering",
+    "body_hash": "9886ff1d71dcc79e52a0d81ab06946d5"
+  },
+  {
+    "slug": "web-auth",
+    "body_hash": "1a2d7d812cf330cca93307978d56d80c"
+  },
+  {
+    "slug": "web-security",
+    "body_hash": "54a03a0142a22592f68aa5d87e9a8ed5"
+  },
+  {
+    "slug": "web-performance",
+    "body_hash": "40ac8464a7bd0600fb9db96e99be2d99"
+  },
+  {
+    "slug": "llm-vector-infra",
+    "body_hash": "39ac6046c43d8ec8af9230861d0dfb7e"
+  },
+  {
+    "slug": "ai-api-integration",
+    "body_hash": "c967a71bfea004227061bfe2387ae201"
+  },
+  {
+    "slug": "rag-document-ingestion",
+    "body_hash": "b73cd6f858fa7406e4a1cd0a7760afd1"
+  },
+  {
+    "slug": "retrieval-hybrid-reranking",
+    "body_hash": "e840bd6bacd77c5b936a60757354282d"
+  },
+  {
+    "slug": "tool-calling",
+    "body_hash": "6e6d8fb4adf8649761bf177dad30db95"
+  },
+  {
+    "slug": "agent-workflows",
+    "body_hash": "825d048ac21322b9c9a82f10fec909b9"
+  },
+  {
+    "slug": "agent-state-memory",
+    "body_hash": "74ee454d29e5acdc05e25fa35fb94180"
+  },
+  {
+    "slug": "agent-permissions-hitl",
+    "body_hash": "e2ec85906b074e5c2a9d724431bd09d6"
+  },
+  {
+    "slug": "agent-evaluation-tracing",
+    "body_hash": "29897d4e0bd355803df2aec6c4f1a29a"
+  },
+  {
+    "slug": "ai-coding-assistants",
+    "body_hash": "c176750f1a272fc3cf60dd7c02aa20ca"
+  },
+  {
+    "slug": "ai-business-automation",
+    "body_hash": "ca473ae2c2ff50400a871c99794207f7"
+  },
+  {
+    "slug": "ai-ml-dl",
+    "body_hash": "d2436411ead835f4ba871d44993d9019"
+  },
+  {
+    "slug": "ml-problem-framing",
+    "body_hash": "10816a441ab73b47594e14c6b0c4d065"
+  },
+  {
+    "slug": "train-validation-test",
+    "body_hash": "b5f85a4cf90f112776c5357e2e70efe3"
+  },
+  {
+    "slug": "features-preprocessing",
+    "body_hash": "b46f309816e84eb5104ba08da5e6b510"
+  },
+  {
+    "slug": "regression-models",
+    "body_hash": "f7b905dc3d82dc6411c0f3263b8c7f48"
+  },
+  {
+    "slug": "classification-metrics",
+    "body_hash": "7ca447fdbfdb950cb7169e588a772bd0"
+  },
+  {
+    "slug": "decision-trees-ensembles",
+    "body_hash": "e4fc5b76dc47082832eedff5c1f72ea5"
+  },
+  {
+    "slug": "clustering-reduction",
+    "body_hash": "611c083d8a2fa920f338e3c1743df2ad"
+  },
+  {
+    "slug": "overfitting-regularization",
+    "body_hash": "59d334ab9993ef6f7be3e6e5ba074a68"
+  },
+  {
+    "slug": "ml-experiment-design",
+    "body_hash": "a7c814db51a37f449bcf74014c45afa8"
+  },
+  {
+    "slug": "data-literacy",
+    "body_hash": "29a3dfdf5742c04563f1325cbd5552e1"
+  },
+  {
+    "slug": "descriptive-statistics",
+    "body_hash": "05c849bd623748e3f56532211e30c648"
+  },
+  {
+    "slug": "probability-bayes",
+    "body_hash": "a6bc834705d8a0757a3467309878e0f5"
+  },
+  {
+    "slug": "sampling-confidence",
+    "body_hash": "d5bb8c3c402e685d58d172dec05fc7f1"
+  },
+  {
+    "slug": "hypothesis-ab-testing",
+    "body_hash": "d25dc7245149b086703947ae0e5295c5"
+  },
+  {
+    "slug": "sql-analytics",
+    "body_hash": "be24e21b062d17353619ba58fa40b88d"
+  },
+  {
+    "slug": "data-cleaning-quality",
+    "body_hash": "07394d6a453a6be03cae920c502b4c09"
+  },
+  {
+    "slug": "etl-data-pipelines",
+    "body_hash": "05c78282c5f29b9449fee3fd4ae090b7"
+  },
+  {
+    "slug": "analytics-warehouses",
+    "body_hash": "455926244d924a37284d051757aad21e"
+  },
+  {
+    "slug": "data-governance-lineage",
+    "body_hash": "6614fcd1e594992e1986a937e40f710f"
+  },
+  {
+    "slug": "vectors-matrices-tensors",
+    "body_hash": "4b13199f74868d6bd05b90fed0b1cd24"
+  },
+  {
+    "slug": "gradients-optimization",
+    "body_hash": "63d787d11804336e6d2732baf67c812f"
+  },
+  {
+    "slug": "neural-networks-backprop",
+    "body_hash": "689d96306354060a3b0bf33a6fd93810"
+  },
+  {
+    "slug": "training-loops-batching",
+    "body_hash": "3da004d6ee05506b2d008634c34cecf6"
+  },
+  {
+    "slug": "convolution-vision",
+    "body_hash": "a1aedfe02a762c08a4c3d7d758d4c909"
+  },
+  {
+    "slug": "sequences-nlp",
+    "body_hash": "71a11ef506932052b1046acf59ed00db"
+  },
+  {
+    "slug": "attention-transformers",
+    "body_hash": "fe6b8c75bb1c53c60e88f23f49c8fb3d"
+  },
+  {
+    "slug": "transfer-learning",
+    "body_hash": "d1960ebb20d98ff2a3bb51bb5fc74af1"
+  },
+  {
+    "slug": "generative-diffusion",
+    "body_hash": "8a1d8c5c807ff408509979c9ada13641"
+  },
+  {
+    "slug": "reinforcement-learning",
+    "body_hash": "78f4b3e490eff9ce091c9d4861efb01b"
+  },
+  {
+    "slug": "llm-pretraining",
+    "body_hash": "3041eb9ca67c43903213fc1191a04b61"
+  },
+  {
+    "slug": "tokens-context-windows",
+    "body_hash": "cabd5f9a7e7190420e70d84e636d93e9"
+  },
+  {
+    "slug": "prompting-instructions",
+    "body_hash": "07a2d2eb0f120fef15d2080facdc12f1"
+  },
+  {
+    "slug": "structured-outputs",
+    "body_hash": "f86fdbe8d2e0bb0988661735dc22a852"
+  },
+  {
+    "slug": "embeddings-similarity",
+    "body_hash": "7d4b838bc053f1fc5faf8db8ef766a88"
+  },
+  {
+    "slug": "rag-retrieval",
+    "body_hash": "519a9b46c3a9118b5156122b652bac7b"
+  },
+  {
+    "slug": "finetuning-lora",
+    "body_hash": "a75a316e5b0fe366481e32ed196c16c0"
+  },
+  {
+    "slug": "hallucination-grounding",
+    "body_hash": "f32c79d7f2bbc101b13c84497459840e"
+  },
+  {
+    "slug": "llm-evaluation",
+    "body_hash": "ec2d42dd6b2e54a516492ed59ed3080a"
+  },
+  {
+    "slug": "multimodal-models",
+    "body_hash": "8c051a4bd75280bbcc5d7b2911aaf473"
+  },
+  {
+    "slug": "mlops-lifecycle",
+    "body_hash": "8a36bfa0c656c4e858f981dabe1d5f15"
+  },
+  {
+    "slug": "data-model-versioning",
+    "body_hash": "41f2312c752f5f948810382e799a6f58"
+  },
+  {
+    "slug": "model-serving-batch-online",
+    "body_hash": "a4d8ea7d05158ac1b7b6fca5e6006f7d"
+  },
+  {
+    "slug": "gpu-inference-optimization",
+    "body_hash": "bbbfec62cc61fa93b5a8febbebb2f510"
+  },
+  {
+    "slug": "llm-cost-latency",
+    "body_hash": "d4e7bdd88fc0df4a82b86b4ad0613bb0"
+  },
+  {
+    "slug": "drift-monitoring",
+    "body_hash": "0c1456470b793e616c1afdd5b069e5d6"
+  },
+  {
+    "slug": "ai-security-prompt-injection",
+    "body_hash": "a1941b077ba4559dde4b2e4fccf73a5b"
+  },
+  {
+    "slug": "ai-privacy-data-handling",
+    "body_hash": "51b6fc2a28fcc99da2529c02ff988b98"
+  },
+  {
+    "slug": "responsible-ai-risk",
+    "body_hash": "c0fdd98339f46abd576c90998e7c1cdd"
+  },
+  {
+    "slug": "ai-release-operations",
+    "body_hash": "9c5db659fd6d6c5309f8e6634e1d08ff"
+  },
+  {
+    "slug": "problem-discovery",
+    "body_hash": "3c229801f88d5efb1641999bee6e0a05"
+  },
+  {
+    "slug": "user-research-journey",
+    "body_hash": "e340ed73ca2ce6f431f07b6f20e9a7cd"
+  },
+  {
+    "slug": "prioritization-roadmaps",
+    "body_hash": "e5efaa32ceba26eaf8474aa0c31f6027"
+  },
+  {
+    "slug": "mvp-experiments",
+    "body_hash": "02d4d632b50bf07e972d25e37cc684b9"
+  },
+  {
+    "slug": "product-metrics-funnels",
+    "body_hash": "5e6736a1bf6c28fc7e9307ba92850834"
+  },
+  {
+    "slug": "ux-accessibility",
+    "body_hash": "49063c640de8807ae7356bb75c497a6a"
+  },
+  {
+    "slug": "technical-communication",
+    "body_hash": "cc9f7a23345cf844a4a4dc908768ba97"
+  },
+  {
+    "slug": "business-cases-tco",
+    "body_hash": "451014af775a14248b048fbded5413b5"
+  },
+  {
+    "slug": "vendor-build-buy",
+    "body_hash": "0f59cfd40977e0a5e981f7c7f3680754"
+  },
+  {
+    "slug": "strategy-okr-learning",
+    "body_hash": "002363268e2963eed14f7c5d2e8ff4ef"
+  },
+  {
+    "slug": "project-charter-scope",
+    "body_hash": "184c58a388b253b8999ab13f902b1353"
+  },
+  {
+    "slug": "stakeholders-raci",
+    "body_hash": "f12616b791683373e6027af0be82bdcc"
+  },
+  {
+    "slug": "requirements-user-stories",
+    "body_hash": "1e4a627d80ef60dd12ce34d9786bb7f8"
+  },
+  {
+    "slug": "wbs-estimation",
+    "body_hash": "5109e813beae1a49a4d1275d6b6c9578"
+  },
+  {
+    "slug": "scheduling-dependencies",
+    "body_hash": "6e9805653e5d2ca22b537ee927930cee"
+  },
+  {
+    "slug": "agile-scrum",
+    "body_hash": "e66af56d357bf00b7c9aa0c0db4d3a1f"
+  },
+  {
+    "slug": "kanban-flow",
+    "body_hash": "2166a8a4f92c6bc03a90518f5db31540"
+  },
+  {
+    "slug": "project-risk-change",
+    "body_hash": "83e86811745697c00727f4b963e0708e"
+  },
+  {
+    "slug": "delivery-quality-release",
+    "body_hash": "4766d4ff5c0eab94901b33ef68f04074"
+  },
+  {
+    "slug": "ai-project-management",
+    "body_hash": "136d7fff507408b426969d631b046ea7"
+  }
+]
