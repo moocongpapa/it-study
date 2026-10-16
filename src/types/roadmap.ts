@@ -68,6 +68,7 @@ export interface TopicProgressResult {
 export interface UserNodeProgress {
   topic_id: string;
   is_completed: boolean;
+  completion_source?: "manual" | "quiz" | null;
   current_level: number;
   self_assessment: number | null;
   completed_at: string | null;

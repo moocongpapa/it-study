@@ -31,6 +31,7 @@ try {
     "supabase/migrations/20261013060132_interactive_learning.sql",
     "supabase/migrations/20261013062613_content_batch_atomic_write.sql",
     "supabase/migrations/20261014000000_content_batch_guarded_write.sql",
+    "supabase/migrations/20261016141247_manual_topic_completion.sql",
     "supabase/seed.sql",
     "supabase/quiz_seed.sql",
   ]) {
@@ -39,6 +40,7 @@ try {
   for (const path of [
     "supabase/migrations/20261013060132_interactive_learning.sql",
     "supabase/migrations/20261014000000_content_batch_guarded_write.sql",
+    "supabase/migrations/20261016141247_manual_topic_completion.sql",
     "supabase/seed.sql",
     "supabase/quiz_seed.sql",
   ]) {

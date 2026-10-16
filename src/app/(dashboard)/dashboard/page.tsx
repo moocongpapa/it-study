@@ -20,7 +20,7 @@ export default async function LearningDashboardPage() {
     topics={catalog.topics}
     progress={catalog.progress}
     learningDays={learningDays}
-    isDemo={catalog.isDemo}
+    usesBrowserStorage={catalog.isDemo || !catalog.userId}
     asOf={new Date().toISOString()}
   />;
 }

@@ -1,61 +1,39 @@
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { isSupabaseConfigured } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
-import { initialReviewSchedule } from "@/lib/spaced-repetition";
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ topicId: string }> }) {
   if (!isSupabaseConfigured) {
     return NextResponse.json({ error: "미리보기에서는 브라우저에 진도를 저장합니다." }, { status: 400 });
   }
-
   const { topicId } = await params;
   if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(topicId)) {
     return NextResponse.json({ error: "잘못된 토픽 ID입니다." }, { status: 400 });
   }
-  const body = await request.json().catch(() => null) as { selfAssessment?: unknown } | null;
-  const selfAssessment = body?.selfAssessment;
-  if (!Number.isInteger(selfAssessment) || Number(selfAssessment) < 1 || Number(selfAssessment) > 5) {
-    return NextResponse.json({ error: "이해도는 1부터 5까지 선택해 주세요." }, { status: 400 });
+  const body: unknown = await request.json().catch(() => null);
+  if (!body || typeof body !== "object" || Array.isArray(body)) {
+    return NextResponse.json({ error: "학습 상태 요청이 올바르지 않습니다." }, { status: 400 });
   }
-
+  const input = body as { isCompleted?: unknown; selfAssessment?: unknown };
+  // Default preserves the previous self-assessment endpoint contract.
+  const completed = input.isCompleted === undefined ? true : input.isCompleted;
+  const assessment = input.selfAssessment ?? null;
+  if (typeof completed !== "boolean" || (assessment !== null &&
+      (!Number.isInteger(assessment) || Number(assessment) < 1 || Number(assessment) > 5))) {
+    return NextResponse.json({ error: "학습 상태 또는 이해도 형식이 올바르지 않습니다." }, { status: 400 });
+  }
   const supabase = await createClient();
-  const { data: claimsData } = await supabase.auth.getClaims();
-  const userId = claimsData?.claims?.sub;
-  if (!userId) return NextResponse.json({ error: "로그인이 필요합니다." }, { status: 401 });
-
-  const [topicResult, edgesResult, progressResult, quizzesResult] = await Promise.all([
-    supabase.from("topics").select("id").eq("id", topicId).maybeSingle(),
-    supabase.from("topic_prerequisites").select("from_topic_id").eq("to_topic_id", topicId),
-    supabase.from("user_node_progress").select("topic_id,is_completed,completed_at").eq("user_id", userId),
-    supabase.from("quizzes").select("id").eq("topic_id", topicId).limit(1),
-  ]);
-  if (topicResult.error || edgesResult.error || progressResult.error || quizzesResult.error) {
-    return NextResponse.json({ error: "학습 상태를 확인하지 못했습니다." }, { status: 500 });
+  const { data: claims, error: authError } = await supabase.auth.getClaims();
+  if (authError || !claims?.claims?.sub) return NextResponse.json({ error: "로그인이 필요합니다." }, { status: 401 });
+  const { data, error } = await supabase.rpc("set_topic_completion", {
+    p_topic_id: topicId, p_completed: completed, p_self_assessment: assessment,
+  });
+  if (error) {
+    const status = error.code === "P0002" ? 404 : error.code === "22023" ? 400 : 500;
+    return NextResponse.json({ error: status === 404 ? "토픽을 찾지 못했습니다." : "완료 상태를 저장하지 못했습니다. 다시 시도해 주세요." }, { status });
   }
-  if (!topicResult.data) return NextResponse.json({ error: "토픽을 찾지 못했습니다." }, { status: 404 });
-  if (quizzesResult.data?.length) return NextResponse.json({ error: "이 토픽은 4개 레벨의 퀴즈를 모두 통과해야 완료됩니다." }, { status: 409 });
-
-  const completed = new Set((progressResult.data ?? []).filter((item) => item.is_completed).map((item) => item.topic_id));
-  const current = (progressResult.data ?? []).find((item) => item.topic_id === topicId);
-  if (current?.is_completed) return NextResponse.json({ ok: true, alreadyCompleted: true });
-  if ((edgesResult.data ?? []).some((edge) => !completed.has(edge.from_topic_id))) {
-    return NextResponse.json({ error: "선수 토픽을 먼저 완료해 주세요." }, { status: 409 });
-  }
-
-  const schedule = initialReviewSchedule();
-  const { error } = await supabase.from("user_node_progress").upsert({
-    user_id: userId,
-    topic_id: topicId,
-    is_completed: true,
-    current_level: 4,
-    self_assessment: Number(selfAssessment),
-    completed_at: schedule.lastReviewedAt,
-    last_reviewed_at: schedule.lastReviewedAt,
-    next_review_at: schedule.nextReviewAt,
-    review_interval_days: schedule.intervalDays,
-    ease_factor: schedule.easeFactor,
-    review_count: schedule.reviewCount,
-  }, { onConflict: "user_id,topic_id" });
-  if (error) return NextResponse.json({ error: "완료 상태를 저장하지 못했습니다." }, { status: 500 });
-  return NextResponse.json({ ok: true, completedAt: schedule.lastReviewedAt });
+  revalidatePath("/roadmap", "layout");
+  revalidatePath("/dashboard");
+  return NextResponse.json({ ok: true, progress: data });
 }

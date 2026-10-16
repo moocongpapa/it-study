@@ -3,12 +3,12 @@
 import { useCallback, useMemo, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { ArrowRight, ChevronRight, Clock3, SearchX } from "lucide-react";
+import { ArrowRight, Check, ChevronRight, Clock3, SearchX } from "lucide-react";
 import { ArticleReaderSheet } from "@/components/reader/ArticleReaderSheet";
 import { DEMO_STORAGE_KEY, useRoadmapFilters } from "@/components/layout/DashboardShell";
 import { CURATED_TRACKS } from "@/lib/curated-tracks";
 import { MilestoneCelebrationModal } from "@/components/common/MilestoneCelebrationModal";
-import { completeDemoTopic } from "@/lib/demo-learning";
+import { DEMO_LEARNING_KEY, getDemoProgressRows, setBrowserTopicCompletion } from "@/lib/demo-learning";
 import { buildTopicLearningStates } from "@/lib/learning-state";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -31,11 +31,12 @@ function subscribeDemoProgress(callback: () => void) {
 }
 
 function getDemoProgressSnapshot() {
-  return localStorage.getItem(DEMO_STORAGE_KEY) ?? "[]";
+  try { return `${localStorage.getItem(DEMO_STORAGE_KEY) ?? "[]"}|${localStorage.getItem(DEMO_LEARNING_KEY) ?? "{}"}`; }
+  catch { return ""; }
 }
 
 function getServerDemoProgressSnapshot() {
-  return "[]";
+  return "";
 }
 
 interface TopicListProps {
@@ -58,19 +59,15 @@ export function TopicList({ domain, allDomains, allTopics, allPrerequisites, ini
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [celebrationTopic, setCelebrationTopic] = useState<Topic | null>(null);
+  const usesBrowserStorage = isDemo || !isAuthenticated;
   const demoSnapshot = useSyncExternalStore(subscribeDemoProgress, getDemoProgressSnapshot, getServerDemoProgressSnapshot);
 
   const progress = useMemo(() => {
-    if (isDemo) {
-      try {
-        const ids = JSON.parse(demoSnapshot) as string[];
-        return ids.map((id) => ({ topic_id: id, is_completed: true, current_level: 4, self_assessment: 4, completed_at: null }));
-      } catch { return []; }
-    }
+    if (usesBrowserStorage) return demoSnapshot ? getDemoProgressRows() : [];
     const byTopic = new Map(initialProgress.map((item) => [item.topic_id, item]));
     localProgress.forEach((item) => byTopic.set(item.topic_id, item));
     return [...byTopic.values()];
-  }, [demoSnapshot, initialProgress, isDemo, localProgress]);
+  }, [demoSnapshot, initialProgress, usesBrowserStorage, localProgress]);
 
   const routeTopicId = allTopics.find((topic) => topic.slug === searchParams.get("topic"))?.id ?? null;
   const activeSelectedId = selectedId ?? routeTopicId;
@@ -101,29 +98,24 @@ export function TopicList({ domain, allDomains, allTopics, allPrerequisites, ini
           .every((edge) => edge.from_topic_id === selectedTopic.id || completedIds.has(edge.from_topic_id))) ?? null
     : null;
 
-  async function completeTopic(topic: Topic, selfAssessment: number) {
-    if (!isDemo && !isAuthenticated) {
-      router.push(`/login?next=${encodeURIComponent(`${domain ? `/roadmap/${domain.slug}` : "/roadmap"}?topic=${topic.slug}`)}`);
-      return;
-    }
-
+  async function setTopicCompleted(topic: Topic, isCompleted: boolean) {
+    if (saving) return;
     setSaving(true);
     setSaveError(null);
     try {
-      if (!isDemo) {
-        const response = await fetch(`/api/progress/${topic.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ selfAssessment }) });
+      if (!usesBrowserStorage) {
+        const response = await fetch(`/api/progress/${topic.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ isCompleted }) });
+        const result = await response.json() as { error?: string; progress?: UserNodeProgress };
         if (!response.ok) {
-          const result = await response.json() as { error?: string };
           throw new Error(result.error ?? "완료 상태를 저장하지 못했습니다.");
         }
-      }
-      if (isDemo) {
-        completeDemoTopic(topic.id, selfAssessment);
+        const saved = result.progress;
+        if (!saved || saved.topic_id !== topic.id || saved.is_completed !== isCompleted) throw new Error("저장 결과를 확인하지 못했습니다. 다시 시도해 주세요.");
+        setLocalProgress((current) => [...current.filter((item) => item.topic_id !== topic.id), saved]);
+        router.refresh();
       } else {
-        setLocalProgress((current) => [...current.filter((item) => item.topic_id !== topic.id), { topic_id: topic.id, is_completed: true, current_level: 4, self_assessment: selfAssessment, completed_at: new Date().toISOString() }]);
+        setBrowserTopicCompletion(topic.id, isCompleted);
       }
-      setCelebrationTopic(topic);
-      if (!isDemo) router.refresh();
     } catch (error) {
       setSaveError(error instanceof Error ? error.message : "완료 상태를 저장하지 못했습니다.");
     } finally { setSaving(false); }
@@ -139,7 +131,7 @@ export function TopicList({ domain, allDomains, allTopics, allPrerequisites, ini
       completed_at: result.isCompleted ? new Date().toISOString() : null,
       next_review_at: result.nextReviewAt,
     }]);
-    if (result.isCompleted) {
+    if (result.isCompleted && !completedIds.has(topic.id)) {
       setCelebrationTopic(topic);
     }
     router.refresh();
@@ -175,13 +167,14 @@ export function TopicList({ domain, allDomains, allTopics, allPrerequisites, ini
             <ul className="divide-y divide-slate-100 overflow-hidden rounded-xl border border-slate-200 bg-white">
               {group.topics.map((topic) => (
                 <li key={topic.id}>
-                  <button type="button" onClick={() => openTopic(topic.id)} aria-label={topic.title + " 학습하기"} className="group flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-slate-50 focus-visible:relative focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 sm:px-5">
+                  <button type="button" onClick={() => openTopic(topic.id)} aria-label={topic.title + (completedIds.has(topic.id) ? " 학습하기 · 학습 완료" : " 학습하기")} className="group flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-slate-50 focus-visible:relative focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 sm:px-5">
                     <span className="min-w-0 flex-1">
-                      <span className="block text-[15px] font-semibold leading-6 text-slate-900 group-hover:text-blue-700">{topic.title}</span>
+                      <span className="flex items-start gap-2 text-[15px] font-semibold leading-6 text-slate-900 group-hover:text-blue-700">{completedIds.has(topic.id) ? <Check aria-hidden="true" className="mt-1 size-4 shrink-0 text-emerald-700"/> : null}<span>{topic.title}</span></span>
                       <span className="mt-0.5 block truncate text-xs leading-5 text-slate-500">{topic.summary}</span>
                       <span className="mt-2 flex items-center gap-2">
                         <Badge className={difficulties[topic.difficulty].className + " px-1.5 py-0 text-[10px] font-medium"}>{difficulties[topic.difficulty].label}</Badge>
                         <span className="inline-flex items-center gap-1 text-[11px] text-slate-500"><Clock3 className="size-3" />{topic.estimated_minutes}분</span>
+                        {completedIds.has(topic.id) ? <span className="text-[11px] font-medium text-emerald-700">학습 완료</span> : null}
                       </span>
                     </span>
                     <span className="inline-flex shrink-0 items-center gap-1 text-xs font-medium text-slate-400 group-hover:text-blue-700" aria-hidden="true"><span className="hidden sm:inline">학습하기</span><ArrowRight className="size-4" /></span>
@@ -214,12 +207,13 @@ export function TopicList({ domain, allDomains, allTopics, allPrerequisites, ini
         prerequisites={allPrerequisites.filter((edge) => edge.to_topic_id === selectedTopic?.id).map((edge) => allTopics.find((topic) => topic.id === edge.from_topic_id)).filter((topic): topic is Topic => Boolean(topic))}
         completedIds={completedIds}
         nextTopic={nextTopic}
-        onComplete={completeTopic}
+        onSetCompleted={setTopicCompleted}
         onQuizProgress={handleQuizProgress}
         onNext={openNext}
         saving={saving}
         saveError={saveError}
         isDemo={isDemo}
+        usesBrowserStorage={usesBrowserStorage}
       />
 
       <MilestoneCelebrationModal

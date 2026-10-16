@@ -17,7 +17,8 @@ function subscribe(callback: () => void) {
 }
 
 function snapshot() {
-  return `${localStorage.getItem(DEMO_LEARNING_KEY) ?? "{}"}|${localStorage.getItem(DEMO_COMPLETED_KEY) ?? "[]"}`;
+  try { return `${localStorage.getItem(DEMO_LEARNING_KEY) ?? "{}"}|${localStorage.getItem(DEMO_COMPLETED_KEY) ?? "[]"}`; }
+  catch { return ""; }
 }
 
 function serverSnapshot() { return ""; }
@@ -44,12 +45,12 @@ function dateLabel(value: string) {
   return new Intl.DateTimeFormat("ko-KR", { month: "short", day: "numeric" }).format(new Date(value));
 }
 
-export function DashboardOverview({ domains, topics, progress: initialProgress, learningDays: initialDays, isDemo, asOf }: {
+export function DashboardOverview({ domains, topics, progress: initialProgress, learningDays: initialDays, usesBrowserStorage, asOf }: {
   domains: DomainSummary[];
   topics: Topic[];
   progress: UserNodeProgress[];
   learningDays: string[];
-  isDemo: boolean;
+  usesBrowserStorage: boolean;
   asOf: string;
 }) {
   const router = useRouter();
@@ -60,8 +61,8 @@ export function DashboardOverview({ domains, topics, progress: initialProgress, 
   const demo = useMemo(() => demoSnapshot ? {
     progress: getDemoProgressRows(), learningDays: readDemoLearning().learningDays,
   } : { progress: [], learningDays: [] }, [demoSnapshot]);
-  const progress = isDemo ? demo.progress : [...new Map([...initialProgress, ...localProgress].map((item) => [item.topic_id, item])).values()];
-  const learningDays = isDemo ? demo.learningDays : initialDays;
+  const progress = usesBrowserStorage ? demo.progress : [...new Map([...initialProgress, ...localProgress].map((item) => [item.topic_id, item])).values()];
+  const learningDays = usesBrowserStorage ? demo.learningDays : initialDays;
   const byId = new Map(topics.map((topic) => [topic.id, topic]));
   const domainById = new Map(domains.map((domain) => [domain.id, domain]));
   const completed = progress.filter((item) => item.is_completed);
@@ -78,7 +79,7 @@ export function DashboardOverview({ domains, topics, progress: initialProgress, 
     setReviewingId(topicId);
     setError(null);
     try {
-      if (isDemo) {
+      if (usesBrowserStorage) {
         if (!reviewDemoTopic(topicId, quality)) throw new Error("완료 기록을 찾지 못했습니다.");
       } else {
         const updated = await reviewTopic(topicId, quality);
@@ -95,6 +96,7 @@ export function DashboardOverview({ domains, topics, progress: initialProgress, 
   }
 
   return <div className="mx-auto max-w-6xl px-4 py-5 md:px-6 md:py-7">
+    {usesBrowserStorage ? <p className="mb-4 text-xs leading-6 text-slate-500">현재 브라우저에 저장한 학습 기록이에요. 로그인 후에는 계정에 저장한 기록을 보여드려요.</p> : null}
     <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
       <div><h2 className="text-xl font-semibold tracking-tight text-slate-900 md:text-2xl">오늘의 학습 흐름</h2><p className="mt-1 text-sm leading-7 text-slate-500">이해한 개념을 다시 꺼내 보고, 다음 연결을 준비하세요.</p></div>
       <Link href="/roadmap" className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-xs font-semibold text-slate-800 hover:bg-slate-50">주제 둘러보기 <ArrowRight className="size-4" /></Link>

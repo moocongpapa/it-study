@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
-import { ArrowDown, ArrowLeft, ArrowRight, BookOpen, Bot, CheckCheck, ChevronDown, Clock3, Trophy, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ArrowDown, ArrowLeft, ArrowRight, BookOpen, Bot, ChevronDown, Clock3, X } from "lucide-react";
 import { ArticleMarkdown } from "@/components/reader/ArticleMarkdown";
+import { CompletionButton } from "@/components/reader/CompletionButton";
 import { QuizSession } from "@/components/quiz/QuizSession";
 import { AiTutorDrawer } from "@/components/tutor/AiTutorDrawer";
 import { Button } from "@/components/ui/button";
@@ -25,18 +26,18 @@ interface ArticleReaderSheetProps {
   prerequisites: Topic[];
   completedIds: Set<string>;
   nextTopic: Topic | null;
-  onComplete: (topic: Topic, selfAssessment: number) => Promise<void>;
+  onSetCompleted: (topic: Topic, completed: boolean) => Promise<void>;
   onQuizProgress: (topic: Topic, progress: TopicProgressResult) => void;
   onNext: (topic: Topic) => void;
   saving: boolean;
   saveError: string | null;
   isDemo: boolean;
+  usesBrowserStorage: boolean;
 }
 
-export function ArticleReaderSheet({ open, onOpenChange, topic, status, prerequisites, completedIds, nextTopic, onComplete, onNext, saving, saveError, isDemo, onQuizProgress }: ArticleReaderSheetProps) {
+export function ArticleReaderSheet({ open, onOpenChange, topic, status, prerequisites, completedIds, nextTopic, onSetCompleted, onNext, saving, saveError, isDemo, usesBrowserStorage, onQuizProgress }: ArticleReaderSheetProps) {
   const [level, setLevel] = useState("1");
   const [result, setResult] = useState<{ article: Article | null; error: string | null } | null>(null);
-  const [selfAssessment, setSelfAssessment] = useState(4);
   const [quizBacked, setQuizBacked] = useState<boolean | null>(null);
   const [tutorOpen, setTutorOpen] = useState(false);
   const [selectedText, setSelectedText] = useState("");
@@ -44,7 +45,6 @@ export function ArticleReaderSheet({ open, onOpenChange, topic, status, prerequi
   const scrollRef = useRef<HTMLDivElement>(null);
   const tabsRef = useRef<HTMLDivElement>(null);
   const quizRef = useRef<HTMLDivElement>(null);
-  const understandingId = useId();
 
   useEffect(() => {
     if (!open || !topic) return;
@@ -85,7 +85,7 @@ export function ArticleReaderSheet({ open, onOpenChange, topic, status, prerequi
   const body = result?.article?.[active.field] ?? null;
   const missing = prerequisites.filter((item) => !completedIds.has(item.id));
   const isCompleted = status === "completed";
-  const isLocked = status === "locked";
+  const isLocked = missing.length > 0;
 
   return <Sheet open={open} onOpenChange={onOpenChange}>
     <SheetContent className="max-w-[720px]" showCloseButton={false}>
@@ -105,9 +105,9 @@ export function ArticleReaderSheet({ open, onOpenChange, topic, status, prerequi
           </TabsList>
 
           <div ref={scrollRef} data-testid="reader-scroll" className="min-h-0 flex-1 overflow-y-auto overscroll-contain bg-[#fffefa] px-4 pb-6 pt-3 [overflow-anchor:none] sm:px-8 sm:pt-4">
-            <div className="mb-4 flex items-start gap-2">
-            <details className="group min-w-0 flex-1 rounded-lg border border-slate-200 bg-slate-50 text-xs text-slate-600">
-              <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2 rounded-lg px-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 [&::-webkit-details-marker]:hidden"><BookOpen className="size-3.5 shrink-0" /><span className="flex-1">수업 안내{prerequisites.length ? " · 먼저 알면 좋은 개념" : ""}</span><ChevronDown className="size-3.5 shrink-0 transition-transform group-open:rotate-180" /></summary>
+            <div className="mb-4 flex flex-wrap items-start gap-2">
+            <details className="group min-w-0 flex-1 rounded-lg border border-slate-200 bg-slate-50 text-xs text-slate-600 open:basis-full">
+              <summary className="flex min-h-11 cursor-pointer list-none items-center gap-1.5 rounded-lg px-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 [&::-webkit-details-marker]:hidden"><BookOpen className="size-3.5 shrink-0" /><span className="flex-1 whitespace-nowrap">수업 안내</span><ChevronDown className="size-3.5 shrink-0 transition-transform group-open:rotate-180" /></summary>
               <div className="border-t border-slate-200 px-3 pb-3 pt-2 leading-6">
                 <p className="mb-2 inline-flex items-center gap-1 text-slate-500"><Clock3 className="size-3.5"/>전체 학습 약 {topic.estimated_minutes}분{isCompleted ? " · 학습 완료" : ""}</p>
                 <p>처음이라면 그림 수업부터 시작해요. 한 번에 다 읽지 않아도 괜찮아요. {active.description}</p>
@@ -118,8 +118,10 @@ export function ArticleReaderSheet({ open, onOpenChange, topic, status, prerequi
                 </> : null}
               </div>
             </details>
+              <CompletionButton compact completed={isCompleted} saving={saving} onToggle={() => void onSetCompleted(topic, !isCompleted)}/>
               <button type="button" className="inline-flex min-h-11 shrink-0 items-center gap-1 rounded-lg px-2 text-xs font-medium text-teal-800 hover:bg-teal-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600" onClick={jumpToQuiz}>퀴즈<ArrowDown className="size-3.5"/></button>
             </div>
+            {saveError ? <p role="alert" className="mb-4 rounded-lg bg-rose-50 p-3 text-xs leading-6 text-rose-700">{saveError}</p> : null}
 
             {levels.map((item) => <TabsContent key={item.value} value={item.value} className="outline-none">
               <h3 className="sr-only">{item.value}단계 · {item.title}</h3>
@@ -136,16 +138,9 @@ export function ArticleReaderSheet({ open, onOpenChange, topic, status, prerequi
             </div>
 
             <section aria-label="학습 마무리" className="mt-6 border-t border-slate-200 pt-4 text-sm leading-6 text-slate-600">
-              {saveError ? <p role="alert" className="mb-3 text-rose-700">{saveError}</p> : null}
-              {quizBacked === null ? <p role="status" className="text-xs text-slate-500">퀴즈 정보를 확인하고 있습니다.</p>
-                : isCompleted ? <p className="flex items-center gap-2 font-medium text-emerald-700"><Trophy className="size-4" />이 주제의 학습을 완료했습니다.</p>
-                : quizBacked ? <p className="text-xs">그림과 예제를 충분히 살펴본 뒤 퀴즈로 확인해 보세요. 네 단계의 퀴즈를 통과하면 완료로 기록돼요.</p>
-                : <div className="flex flex-wrap items-center gap-2">
-                  <label htmlFor={understandingId} className="text-xs">내 이해도</label>
-                  <select id={understandingId} value={selfAssessment} onChange={(event) => setSelfAssessment(Number(event.target.value))} className="h-11 min-w-0 rounded-lg border border-slate-200 bg-white px-2 text-base text-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 sm:text-sm"><option value={1}>1 · 다시 보기</option><option value={2}>2 · 조금 이해</option><option value={3}>3 · 기본 이해</option><option value={4}>4 · 잘 이해</option><option value={5}>5 · 설명 가능</option></select>
-                  <Button className="h-11" onClick={() => onComplete(topic, selfAssessment)} disabled={isLocked || saving}><CheckCheck className="size-4" />{saving ? "저장 중..." : "이해도 기록"}</Button>
-                  {isLocked ? <p className="w-full text-xs text-amber-800">먼저 알면 좋은 개념을 완료하면 기록할 수 있습니다.</p> : isDemo ? <p className="w-full text-xs text-slate-500">이 브라우저에 저장됩니다.</p> : null}
-                </div>}
+              <CompletionButton completed={isCompleted} saving={saving} onToggle={() => void onSetCompleted(topic, !isCompleted)}/>
+              <p role="status" className="mt-2 text-xs leading-6">{isCompleted ? "학습 완료로 표시했어요. 다시 누르면 취소할 수 있어요." : "이 주제를 충분히 살펴봤다면 완료로 표시해 보세요."}</p>
+              <p className="mt-1 text-xs leading-6 text-slate-500">{usesBrowserStorage ? "로그인 전 기록은 현재 브라우저에 저장돼요. 계정 기록과는 별도로 보관돼요." : "계정에 저장되어 다른 기기에서도 이어볼 수 있어요."}{quizBacked ? " 퀴즈는 별도로 풀 수 있고, 통과 기록도 따로 남아요." : ""}</p>
               {nextTopic && isCompleted ? <Button variant="secondary" onClick={() => onNext(nextTopic)} className="mt-3 h-auto min-h-11 w-full justify-between whitespace-normal py-3 text-left"><span>다음 주제 · {nextTopic.title}</span><ArrowRight className="size-4 shrink-0" /></Button> : null}
             </section>
 

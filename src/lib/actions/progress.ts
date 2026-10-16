@@ -47,16 +47,16 @@ export async function updateTopicProgress(topicId: string, level: number, passed
   const passedIds = new Set((passesResult.data ?? []).map((item) => item.quiz_id));
   const hasAllLevels = [1, 2, 3, 4].every((candidate) => quizzes.some((quiz) => quiz.level === candidate));
   const allPassed = quizzes.length > 0 && hasAllLevels && quizzes.every((quiz) => passedIds.has(quiz.id));
-  const currentLevel = quizzes.length
+  let currentLevel = quizzes.length
     ? ([1, 2, 3, 4].find((candidate) => quizzes.filter((quiz) => quiz.level === candidate).some((quiz) => !passedIds.has(quiz.id))) ?? 4)
     : existing?.current_level ?? 1;
-  const isCompleted = Boolean(existing?.is_completed || allPassed);
+  let isCompleted = Boolean(existing?.is_completed || allPassed);
   let nextReviewAt = existing?.next_review_at ?? null;
 
   if (passedQuiz && quizzes.length && !existing?.is_completed) {
     const completedNow = allPassed;
     const schedule = completedNow ? initialReviewSchedule() : null;
-    const { error } = await supabase.from("user_node_progress").upsert({
+    const changes = {
       user_id: userId,
       topic_id: topicId,
       is_completed: completedNow,
@@ -69,9 +69,20 @@ export async function updateTopicProgress(topicId: string, level: number, passed
         ease_factor: schedule.easeFactor,
         review_count: schedule.reviewCount,
       } : {}),
-    }, { onConflict: "user_id,topic_id" });
-    if (error) throw new Error(`진도를 저장하지 못했습니다: ${error.message}`);
-    if (schedule) nextReviewAt = schedule.nextReviewAt;
+    };
+    // An in-flight quiz must not overwrite a manual completion from another tab.
+    const inserted = await supabase.from("user_node_progress").upsert(changes,
+      { onConflict: "user_id,topic_id", ignoreDuplicates: true });
+    if (inserted.error) throw new Error("진도를 저장하지 못했습니다.");
+    const updated = await supabase.from("user_node_progress").update(changes)
+      .eq("user_id", userId).eq("topic_id", topicId).eq("is_completed", false);
+    if (updated.error) throw new Error("진도를 저장하지 못했습니다.");
+    const saved = await supabase.from("user_node_progress")
+      .select("is_completed,current_level,next_review_at").eq("user_id", userId).eq("topic_id", topicId).single();
+    if (saved.error) throw new Error("저장한 진도를 확인하지 못했습니다.");
+    isCompleted = saved.data.is_completed;
+    currentLevel = saved.data.current_level;
+    nextReviewAt = saved.data.next_review_at;
     revalidatePath("/roadmap", "layout");
     revalidatePath("/dashboard");
   }

@@ -32,13 +32,7 @@ export function readDemoLearning(): DemoLearningState {
 
 export function getDemoProgressRows(): UserNodeProgress[] {
   const state = readDemoLearning();
-  let ids: string[] = [];
-  try { ids = JSON.parse(localStorage.getItem(DEMO_COMPLETED_KEY) ?? "[]") as string[]; }
-  catch { /* invalid legacy data is ignored */ }
-  return [...new Set(ids)].map((topicId) => state.progress[topicId] ?? {
-    topic_id: topicId, is_completed: true, current_level: 4,
-    self_assessment: null, completed_at: null,
-  });
+  return Object.values(state.progress);
 }
 
 function writeDemoLearning(state: DemoLearningState) {
@@ -55,12 +49,24 @@ function todayInSeoul() {
   return `${values.year}-${values.month}-${values.day}`;
 }
 
-export function completeDemoTopic(topicId: string, selfAssessment: number) {
+export function setBrowserTopicCompletion(topicId: string, completed: boolean, selfAssessment: number | null = null): UserNodeProgress {
   const state = readDemoLearning();
-  if (state.progress[topicId]?.is_completed) return;
+  const existing = state.progress[topicId];
+  if (existing?.is_completed === completed) return existing;
+  if (!completed) {
+    const updated: UserNodeProgress = {
+      ...existing, topic_id: topicId, is_completed: false, completion_source: null,
+      current_level: 1, self_assessment: existing?.self_assessment ?? null,
+      completed_at: null, last_reviewed_at: null, next_review_at: null,
+      review_interval_days: 0, ease_factor: 2.5, review_count: 0,
+    };
+    state.progress[topicId] = updated;
+    writeDemoLearning(state);
+    return updated;
+  }
   const schedule = initialReviewSchedule();
   state.progress[topicId] = {
-    topic_id: topicId, is_completed: true, current_level: 4,
+    topic_id: topicId, is_completed: true, completion_source: "manual", current_level: 4,
     self_assessment: selfAssessment, completed_at: schedule.lastReviewedAt,
     last_reviewed_at: schedule.lastReviewedAt,
     next_review_at: schedule.nextReviewAt,
@@ -70,6 +76,11 @@ export function completeDemoTopic(topicId: string, selfAssessment: number) {
   };
   state.learningDays = [...new Set([...state.learningDays, todayInSeoul()])];
   writeDemoLearning(state);
+  return state.progress[topicId];
+}
+
+export function completeDemoTopic(topicId: string, selfAssessment: number) {
+  return setBrowserTopicCompletion(topicId, true, selfAssessment);
 }
 
 export function markDemoQuizPassed(quizId: string) {

@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "db:verify": "node scripts/verify-schema.mjs",
+    "completion:verify": "node scripts/verify-completion.mjs",
     "content:generate": "node --import tsx scripts/generate-content.ts",
     "content:seed-starter": "node --import tsx scripts/seed-curated-content.ts",
     "content:build-expansion": "node --import tsx scripts/build-expansion.ts",
