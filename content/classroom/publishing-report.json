@@ -1,0 +1,195 @@
+{
+  "checkedAt": "2026-10-16 13:12:38 UTC",
+  "productionOrigin": "https://it-study-two.vercel.app",
+  "supabaseProject": "ofylxwqyahqghvhphdos",
+  "codeCommit": "cad36525be164daa59812666557ce26fd4d09ac6",
+  "rendererDeployment": {
+    "id": "dpl_2y8a7oQeKiiKjaSG7U4Bte11aNS7",
+    "status": "READY",
+    "target": "production",
+    "deployedBeforeArticleEdits": true
+  },
+  "articleWrites": {
+    "mode": "guarded article body UPDATE only",
+    "domainBatches": [
+      {
+        "domain": "hardware",
+        "articles": 5,
+        "hashesMatched": true
+      },
+      {
+        "domain": "operating-systems",
+        "articles": 5,
+        "hashesMatched": true
+      },
+      {
+        "domain": "networks",
+        "articles": 5,
+        "hashesMatched": true
+      },
+      {
+        "domain": "algorithms",
+        "articles": 5,
+        "hashesMatched": true
+      },
+      {
+        "domain": "languages",
+        "articles": 5,
+        "hashesMatched": true
+      },
+      {
+        "domain": "engineering",
+        "articles": 5,
+        "hashesMatched": true
+      },
+      {
+        "domain": "databases",
+        "articles": 5,
+        "hashesMatched": true
+      },
+      {
+        "domain": "distributed-systems",
+        "articles": 5,
+        "hashesMatched": true
+      },
+      {
+        "domain": "cloud-devops",
+        "articles": 5,
+        "hashesMatched": true
+      },
+      {
+        "domain": "web-security-ai",
+        "articles": 5,
+        "hashesMatched": true
+      },
+      {
+        "domain": "data-analytics",
+        "articles": 10,
+        "hashesMatched": true
+      },
+      {
+        "domain": "ai-machine-learning",
+        "articles": 10,
+        "hashesMatched": true
+      },
+      {
+        "domain": "deep-learning",
+        "articles": 10,
+        "hashesMatched": true
+      },
+      {
+        "domain": "generative-ai",
+        "articles": 10,
+        "hashesMatched": true
+      },
+      {
+        "domain": "ai-engineering",
+        "articles": 10,
+        "hashesMatched": true
+      },
+      {
+        "domain": "mlops-responsible-ai",
+        "articles": 10,
+        "hashesMatched": true
+      },
+      {
+        "domain": "project-management",
+        "articles": 10,
+        "hashesMatched": true
+      },
+      {
+        "domain": "product-business",
+        "articles": 10,
+        "hashesMatched": true
+      }
+    ],
+    "expectedHashes": "content/classroom/expected-hashes.json"
+  },
+  "before": {
+    "articles": 130,
+    "quizzes": 528,
+    "quiz_hash": "15835981acd2e44e722858a01a97a846",
+    "progress_rows": 0,
+    "progress_hash": null,
+    "quiz_passes": 0,
+    "learning_days": 0,
+    "prerequisite_edges": 197
+  },
+  "after": {
+    "expected_articles": 130,
+    "published_articles": 130,
+    "body_mismatches": 0,
+    "quizzes": 528,
+    "quiz_hash": "15835981acd2e44e722858a01a97a846",
+    "quiz_row_hash": "080ff8dd9062a527d91cedd62fdfab02",
+    "progress_rows": 0,
+    "progress_hash": null,
+    "quiz_passes": 0,
+    "learning_days": 0,
+    "prerequisite_edges": 197
+  },
+  "preserved": {
+    "quizWholeRowHash": "080ff8dd9062a527d91cedd62fdfab02",
+    "quizzes": 528,
+    "prerequisiteEdges": 197,
+    "progressWrites": 0,
+    "quizPassWrites": 0,
+    "learningDayWrites": 0,
+    "retainedTechnicalChapters": 390
+  },
+  "validation": {
+    "typecheck": "passed",
+    "lint": "passed without warnings",
+    "productionBuild": "passed",
+    "classroomArticles": 130,
+    "classroomChapters": 520,
+    "visualBlocks": 780,
+    "ssrViews": 780,
+    "visualFormats": 14,
+    "publicApiSourceMatches": 130,
+    "publicQuizCount": 528,
+    "publicQuizAnswersExposed": false,
+    "domainPages": 18,
+    "domainPagesStatus": 200,
+    "sqlConcurrentEditProtection": "passed",
+    "sqlDomainAtomicity": "passed",
+    "sqlRepeatNoUpdates": "passed"
+  },
+  "browser": {
+    "localWidths": [
+      320,
+      390
+    ],
+    "productionWidth": 390,
+    "horizontalOverflow": false,
+    "localInteractions": [
+      "logic/bit switches and two's complement",
+      "classification endpoint and counts",
+      "one-neuron gradient update",
+      "motion play/pause and manual steps",
+      "sorting retry feedback",
+      "debug clue navigation",
+      "Attention row selection and readable 320px table",
+      "Kanban WIP limit and completion",
+      "parallel schedule critical branch"
+    ],
+    "productionInteractions": [
+      "Kanban reaches WIP=2: start disabled; complete re-enables start",
+      "Neuron: output .711 → .745, target gap .289 → .255",
+      "Motion advances to scene 3 and stops; replay/pause works",
+      "Original highlighted code expands with copy control"
+    ],
+    "consoleErrors": 0,
+    "reducedMotion": "implemented and source-reviewed; OS preference not changed during browser QA",
+    "authenticatedAiChat": "prompt/context reviewed and built; live authenticated provider reply not invoked"
+  },
+  "runtimeLogs": {
+    "deploymentId": "dpl_2y8a7oQeKiiKjaSG7U4Bte11aNS7",
+    "scan": "2026-10-16T13:00:41.944Z to 2026-10-16T13:10:41.944Z",
+    "levels": [
+      "error",
+      "fatal"
+    ],
+    "matches": 0
+  }
+}
