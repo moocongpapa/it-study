@@ -1,0 +1,280 @@
+{
+  "checkedAt": "2026-10-19T02:32:33.983Z",
+  "origin": "https://it-study-two.vercel.app",
+  "beforeCommit": "191158345d16184366f065bc06bd503f98899ba8",
+  "verifiedCommit": "2c273820fb30fe62bc5e4e2cbd9a2a394ead92ab",
+  "deploymentId": "dpl_ANFwSp79wDXQeTL5akmwewHbmQ16",
+  "method": "Sequential anonymous Node.js fetch from the same workstation; header TTFB and complete UTF-8 body size. No request cache-bypass headers. Unique query pair measured separately after warming the function.",
+  "serverRegion": {
+    "before": "iad1",
+    "after": "hnd1",
+    "database": "ap-northeast-1"
+  },
+  "publicArticleApi": {
+    "beforeMedianTtfbMs": 1711.5,
+    "afterComparableMedianTtfbMs": 398,
+    "before": [
+      {
+        "path": "/api/articles/neural-networks-backprop",
+        "status": 200,
+        "ttfbMs": 2132,
+        "totalMs": 2140,
+        "bytes": 7711,
+        "region": "icn1::iad1::rnjlz-1792375972048-1d3e5bc94a8e",
+        "cache": "MISS",
+        "cacheControl": "no-store"
+      },
+      {
+        "path": "/api/articles/neural-networks-backprop",
+        "status": 200,
+        "ttfbMs": 1677,
+        "totalMs": 1679,
+        "bytes": 7711,
+        "region": "icn1::iad1::28h9z-1792375974069-3639c7203196",
+        "cache": "MISS",
+        "cacheControl": "no-store"
+      },
+      {
+        "path": "/api/articles/processes-threads",
+        "status": 200,
+        "ttfbMs": 1746,
+        "totalMs": 1749,
+        "bytes": 11741,
+        "region": "icn1::iad1::l6fqn-1792375975748-2b5731bf2843",
+        "cache": "MISS",
+        "cacheControl": "no-store"
+      },
+      {
+        "path": "/roadmap/deep-learning",
+        "status": 200,
+        "ttfbMs": 2067,
+        "totalMs": 2426,
+        "bytes": 150186,
+        "region": "icn1::iad1::455tk-1792375977497-12cf12959edf",
+        "cache": "MISS",
+        "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate"
+      },
+      {
+        "path": "/api/articles/neural-networks-backprop",
+        "status": 200,
+        "ttfbMs": 1276,
+        "totalMs": 1279,
+        "bytes": 7711,
+        "region": "icn1::iad1::455tk-1792375979924-2c8fa533e3d8",
+        "cache": "MISS",
+        "cacheControl": "no-store"
+      }
+    ],
+    "after": [
+      {
+        "path": "/api/articles/neural-networks-backprop",
+        "label": "comparable",
+        "status": 200,
+        "ttfb_ms": 1428,
+        "total_ms": 1436,
+        "bytes": 10615,
+        "cache": "MISS",
+        "region": "icn1::hnd1::2jjhx-1792376944741-ecf7c346a0d3",
+        "cache_control": "public, max-age=0, must-revalidate",
+        "age": "0",
+        "server_timing": "article;dur=336.2",
+        "has_set_cookie": false,
+        "lesson_slug": "neural-networks-backprop"
+      },
+      {
+        "path": "/api/articles/neural-networks-backprop",
+        "label": "comparable",
+        "status": 200,
+        "ttfb_ms": 333,
+        "total_ms": 335,
+        "bytes": 10615,
+        "cache": "HIT",
+        "region": "icn1::hnd1::2557d-1792376946022-66970d94a948",
+        "cache_control": "public, max-age=0, must-revalidate",
+        "age": "1",
+        "server_timing": "article;dur=336.2",
+        "has_set_cookie": false,
+        "lesson_slug": "neural-networks-backprop"
+      },
+      {
+        "path": "/api/articles/processes-threads",
+        "label": "comparable",
+        "status": 200,
+        "ttfb_ms": 463,
+        "total_ms": 467,
+        "bytes": 17894,
+        "cache": "MISS",
+        "region": "icn1::hnd1::k94ns-1792376946358-08f0f90e5d9a",
+        "cache_control": "public, max-age=0, must-revalidate",
+        "age": "0",
+        "server_timing": "article;dur=53.6",
+        "has_set_cookie": false,
+        "lesson_slug": "processes-threads"
+      },
+      {
+        "path": "/roadmap/deep-learning",
+        "label": "comparable",
+        "status": 200,
+        "ttfb_ms": 921,
+        "total_ms": 932,
+        "bytes": 150186,
+        "cache": "MISS",
+        "region": "icn1::hnd1::cnfhp-1792376946825-a7b9deba472e",
+        "cache_control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "age": "0",
+        "server_timing": null,
+        "has_set_cookie": false
+      },
+      {
+        "path": "/api/articles/neural-networks-backprop",
+        "label": "comparable",
+        "status": 200,
+        "ttfb_ms": 114,
+        "total_ms": 116,
+        "bytes": 10615,
+        "cache": "HIT",
+        "region": "icn1::hnd1::cwxfk-1792376947758-e4da929ca40b",
+        "cache_control": "public, max-age=0, must-revalidate",
+        "age": "2",
+        "server_timing": "article;dur=336.2",
+        "has_set_cookie": false,
+        "lesson_slug": "neural-networks-backprop"
+      },
+      {
+        "path": "/api/articles/neural-networks-backprop?loading-audit=1792376944574",
+        "label": "unique-cache-key-first",
+        "status": 200,
+        "ttfb_ms": 206,
+        "total_ms": 208,
+        "bytes": 10615,
+        "cache": "MISS",
+        "region": "icn1::hnd1::rnjlz-1792376947875-bb9c7dce2448",
+        "cache_control": "public, max-age=0, must-revalidate",
+        "age": "0",
+        "server_timing": "article;dur=36.8",
+        "has_set_cookie": false,
+        "lesson_slug": "neural-networks-backprop"
+      },
+      {
+        "path": "/api/articles/neural-networks-backprop?loading-audit=1792376944574",
+        "label": "unique-cache-key-repeat",
+        "status": 200,
+        "ttfb_ms": 119,
+        "total_ms": 121,
+        "bytes": 10615,
+        "cache": "HIT",
+        "region": "icn1::hnd1::2r8sl-1792376948085-013d3b0c35d0",
+        "cache_control": "public, max-age=0, must-revalidate",
+        "age": "0",
+        "server_timing": "article;dur=36.8",
+        "has_set_cookie": false,
+        "lesson_slug": "neural-networks-backprop"
+      }
+    ]
+  },
+  "visualLessonClientChunk": {
+    "before": {
+      "bytes": 537221,
+      "gzipBytes": 148395
+    },
+    "after": {
+      "bytes": 46273,
+      "gzipBytes": 13607
+    },
+    "rawReductionPercent": 91.39,
+    "gzipReductionPercent": 90.83
+  },
+  "cache": {
+    "edgeTtlSeconds": 60,
+    "browserTtlSeconds": 60,
+    "browserCapacity": 12,
+    "subtractEdgeAge": true,
+    "prefetch": "Pointer hover, keyboard focus, or pointer down only; skipped for saveData/2G",
+    "scope": "Published public article and one matching visual lesson only"
+  },
+  "verification": {
+    "articles": 130,
+    "levels": 520,
+    "quizzes": 528,
+    "domains": 18,
+    "sourceMatchedArticles": 130,
+    "sourceMatchedVisualLessons": 130,
+    "ssrVisualViews": 780,
+    "preservedTechnicalReferences": 390,
+    "checks": [
+      "loading:verify",
+      "content:verify-classroom",
+      "completion:verify",
+      "typecheck",
+      "lint",
+      "build",
+      "content:verify-live"
+    ],
+    "browser": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "topics": [
+        "neural-networks-backprop",
+        "kanban-flow"
+      ],
+      "reopenLoadingPlaceholders": 0,
+      "matchingVisualOnReopen": 1,
+      "foldedCodeCopyButtons": 0,
+      "expandedCodeCopyButtons": 1,
+      "horizontalOverflow": false,
+      "consoleErrors": []
+    },
+    "boundaryChecks": [
+      {
+        "label": "public-with-cookie",
+        "status": 200,
+        "cache_control": "public, max-age=0, must-revalidate",
+        "cache": "HIT",
+        "has_set_cookie": false,
+        "same_public_body": true
+      },
+      {
+        "label": "public-with-invalid-bearer",
+        "status": 200,
+        "cache_control": "public, max-age=0, must-revalidate",
+        "cache": "BYPASS",
+        "has_set_cookie": false,
+        "same_public_body": true
+      },
+      {
+        "label": "missing-article",
+        "status": 404,
+        "cache_control": "no-store",
+        "cache": "MISS",
+        "has_set_cookie": false,
+        "same_public_body": null
+      },
+      {
+        "label": "progress-anonymous",
+        "status": 401,
+        "cache_control": "public, max-age=0, must-revalidate",
+        "cache": "MISS",
+        "has_set_cookie": false,
+        "same_public_body": null
+      },
+      {
+        "label": "progress-invalid-body",
+        "status": 400,
+        "cache_control": "public, max-age=0, must-revalidate",
+        "cache": "MISS",
+        "has_set_cookie": false,
+        "same_public_body": null
+      }
+    ],
+    "runtimeErrorLogMatches": 0
+  },
+  "limitations": [
+    "Small diagnostic sample; not a controlled benchmark, Core Web Vitals measurement, or latency guarantee. Network, connection reuse, cold starts and cache hits differ between requests.",
+    "The visual chunk reduction is not a whole-page JavaScript or overall page-size reduction. Per-topic JSON grows slightly because it now carries only that topic’s visual metadata.",
+    "First post-deployment MISS still took 1428 ms; the separate unique-key MISS of 206 ms used an already warm function.",
+    "Public content can remain available until short cache expiry after edits or unpublishing. Browser TTL subtracts CDN Age when present; without Age the two cache layers can combine to approximately two minutes.",
+    "Authenticated learner progress was not modified. PATCH auth/validation failures are non-cached methods; the platform default max-age=0 header is recorded verbatim."
+  ]
+}
