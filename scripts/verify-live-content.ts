@@ -3,6 +3,7 @@ import { Command } from "commander";
 import pLimit from "p-limit";
 import { z } from "zod";
 import { readLibrary } from "./content-library.ts";
+import { LessonSchema } from "../src/lib/lesson-schema.ts";
 
 const keys = ["level_1_mental_model", "level_2_core_engineering", "level_3_troubleshooting", "level_4_architecture_tradeoffs"] as const;
 const ArticleSchema = z.object({
@@ -22,6 +23,8 @@ async function main() {
     throw new Error("Provide an HTTPS origin without credentials, path, or query");
   const catalog = JSON.parse(await readFile("src/lib/demo-catalog.json", "utf8")) as { topics: { slug: string }[]; domains: { slug: string; title: string }[] };
   const library = new Map((await readLibrary()).map((row) => [row.slug, row]));
+  const visualLessons = new Map((JSON.parse(await readFile("src/lib/learning-lessons.json", "utf8")) as unknown[])
+    .map((row) => { const lesson = LessonSchema.parse(row); return [lesson.slug, lesson] as const; }));
   const readable = new Map<string, Pick<z.infer<typeof ArticleSchema>, typeof keys[number]>>();
   try {
     const rows = JSON.parse(await readFile("content/readable-library.json", "utf8")) as Array<{ slug: string } & Pick<z.infer<typeof ArticleSchema>, typeof keys[number]>>;
@@ -36,7 +39,15 @@ async function main() {
     return response;
   }
   const topics = await Promise.all(catalog.topics.map((topic) => limit(async () => {
-    const article = ArticleSchema.parse((await (await get(`/api/articles/${topic.slug}`)).json()).article);
+    const response = await get(`/api/articles/${topic.slug}`);
+    if (response.headers.has("set-cookie")) throw new Error(`${topic.slug}: public article response changes a session`);
+    const articlePayload = await response.json();
+    const article = ArticleSchema.parse(articlePayload.article);
+    const lesson = LessonSchema.parse(articlePayload.lesson);
+    if (lesson.slug !== topic.slug || JSON.stringify(lesson) !== JSON.stringify(visualLessons.get(topic.slug)))
+      throw new Error(`${topic.slug}: visual lesson differs from source`);
+    if ("progress" in articlePayload || "passedQuizIds" in articlePayload || "userId" in articlePayload)
+      throw new Error(`${topic.slug}: public article endpoint includes private state`);
     const source = library.get(topic.slug);
     const bodySource = readable.get(topic.slug) ?? source;
     if (bodySource && keys.some((key) => article[key] !== bodySource[key])) throw new Error(`${topic.slug}: published body differs from source`);

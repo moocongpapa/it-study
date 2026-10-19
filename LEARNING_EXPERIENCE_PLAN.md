@@ -22,7 +22,7 @@ HTML/CSS/SVG로 선명하고 반응형인 도형을 만든다. 외부 영상 재
 - `content/classroom/reference-library.json`: 개선 전 130개 글의 네 단계 심화 원문. 재빌드와 상세 읽기의 기준.
 - `content/classroom/lesson-specs.json`: 주제별 질문·그림 형식·짧은 라벨·분류 사례.
 - `scripts/build-classroom.ts`: 편집 자료와 원문으로 130개 과외식 본문 및 시각 자료 데이터를 생성.
-- `src/lib/learning-lessons.json`: 클라이언트에서 사용하는 검증된 수업 데이터. 시각 컴포넌트를 열 때 지연 로드.
+- `src/lib/learning-lessons.json`: 서버에서 관리하는 검증된 수업 데이터. 클라이언트에는 선택한 주제 한 건만 글 API로 전달한다. 시각 컴포넌트는 지연 로드한다.
 - Markdown의 `learning` 블록은 알려진 주제와 보기 종류만 허용한다. 임의 JS·HTML을 실행하지 않는다.
 - 운영 DB는 본문 해시가 예상과 일치할 때만 수정한다. 시각 렌더러를 먼저 배포하고 본문을 적용한다.
 

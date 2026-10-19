@@ -2,12 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { ArrowLeft, ArrowRight, Check, ChevronRight, CircleHelp, Eye, GraduationCap, Lightbulb, Pause, Play, Search, ShieldCheck, Sparkles, Wrench } from "lucide-react";
-import registry from "@/lib/learning-lessons.json";
 import type { Lesson, LessonReference } from "@/lib/lesson-schema";
 import { AttentionLab, KanbanLab, NetworkLab, ScheduleLab } from "./AppliedLabs";
 import { BitsLab, DistributionLab, GateLab, GrowthLab, QueueLab, ThresholdLab, VectorLab } from "./SpecialLabs";
 
-const lessons = new Map((registry as Lesson[]).map((lesson) => [lesson.slug, lesson]));
 const control = "lesson-control";
 function Teacher({children}:{children:React.ReactNode}) {
   return <div className="mt-4 flex items-start gap-2.5 rounded-2xl bg-white/80 p-3 text-sm leading-7 text-slate-700"><span aria-hidden="true" className="mt-1 grid size-7 shrink-0 place-items-center rounded-full bg-amber-100 text-amber-900"><GraduationCap className="size-4"/></span><div>{children}</div></div>;
@@ -101,7 +99,7 @@ function Explore({lesson}:{lesson:Lesson}) {
     default:return <Sequence lesson={lesson}/>;
   }
 }
-export default function LessonVisual({source}:{source:string}) {
+export default function LessonVisual({source,lesson}:{source:string;lesson?:Lesson|null}) {
   let ref:LessonReference;
   try {
     if(source.length>300)throw Error("Long reference");
@@ -109,8 +107,7 @@ export default function LessonVisual({source}:{source:string}) {
     if(!value||typeof value.slug!=="string"||!["explore","trace","words","recall","debug","decide"].includes(value.view)||Object.keys(value).some(k=>!["slug","view"].includes(k)))throw Error("Invalid reference");
     ref=value;
   }catch{return <p role="status" className="not-prose rounded-xl bg-amber-50 p-3 text-sm">그림 참조를 확인하지 못했어요. 아래 설명을 읽어 주세요.</p>;}
-  const lesson=lessons.get(ref.slug);
-  if(!lesson)return <p role="status" className="not-prose rounded-xl bg-amber-50 p-3 text-sm">이 주제의 그림을 준비하고 있어요.</p>;
+  if(!lesson||lesson.slug!==ref.slug)return <p role="status" className="not-prose rounded-xl bg-amber-50 p-3 text-sm">이 주제의 그림을 준비하고 있어요.</p>;
   if(ref.view==="words")return <div className="not-prose my-5" data-lesson-view="words"><Words key={ref.slug} lesson={lesson}/></div>;
   if(ref.view==="recall")return <div className="not-prose my-5" data-lesson-view="recall"><Recall key={ref.slug} lesson={lesson}/></div>;
   const subtitle=ref.view==="debug"?"단서를 눌러 함께 찾아봐요":ref.view==="decide"?"조건을 생각하며 골라봐요":ref.view==="trace"?"한 장면씩, 직접 재생해 봐요":"손으로 바꾸면 더 잘 보여요";

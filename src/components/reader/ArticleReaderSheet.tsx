@@ -3,13 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowDown, ArrowLeft, ArrowRight, BookOpen, Bot, ChevronDown, Clock3, X } from "lucide-react";
 import { ArticleMarkdown } from "@/components/reader/ArticleMarkdown";
+import { articleResource, type ArticlePayload } from "@/lib/article-resource";
 import { CompletionButton } from "@/components/reader/CompletionButton";
 import { QuizSession } from "@/components/quiz/QuizSession";
 import { AiTutorDrawer } from "@/components/tutor/AiTutorDrawer";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import type { Article, Topic, TopicProgressResult, TopicStatus } from "@/types/roadmap";
+import type { Topic, TopicProgressResult, TopicStatus } from "@/types/roadmap";
 
 const levels = [
   { value: "1", short: "그림 수업", title: "비유로 이해하기", description: "필요한 이유와 일상 비유를 읽고 작은 예로 확인합니다.", field: "level_1_mental_model" },
@@ -37,7 +38,11 @@ interface ArticleReaderSheetProps {
 
 export function ArticleReaderSheet({ open, onOpenChange, topic, status, prerequisites, completedIds, nextTopic, onSetCompleted, onNext, saving, saveError, isDemo, usesBrowserStorage, onQuizProgress }: ArticleReaderSheetProps) {
   const [level, setLevel] = useState("1");
-  const [result, setResult] = useState<{ article: Article | null; error: string | null } | null>(null);
+  const [result, setResult] = useState<(Partial<ArticlePayload> & { error: string | null }) | null>(() => {
+    const cached = topic ? articleResource.peek(topic.slug) : undefined;
+    return cached ? { ...cached, error: null } : null;
+  });
+  const [loadAttempt, setLoadAttempt] = useState(0);
   const [quizBacked, setQuizBacked] = useState<boolean | null>(null);
   const [tutorOpen, setTutorOpen] = useState(false);
   const [selectedText, setSelectedText] = useState("");
@@ -46,21 +51,18 @@ export function ArticleReaderSheet({ open, onOpenChange, topic, status, prerequi
   const tabsRef = useRef<HTMLDivElement>(null);
   const quizRef = useRef<HTMLDivElement>(null);
 
+  const topicSlug = topic?.slug;
   useEffect(() => {
-    if (!open || !topic) return;
-    const controller = new AbortController();
-    fetch(`/api/articles/${encodeURIComponent(topic.slug)}`, { signal: controller.signal })
-      .then(async (response) => {
-        if (!response.ok) throw new Error("아티클을 불러오지 못했습니다.");
-        return response.json() as Promise<{ article: Article | null }>;
-      })
-      .then((data) => setResult({ article: data.article, error: null }))
+    if (!open || !topicSlug) return;
+    let active = true;
+    articleResource.load(topicSlug)
+      .then((payload) => { if (active) setResult({ ...payload, error: null }); })
       .catch((error: unknown) => {
-        if (controller.signal.aborted) return;
-        setResult({ article: null, error: error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다." });
+        if (active) setResult({ error: error instanceof Error && error.name !== "TimeoutError" ? error.message : "불러오는 데 시간이 걸리고 있어요. 다시 시도해 주세요." });
       });
-    return () => controller.abort();
-  }, [open, topic]);
+    // A closing reader stops UI updates, while its shared prefetch can finish.
+    return () => { active = false; };
+  }, [open, topicSlug, loadAttempt]);
 
   function changeLevel(value: string) {
     if (value === level) return;
@@ -126,8 +128,8 @@ export function ArticleReaderSheet({ open, onOpenChange, topic, status, prerequi
             {levels.map((item) => <TabsContent key={item.value} value={item.value} className="outline-none">
               <h3 className="sr-only">{item.value}단계 · {item.title}</h3>
               {!result ? <div role="status" className="space-y-3 py-6" aria-label="아티클 불러오는 중"><div className="h-6 w-3/4 animate-pulse rounded bg-slate-100" /><div className="h-4 w-full animate-pulse rounded bg-slate-100" /><div className="h-4 w-2/3 animate-pulse rounded bg-slate-100" /></div>
-                : result.error ? <p role="alert" className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700">{result.error}</p>
-                : body ? <ArticleMarkdown body={body} referenceTitle={level === "2" ? "코드·템플릿과 원리 더 살펴보기" : level === "3" ? "장애 사례와 해결 방법 더 살펴보기" : "상세 비교표와 출처 살펴보기"} largeFont={isLargeFont} onSelectText={setSelectedText} />
+                : result.error ? <div role="alert" className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700"><p>{result.error}</p><Button variant="secondary" className="mt-3 h-11" onClick={() => { setResult(null); setLoadAttempt((attempt) => attempt + 1); }}>다시 불러오기</Button></div>
+                : body ? <ArticleMarkdown body={body} lesson={result.lesson} referenceTitle={level === "2" ? "코드·템플릿과 원리 더 살펴보기" : level === "3" ? "장애 사례와 해결 방법 더 살펴보기" : "상세 비교표와 출처 살펴보기"} largeFont={isLargeFont} onSelectText={setSelectedText} />
                 : <div className="rounded-xl border border-dashed border-slate-200 p-5 text-sm leading-7 text-slate-600"><BookOpen className="mb-2 size-5" /><h4 className="font-semibold text-slate-900">이 단계의 글을 준비하고 있어요</h4><p>다른 단계를 읽거나 이미 아는 내용의 이해도를 아래에 기록해 보세요.</p></div>}
             </TabsContent>)}
 

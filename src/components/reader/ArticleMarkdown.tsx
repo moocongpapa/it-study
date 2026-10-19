@@ -9,6 +9,7 @@ import { BookOpen, Check, ChevronDown, Copy } from "lucide-react";
 import { MermaidRenderer } from "@/components/reader/MermaidRenderer";
 import { annotateGlossaryTerms } from "@/lib/render-glossary";
 import { splitClassroomReference } from "@/lib/classroom-markdown";
+import type { Lesson } from "@/lib/lesson-schema";
 
 const LessonVisual = dynamic(() => import("@/components/learning/LessonVisual"), {
   loading: () => <div role="status" className="not-prose my-5 grid min-h-60 place-items-center rounded-3xl bg-teal-50 text-sm text-teal-800">그림 수업을 펼치고 있어요…</div>,
@@ -57,8 +58,9 @@ function CodeBlock({ children, language }: { children: ReactNode; language: stri
   </div>;
 }
 
-export function ArticleMarkdown({ body, largeFont, onSelectText, referenceTitle = "코드·사례·출처 자세히 보기" }: { body: string; largeFont: boolean; onSelectText: (text: string) => void; referenceTitle?: string }) {
+export function ArticleMarkdown({ body, lesson, largeFont, onSelectText, referenceTitle = "코드·사례·출처 자세히 보기" }: { body: string; lesson?: Lesson|null; largeFont: boolean; onSelectText: (text: string) => void; referenceTitle?: string }) {
   const articleRef = useRef<HTMLDivElement>(null);
+  const [referenceOpen, setReferenceOpen] = useState(false);
   useEffect(() => {
     function captureSelection() {
       const selection = window.getSelection();
@@ -71,16 +73,16 @@ export function ArticleMarkdown({ body, largeFont, onSelectText, referenceTitle 
   }, [onSelectText]);
   const parts = splitClassroomReference(body);
   return <div ref={articleRef} className={`reader-prose reader-article prose max-w-none ${largeFont ? "reader-article-large" : ""}`}>
-    <MarkdownContent body={parts.before} />
-    {parts.reference ? <details className="classroom-reference group not-prose my-6 overflow-hidden rounded-2xl border border-slate-200 bg-white">
+    <MarkdownContent body={parts.before} lesson={lesson}/>
+    {parts.reference ? <details onToggle={(event) => setReferenceOpen(event.currentTarget.open)} className="classroom-reference group not-prose my-6 overflow-hidden rounded-2xl border border-slate-200 bg-white">
       <summary className="flex min-h-12 cursor-pointer list-none items-center gap-2 px-4 py-3 text-sm font-medium text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 [&::-webkit-details-marker]:hidden"><BookOpen className="size-4 shrink-0 text-teal-700"/><span className="flex-1">{referenceTitle}</span><ChevronDown className="size-4 shrink-0 transition-transform group-open:rotate-180"/></summary>
-      <div className="reader-prose prose max-w-none border-t border-slate-100 px-4 pb-4 pt-3 text-sm"><MarkdownContent body={parts.reference}/></div>
+      {referenceOpen ? <div className="reader-prose prose max-w-none border-t border-slate-100 px-4 pb-4 pt-3 text-sm"><MarkdownContent body={parts.reference} lesson={lesson}/></div> : null}
     </details> : null}
-    {parts.after ? <MarkdownContent body={parts.after}/> : null}
+    {parts.after ? <MarkdownContent body={parts.after} lesson={lesson}/> : null}
   </div>;
 }
 
-function MarkdownContent({body}:{body:string}) {
+function MarkdownContent({body,lesson}:{body:string;lesson?:Lesson|null}) {
   return <ReactMarkdown skipHtml remarkPlugins={[remarkGfm]} rehypePlugins={[[rehypeHighlight, {ignoreMissing:true}]]} components={{
     p: ({ children }) => <p>{withGlossary(children)}</p>,
     li: ({ children }) => <li>{withGlossary(children)}</li>,
@@ -88,7 +90,7 @@ function MarkdownContent({body}:{body:string}) {
       const code = node?.children.find((child) => child.type === "element" && child.tagName === "code");
       const classes = code?.type === "element" && Array.isArray(code.properties.className) ? code.properties.className : [];
       const language = String(classes.find((c) => String(c).startsWith("language-")) ?? "").replace("language-", "");
-      if(language === "learning") return <LessonVisual source={markdownNodeText(code).trim()}/>;
+      if(language === "learning") return <LessonVisual source={markdownNodeText(code).trim()} lesson={lesson}/>;
       if(language === "mermaid") return <MermaidRenderer chart={markdownNodeText(code).trim()}/>;
       return <CodeBlock language={language}>{children}</CodeBlock>;
     },

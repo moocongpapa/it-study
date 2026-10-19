@@ -5,19 +5,19 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { z } from "zod";
 import LessonVisual from "../src/components/learning/LessonVisual.tsx";
-import { LessonSchema, LessonReferenceSchema } from "../src/lib/lesson-schema.ts";
+import { LessonSchema, LessonReferenceSchema, type Lesson } from "../src/lib/lesson-schema.ts";
 import { splitClassroomReference } from "../src/lib/classroom-markdown.ts";
 import { averageAndMedian, classificationCounts, CLASSIFICATION_SAMPLES, logicResult, queueTurn, readFourBits, vectorSimilarities, neuronOutput, trainNeuron, scheduleExample, ATTENTION_EXAMPLE } from "../src/lib/lesson-math.ts";
 
 const load=async(path:string)=>JSON.parse(await readFile(path,"utf8"));
 const keys=["level_1_mental_model","level_2_core_engineering","level_3_troubleshooting","level_4_architecture_tradeoffs"] as const;
 const clean=(s:string)=>s.replace(/<!-- beginner-guide:start -->[\s\S]*?<!-- beginner-guide:end -->/g,"").replace(/<!--[^]*?-->/g,"").trim().replace(/^# [^\n]+\n/,"").trim();
-function renderLesson(source:string) {
+function renderLesson(source:string, lesson?:Lesson) {
   const errors:unknown[][]=[],previous=console.error;
   let html:string;
   try {
     console.error=(...args:unknown[])=>{errors.push(args);};
-    html=renderToStaticMarkup(createElement(LessonVisual,{source}));
+    html=renderToStaticMarkup(createElement(LessonVisual,{source,lesson}));
   }finally{console.error=previous;}
   assert.equal(errors.length,0,"SSR warning: "+JSON.stringify(errors));
   return html;
@@ -43,7 +43,7 @@ async function main(){
       assert(references.length>0,lesson.slug+": visual missing");
       for(const reference of references){
         assert.equal(reference.slug,lesson.slug);blocks++;
-        const html=renderLesson(JSON.stringify(reference));
+        const html=renderLesson(JSON.stringify(reference),lesson);
         assert(!html.includes("그림 참조를 확인하지 못했어요")&&!html.includes("이 주제의 그림을 준비하고 있어요"),lesson.slug+": SSR fallback");
         assert(html.includes("<button")||html.includes("type=\"range\""),lesson.slug+": static-only lesson");
         ssrViews++;

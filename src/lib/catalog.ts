@@ -4,6 +4,7 @@ import demoCatalog from "@/lib/demo-catalog.json";
 import starterContent from "../../content/starter-content.json";
 import { isSupabaseConfigured } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import type {
   Article,
   Catalog,
@@ -99,30 +100,15 @@ export const getCatalog = cache(async (): Promise<Catalog> => {
 
 export async function getArticle(topicSlug: string): Promise<Article | null> {
   if (!isSupabaseConfigured) return demoArticle(topicSlug, true);
-
-  try {
-    const supabase = await createClient();
-    const topicResult = await supabase
-      .from("topics")
-      .select("id")
-      .eq("slug", topicSlug)
-      .maybeSingle();
-    if (topicResult.error) throw new Error(topicResult.error.message);
-    if (!topicResult.data) return demoArticle(topicSlug);
-
-    const articleResult = await supabase
-      .from("articles")
-      .select("*")
-      .eq("topic_id", topicResult.data.id)
-      .eq("is_published", true)
-      .maybeSingle();
-    if (articleResult.error) throw new Error(articleResult.error.message);
-    return (articleResult.data as Article | null) ?? demoArticle(topicSlug);
-  } catch (error) {
-    unstable_rethrow(error);
-    console.error(`[catalog] ${topicSlug} 아티클 조회 실패, 데모 데이터 표시:`, error);
-    return demoArticle(topicSlug);
-  }
+  const { data, error } = await createPublicClient().from("articles")
+    .select("id,topic_id,level_1_mental_model,level_2_core_engineering,level_3_troubleshooting,level_4_architecture_tradeoffs,is_published,created_at,updated_at,topics!inner(slug)")
+    .eq("topics.slug", topicSlug).eq("is_published", true).maybeSingle();
+  if (error) throw new Error(`아티클 조회 실패: ${error.message}`);
+  if (!data) return null;
+  // Keep the API shape independent of the joined lookup metadata.
+  const article = { ...data };
+  Reflect.deleteProperty(article, "topics");
+  return article as Article;
 }
 
 export function getDomainSummaries(catalog: Catalog): DomainSummary[] {

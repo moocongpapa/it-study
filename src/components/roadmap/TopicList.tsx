@@ -10,6 +10,7 @@ import { CURATED_TRACKS } from "@/lib/curated-tracks";
 import { MilestoneCelebrationModal } from "@/components/common/MilestoneCelebrationModal";
 import { DEMO_LEARNING_KEY, getDemoProgressRows, setBrowserTopicCompletion } from "@/lib/demo-learning";
 import { buildTopicLearningStates } from "@/lib/learning-state";
+import { warmArticle } from "@/lib/article-resource";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { Difficulty, Domain, Topic, TopicPrerequisite, UserNodeProgress, TopicProgressResult } from "@/types/roadmap";
@@ -167,7 +168,7 @@ export function TopicList({ domain, allDomains, allTopics, allPrerequisites, ini
             <ul className="divide-y divide-slate-100 overflow-hidden rounded-xl border border-slate-200 bg-white">
               {group.topics.map((topic) => (
                 <li key={topic.id}>
-                  <button type="button" onClick={() => openTopic(topic.id)} aria-label={topic.title + (completedIds.has(topic.id) ? " 학습하기 · 학습 완료" : " 학습하기")} className="group flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-slate-50 focus-visible:relative focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 sm:px-5">
+                  <button type="button" onPointerEnter={() => warmArticle(topic.slug)} onFocus={() => warmArticle(topic.slug)} onPointerDown={() => warmArticle(topic.slug)} onClick={() => openTopic(topic.id)} aria-label={topic.title + (completedIds.has(topic.id) ? " 학습하기 · 학습 완료" : " 학습하기")} className="group flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-slate-50 focus-visible:relative focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 sm:px-5">
                     <span className="min-w-0 flex-1">
                       <span className="flex items-start gap-2 text-[15px] font-semibold leading-6 text-slate-900 group-hover:text-blue-700">{completedIds.has(topic.id) ? <Check aria-hidden="true" className="mt-1 size-4 shrink-0 text-emerald-700"/> : null}<span>{topic.title}</span></span>
                       <span className="mt-0.5 block truncate text-xs leading-5 text-slate-500">{topic.summary}</span>

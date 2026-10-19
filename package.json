@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "db:verify": "node scripts/verify-schema.mjs",
     "completion:verify": "node scripts/verify-completion.mjs",
+    "loading:verify": "node --import tsx scripts/verify-article-resource.ts",
     "content:generate": "node --import tsx scripts/generate-content.ts",
     "content:seed-starter": "node --import tsx scripts/seed-curated-content.ts",
     "content:build-expansion": "node --import tsx scripts/build-expansion.ts",
