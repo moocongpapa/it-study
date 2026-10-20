@@ -21,17 +21,23 @@ function LoginForm() {
     if (!isSupabaseConfigured) return;
     setLoading(true);
     setError(null);
-    const requested = params.get("next") ?? "/roadmap";
-    const next = requested.startsWith("/") && !requested.startsWith("//") ? requested : "/roadmap";
-    const redirect = new URL("/auth/callback", window.location.origin);
-    redirect.searchParams.set("next", next);
-    const { error: signInError } = await createClient().auth.signInWithOtp({
-      email,
-      options: { emailRedirectTo: redirect.toString() },
-    });
-    setLoading(false);
-    if (signInError) setError(signInError.message);
-    else setMessage("로그인 링크를 보냈습니다. 이메일을 확인해 주세요.");
+    setMessage(null);
+    try {
+      const requested = params.get("next") ?? "/roadmap";
+      const next = requested.startsWith("/") && !requested.startsWith("//") ? requested : "/roadmap";
+      const redirect = new URL("/auth/callback", window.location.origin);
+      redirect.searchParams.set("next", next);
+      const { error: signInError } = await createClient().auth.signInWithOtp({
+        email: email.trim(),
+        options: { emailRedirectTo: redirect.toString() },
+      });
+      if (signInError) setError(signInError.status === 429
+        ? "로그인 요청이 많습니다. 잠시 기다린 뒤 다시 시도해 주세요."
+        : "로그인 이메일을 보내지 못했습니다. 주소를 확인하고 잠시 후 다시 시도해 주세요.");
+      else setMessage("로그인 링크를 보냈습니다. 이메일과 스팸함을 확인해 주세요.");
+    } catch {
+      setError("연결이 원활하지 않습니다. 인터넷 연결을 확인한 뒤 다시 시도해 주세요.");
+    } finally { setLoading(false); }
   }
 
   return (
@@ -83,7 +89,7 @@ function LoginForm() {
           </Button>
         </form>
       ) : <p className="mt-7 rounded-xl border border-blue-200 bg-blue-50 p-4 text-xs leading-6 text-slate-500">현재는 시드 데이터 미리보기 모드입니다. Supabase 프로젝트 URL과 publishable key를 설정하면 로그인을 사용할 수 있습니다.</p>}
-      <Button asChild variant="ghost" className="mt-5 -ml-2"><Link href="/roadmap"><ArrowLeft className="size-4" /> 지도로 돌아가기</Link></Button>
+      <Button asChild variant="ghost" className="mt-5 -ml-2"><Link href="/roadmap"><ArrowLeft className="size-4" /> 학습으로 돌아가기</Link></Button>
     </Card>
   );
 }

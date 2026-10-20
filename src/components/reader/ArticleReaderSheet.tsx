@@ -136,7 +136,7 @@ export function ArticleReaderSheet({ open, onOpenChange, topic, status, prerequi
             {selectedText ? <div className="mt-5 rounded-xl border border-blue-200 bg-blue-50 p-3"><p className="line-clamp-2 text-xs leading-6 text-slate-600">“{selectedText}”</p><Button className="mt-2 h-11 gap-1.5" size="sm" variant="secondary" onClick={() => setTutorOpen(true)}><Bot className="size-4" />이 문장 질문하기</Button></div> : null}
 
             <div ref={quizRef} tabIndex={-1} aria-label="퀴즈 영역" className="scroll-mt-3 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
-              <QuizSession key={`${topic.id}:${level}`} topic={topic} level={Number(level) as 1 | 2 | 3 | 4} locked={isLocked} isDemo={isDemo} onAvailability={setQuizBacked} onProgressUpdate={(progress) => onQuizProgress(topic, progress)} />
+              <QuizSession key={`${topic.id}:${level}`} topic={topic} level={Number(level) as 1 | 2 | 3 | 4} locked={isLocked} isDemo={isDemo} requiresLogin={!isDemo && usesBrowserStorage} onAvailability={setQuizBacked} onProgressUpdate={(progress) => onQuizProgress(topic, progress)} />
             </div>
 
             <section aria-label="학습 마무리" className="mt-6 border-t border-slate-200 pt-4 text-sm leading-6 text-slate-600">
@@ -152,7 +152,7 @@ export function ArticleReaderSheet({ open, onOpenChange, topic, status, prerequi
             </nav>
           </div>
         </Tabs>
-        <AiTutorDrawer key={`${topic.id}:${level}`} open={tutorOpen} onOpenChange={setTutorOpen} topic={topic} level={Number(level)} articleContext={selectedText} />
+        <AiTutorDrawer key={`${topic.id}:${level}`} open={tutorOpen} onOpenChange={setTutorOpen} topic={topic} level={Number(level)} articleContext={selectedText} requiresLogin={usesBrowserStorage} />
       </> : <><SheetTitle className="sr-only">아티클 리더</SheetTitle><SheetDescription className="sr-only">주제를 선택하세요.</SheetDescription></>}
     </SheetContent>
   </Sheet>;

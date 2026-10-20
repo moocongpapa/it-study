@@ -26,23 +26,29 @@ function plainText(children: ReactNode): string {
 
 function TutorCode({ children }: { children: ReactNode }) {
   const [copied, setCopied] = useState(false);
+  const [copyError, setCopyError] = useState(false);
   async function copy() {
-    await navigator.clipboard.writeText(plainText(children).replace(/\n$/, ""));
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 1600);
+    try {
+      await navigator.clipboard.writeText(plainText(children).replace(/\n$/, ""));
+      setCopyError(false);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1600);
+    } catch { setCopyError(true); }
   }
   return <div className="my-3 overflow-hidden rounded-xl border border-slate-200 bg-white">
     <div className="flex justify-end border-b border-slate-200 px-2"><button type="button" onClick={copy} aria-label="튜터 코드 복사" className="flex min-h-11 items-center gap-1 rounded px-2 text-xs text-slate-500 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">{copied ? <Check className="size-3" /> : <Copy className="size-3" />}{copied ? "복사됨" : "복사"}</button></div>
     <pre className="overflow-x-auto p-3 text-[13px] leading-6">{children}</pre>
+    {copyError ? <p role="status" className="px-3 pb-3 text-xs text-rose-700">복사 권한이 없습니다. 코드를 직접 선택해 복사해 주세요.</p> : null}
   </div>;
 }
 
-export function AiTutorDrawer({ open, onOpenChange, topic, level, articleContext }: {
+export function AiTutorDrawer({ open, onOpenChange, topic, level, articleContext, requiresLogin }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   topic: Topic;
   level: number;
   articleContext: string;
+  requiresLogin: boolean;
 }) {
   const [messages, setMessages] = useState<TutorMessage[]>([]);
   const [draft, setDraft] = useState("");
@@ -56,7 +62,7 @@ export function AiTutorDrawer({ open, onOpenChange, topic, level, articleContext
 
   async function send(text: string) {
     const content = text.trim();
-    if (!content || streaming) return;
+    if (!content || streaming || requiresLogin) return;
     const conversation: TutorMessage[] = [...messages.filter((item) => item.content.trim()), { role: "user" as const, content }].slice(-12);
     setMessages([...conversation, { role: "assistant", content: "" }]);
     setDraft("");
@@ -121,7 +127,8 @@ export function AiTutorDrawer({ open, onOpenChange, topic, level, articleContext
       <div className="min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain px-4 py-4 sm:px-6" role="log" aria-label="튜터 대화" aria-live="polite">
         <p className="text-xs leading-6 text-slate-500">{topic.title}</p>
         {articleContext ? <details className="rounded-lg border border-slate-200 bg-slate-50 text-xs text-slate-600"><summary className="min-h-11 cursor-pointer px-3 py-3">선택한 문장 보기</summary><p className="border-t border-slate-200 px-3 py-2 leading-6">{articleContext}</p></details> : null}
-        {!messages.length ? <div className="rounded-xl bg-blue-50 p-4"><Sparkles className="mb-2 size-5 text-blue-700" /><p className="text-base font-semibold text-slate-900">어디서 막혔나요?</p><p className="mt-2 text-sm leading-7 text-slate-600">이해한 내용을 자신의 말로 설명해 보세요. 필요한 단서부터 함께 찾아갑니다.</p><div className="mt-3 space-y-2">{suggestions.map((item) => <button key={item} type="button" onClick={() => void send(item)} className="block min-h-11 w-full rounded-lg border border-blue-100 bg-white px-3 py-2.5 text-left text-xs leading-5 text-blue-700 hover:border-blue-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">{item}</button>)}</div></div> : null}
+        {requiresLogin ? <div className="rounded-xl bg-blue-50 p-4"><p className="font-semibold text-slate-900">로그인하고 튜터와 대화해 보세요</p><p className="mt-2 text-sm leading-6 text-slate-600">그림 수업과 실무 연습은 로그인 없이 이용할 수 있어요. AI 튜터는 로그인이 필요합니다.</p><Link href={`/login?next=${encodeURIComponent(`/roadmap?topic=${topic.slug}`)}`} className="mt-3 inline-flex min-h-11 items-center rounded-lg bg-blue-600 px-4 text-sm font-semibold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2">로그인하기</Link></div> : null}
+        {!requiresLogin && !messages.length ? <div className="rounded-xl bg-blue-50 p-4"><Sparkles className="mb-2 size-5 text-blue-700" /><p className="text-base font-semibold text-slate-900">어디서 막혔나요?</p><p className="mt-2 text-sm leading-7 text-slate-600">이해한 내용을 자신의 말로 설명해 보세요. 필요한 단서부터 함께 찾아갑니다.</p><div className="mt-3 space-y-2">{suggestions.map((item) => <button key={item} type="button" onClick={() => void send(item)} className="block min-h-11 w-full rounded-lg border border-blue-100 bg-white px-3 py-2.5 text-left text-xs leading-5 text-blue-700 hover:border-blue-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">{item}</button>)}</div></div> : null}
         {messages.map((message, index) => <div key={index} className={`flex gap-2 ${message.role === "user" ? "justify-end" : "justify-start"}`}>
           {message.role === "assistant" ? <span aria-hidden="true" className="grid size-7 shrink-0 place-items-center rounded-lg bg-blue-50 text-blue-700"><Bot className="size-4" /></span> : null}
           <div className={`min-w-0 max-w-[88%] rounded-xl px-3 py-3 text-sm leading-7 ${message.role === "user" ? "bg-blue-600 text-white" : "border border-slate-200 bg-slate-50 text-slate-800"}`}>
@@ -134,7 +141,7 @@ export function AiTutorDrawer({ open, onOpenChange, topic, level, articleContext
 
       <div className="shrink-0 border-t border-slate-200 bg-white px-4 py-3 sm:px-6">
         {error ? <p role="alert" className="mb-2 text-xs leading-5 text-rose-700">{error} {error.includes("로그인") ? <Link href="/login" className="font-semibold underline">로그인하기</Link> : null}</p> : null}
-        <form onSubmit={submit} className="flex items-end gap-2">
+        {!requiresLogin ? <form onSubmit={submit} className="flex items-end gap-2">
           <label className="min-w-0 flex-1">
             <span className="sr-only">튜터에게 질문</span>
             <textarea value={draft} onChange={(event) => setDraft(event.target.value)} onKeyDown={(event) => {
@@ -147,7 +154,7 @@ export function AiTutorDrawer({ open, onOpenChange, topic, level, articleContext
           </label>
           {streaming ? <button type="button" onClick={stop} aria-label="응답 중단" className="grid size-11 shrink-0 place-items-center rounded-xl bg-slate-100 text-slate-900 hover:bg-rose-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"><Square className="size-4" /></button>
             : <button type="submit" disabled={!draft.trim()} aria-label="질문 보내기" className="grid size-11 shrink-0 place-items-center rounded-xl bg-blue-600 text-white hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 disabled:opacity-40"><ArrowUp className="size-5" /></button>}
-        </form>
+        </form> : <p className="text-xs leading-5 text-slate-500">로그인 후 이 주제로 돌아와 이어서 질문할 수 있어요.</p>}
       </div>
     </SheetContent>
   </Sheet>;

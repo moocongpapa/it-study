@@ -13,11 +13,12 @@ interface QuizSessionProps {
   level: 1 | 2 | 3 | 4;
   locked: boolean;
   isDemo: boolean;
+  requiresLogin: boolean;
   onAvailability: (hasQuizzes: boolean) => void;
   onProgressUpdate: (progress: TopicProgressResult) => void;
 }
 
-export function QuizSession({ topic, level, locked, isDemo, onAvailability, onProgressUpdate }: QuizSessionProps) {
+export function QuizSession({ topic, level, locked, isDemo, requiresLogin, onAvailability, onProgressUpdate }: QuizSessionProps) {
   const [quizzes, setQuizzes] = useState<Quiz[] | null>(null);
   const [allQuizzes, setAllQuizzes] = useState<Quiz[]>([]);
   const [passedIds, setPassedIds] = useState<string[]>([]);
@@ -27,10 +28,11 @@ export function QuizSession({ topic, level, locked, isDemo, onAvailability, onPr
   const [feedback, setFeedback] = useState<QuizFeedback | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [loadAttempt, setLoadAttempt] = useState(0);
 
   useEffect(() => {
     const controller = new AbortController();
-    fetch(`/api/quizzes/${encodeURIComponent(topic.id)}`, { signal: controller.signal, cache: "no-store" })
+    fetch(`/api/quizzes/${encodeURIComponent(topic.id)}`, { signal: AbortSignal.any([controller.signal, AbortSignal.timeout(12_000)]), cache: "no-store" })
       .then(async (response) => {
         if (!response.ok) throw new Error("퀴즈를 불러오지 못했습니다.");
         return response.json() as Promise<{ quizzes: Quiz[]; passedQuizIds: string[] }>;
@@ -50,13 +52,13 @@ export function QuizSession({ topic, level, locked, isDemo, onAvailability, onPr
         setError(cause instanceof Error ? cause.message : "퀴즈를 불러오지 못했습니다.");
       });
     return () => controller.abort();
-  }, [topic.id, level, isDemo, onAvailability]);
+  }, [topic.id, level, isDemo, onAvailability, loadAttempt]);
 
   const quiz = quizzes?.[index];
   const levelComplete = Boolean(quizzes?.length && quizzes.every((item) => passedIds.includes(item.id)));
 
   async function submit(choiceIndex: number | null, text: string | null) {
-    if (!quiz || locked || loading) return;
+    if (!quiz || locked || requiresLogin || loading) return;
     setLoading(true);
     setError(null);
     setSelectedChoice(choiceIndex);
@@ -91,7 +93,7 @@ export function QuizSession({ topic, level, locked, isDemo, onAvailability, onPr
     setSelectedChoice(null);
   }
 
-  if (error && !quizzes) return <p role="alert" className="mt-7 rounded-xl border border-rose-200 bg-rose-50 p-4 text-xs text-rose-700">{error}</p>;
+  if (error && !quizzes) return <div role="alert" className="mt-7 rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700"><p>퀴즈를 불러오지 못했어요.</p><button type="button" onClick={() => { setError(null); setLoadAttempt((attempt) => attempt + 1); }} className="mt-2 min-h-11 rounded-lg px-3 font-semibold underline focus-visible:ring-2 focus-visible:ring-rose-600">퀴즈 다시 불러오기</button></div>;
   if (!quizzes) return <div className="mt-8 h-28 animate-pulse rounded-xl border border-slate-200 bg-slate-50" aria-label="퀴즈 불러오는 중" />;
   if (!quizzes.length) return <div className="mt-9 rounded-xl border border-dashed border-slate-200 p-5 text-center text-xs text-slate-500"><CircleHelp className="mx-auto mb-2 size-5" />이 레벨의 퀴즈를 준비하고 있어요.</div>;
 
@@ -101,7 +103,7 @@ export function QuizSession({ topic, level, locked, isDemo, onAvailability, onPr
         <div className="flex items-center gap-2 text-xs font-semibold text-blue-700"><Sparkles className="size-4" />{level}단계 · 확인 퀴즈</div>
         <span className="text-[11px] tabular-nums text-slate-500">{passedIds.filter((id) => quizzes.some((item) => item.id === id)).length}/{quizzes.length} 통과</span>
       </div>
-      {locked ? <p className="mb-4 flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-700"><LockKeyhole className="size-4 shrink-0" />먼저 알면 좋은 개념을 완료하면 풀 수 있어요. 그림과 연습 카드는 지금도 자유롭게 볼 수 있어요.</p> : null}
+      {requiresLogin ? <div className="mb-4 rounded-lg border border-blue-200 bg-blue-50 p-3 text-sm leading-6 text-slate-700"><p>채점 퀴즈는 로그인한 뒤 풀 수 있어요. 그림 수업과 실무 연습실은 바로 이용할 수 있어요.</p><Link href={`/login?next=${encodeURIComponent(`/roadmap?topic=${topic.slug}`)}`} className="mt-1 inline-flex min-h-11 items-center font-semibold text-blue-700 underline underline-offset-4">로그인하고 퀴즈 풀기</Link></div> : locked ? <p className="mb-4 flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-700"><LockKeyhole className="size-4 shrink-0" />먼저 알면 좋은 개념을 완료하면 풀 수 있어요. 그림과 연습 카드는 지금도 자유롭게 볼 수 있어요.</p> : null}
       {levelComplete ? (
         <div className="rounded-lg bg-emerald-50 p-4">
           <p className="flex items-center gap-2 text-sm font-semibold text-emerald-800"><Check className="size-4" />{level}단계 퀴즈 완료</p>
@@ -130,7 +132,7 @@ export function QuizSession({ topic, level, locked, isDemo, onAvailability, onPr
                   <button
                     key={choiceIndex}
                     type="button"
-                    disabled={locked || loading || Boolean(feedback)}
+                    disabled={locked || requiresLogin || loading || Boolean(feedback)}
                     onClick={() => submit(choiceIndex, null)}
                     className={cn(
                       "group flex w-full items-start gap-3 rounded-xl border p-3.5 text-left text-sm leading-6 transition-all active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/30",
@@ -151,8 +153,8 @@ export function QuizSession({ topic, level, locked, isDemo, onAvailability, onPr
             </div>
           ) : (
             <form onSubmit={(event) => { event.preventDefault(); void submit(null, shortAnswer.trim()); }} className="flex min-h-11 gap-2">
-              <input value={shortAnswer} onChange={(event) => setShortAnswer(event.target.value)} maxLength={500} disabled={locked || loading || Boolean(feedback)} placeholder="핵심 용어를 입력해 보세요" aria-label="단답형 답안" className="min-w-0 flex-1 rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-base text-slate-900 outline-none placeholder:text-slate-500 focus:border-blue-200 focus:ring-2 focus:ring-blue-500/30" />
-              <button type="submit" disabled={locked || loading || Boolean(feedback) || !shortAnswer.trim()} className="rounded-xl bg-blue-600 px-5 text-xs font-bold text-white transition hover:bg-blue-700 disabled:opacity-40">채점</button>
+              <input value={shortAnswer} onChange={(event) => setShortAnswer(event.target.value)} maxLength={500} disabled={locked || requiresLogin || loading || Boolean(feedback)} placeholder="핵심 용어를 입력해 보세요" aria-label="단답형 답안" className="min-w-0 flex-1 rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-base text-slate-900 outline-none placeholder:text-slate-500 focus:border-blue-200 focus:ring-2 focus:ring-blue-500/30" />
+              <button type="submit" disabled={locked || requiresLogin || loading || Boolean(feedback) || !shortAnswer.trim()} className="rounded-xl bg-blue-600 px-5 text-xs font-bold text-white transition hover:bg-blue-700 disabled:opacity-40">채점</button>
             </form>
           )}
           {loading ? (

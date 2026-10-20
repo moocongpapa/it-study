@@ -50,6 +50,7 @@ function SidebarContents({ domains, pathname, onNavigate }: { domains: Domain[];
       <nav aria-label="학습 메뉴" className="space-y-1 px-3">
         <Link href="/roadmap" onClick={onNavigate} aria-current={pathname === "/roadmap" ? "page" : undefined} className={cn("flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium", pathname === "/roadmap" ? "bg-slate-100 text-slate-900" : "text-slate-600 hover:bg-slate-50")}><LayoutGrid className="size-4" />전체 학습 주제</Link>
         <Link href="/dashboard" onClick={onNavigate} aria-current={pathname === "/dashboard" ? "page" : undefined} className={cn("flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium", pathname === "/dashboard" ? "bg-slate-100 text-slate-900" : "text-slate-600 hover:bg-slate-50")}><LayoutDashboard className="size-4" />내 학습</Link>
+        <Link href="/practice" onClick={onNavigate} aria-current={pathname.startsWith("/practice") ? "page" : undefined} className={cn("flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium", pathname.startsWith("/practice") ? "bg-teal-50 text-teal-900" : "text-slate-600 hover:bg-slate-50")}><FlaskConical className="size-4" />실무 연습실</Link>
       </nav>
       <p className="mb-2 mt-6 px-6 text-xs font-medium text-slate-400">분야별 학습</p>
       <nav aria-label="학습 분야" className="flex-1 space-y-0.5 overflow-y-auto px-3 pb-4">
@@ -86,7 +87,7 @@ export function DashboardShell({ children, domains, isDemo, isAuthenticated }: D
   const isRoadmap = pathname.startsWith("/roadmap");
   const hasFilters = difficulty !== "all" || selectedTrack !== "all";
   const selectedDomain = domains.find((domain) => pathname === "/roadmap/" + domain.slug);
-  const title = selectedDomain?.title ?? (pathname === "/dashboard" ? "내 학습" : "전체 학습 주제");
+  const title = selectedDomain?.title ?? (pathname === "/dashboard" ? "내 학습" : pathname.startsWith("/practice") ? "실무 연습실" : "전체 학습 주제");
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {

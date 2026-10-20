@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "db:verify": "node scripts/verify-schema.mjs",
     "completion:verify": "node scripts/verify-completion.mjs",
+    "practice:verify": "node --import tsx scripts/verify-practice.ts",
     "loading:verify": "node --import tsx scripts/verify-article-resource.ts",
     "content:generate": "node --import tsx scripts/generate-content.ts",
     "content:seed-starter": "node --import tsx scripts/seed-curated-content.ts",

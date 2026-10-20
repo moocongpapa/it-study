@@ -93,8 +93,8 @@ export const getCatalog = cache(async (): Promise<Catalog> => {
     };
   } catch (error) {
     unstable_rethrow(error);
-    console.error("[catalog] 학습 DB 조회 실패, 데모 데이터 표시:", error);
-    return demoCatalogResult();
+    console.error("[catalog] 학습 DB 조회 실패:", error);
+    throw new Error("학습 정보를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.");
   }
 });
 

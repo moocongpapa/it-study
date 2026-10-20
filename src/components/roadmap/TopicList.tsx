@@ -77,6 +77,13 @@ export function TopicList({ domain, allDomains, allTopics, allPrerequisites, ini
     const needle = query.trim().toLocaleLowerCase("ko");
     const track = CURATED_TRACKS.find((item) => item.id === selectedTrack);
     const trackSlugs = track && track.id !== "all" ? new Set(track.topicSlugs) : null;
+    if (track && trackSlugs && !domain) {
+      const bySlug = new Map(allTopics.map((topic) => [topic.slug, topic]));
+      const topics = track.topicSlugs.map((slug) => bySlug.get(slug)).filter((topic): topic is Topic => Boolean(topic))
+        .filter((topic) => (!needle || (topic.title + " " + topic.summary + " " + topic.slug).toLocaleLowerCase("ko").includes(needle))
+          && (difficulty === "all" || topic.difficulty === difficulty));
+      return topics.length ? [{ domain: { id: track.id, title: track.title, slug: "" }, topics }] : [];
+    }
     return allDomains.filter((item) => !domain || item.id === domain.id).map((item) => ({
       domain: item,
       topics: allTopics.filter((topic) => topic.domain_id === item.id
@@ -153,6 +160,7 @@ export function TopicList({ domain, allDomains, allTopics, allPrerequisites, ini
       <p className="mb-4 text-sm leading-6 text-slate-500">
         {currentTrack && currentTrack.id !== "all" ? currentTrack.description : domain?.description ?? "궁금한 분야의 주제를 골라 학습해 보세요."}
       </p>
+      {!domain ? <Link href="/practice" className="mb-4 flex min-h-12 items-center justify-between gap-3 rounded-xl border border-teal-200 bg-teal-50 px-4 py-3 text-sm text-teal-900 hover:bg-teal-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600"><span><strong>실무 연습실</strong><span className="ml-2 text-teal-700">배운 내용을 작은 과제로 써보세요</span></span><ArrowRight className="size-4 shrink-0" /></Link> : null}
       {isDemo && !domain ? (
         <p role="status" className="mb-4 rounded-lg bg-blue-50 px-3 py-2 text-xs leading-5 text-blue-700">체험 화면이에요. 모든 그림 수업을 둘러볼 수 있고, 확인 퀴즈는 일부 샘플 주제에서 체험할 수 있어요.</p>
       ) : null}
@@ -162,13 +170,14 @@ export function TopicList({ domain, allDomains, allTopics, allPrerequisites, ini
             {!domain ? (
               <div className="mb-2 flex items-center justify-between gap-3 px-1">
                 <h2 className="min-w-0 text-sm font-semibold text-slate-900">{group.domain.title}</h2>
-                <Link href={"/roadmap/" + group.domain.slug} onClick={() => { setQuery(""); setDifficulty("all"); setSelectedTrack("all"); }} className="inline-flex shrink-0 items-center gap-0.5 rounded text-xs text-slate-500 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500" aria-label={group.domain.title + " 전체 보기"}>전체 보기 <ChevronRight className="size-3" /></Link>
+                {group.domain.slug ? <Link href={"/roadmap/" + group.domain.slug} onClick={() => { setQuery(""); setDifficulty("all"); setSelectedTrack("all"); }} className="inline-flex shrink-0 items-center gap-0.5 rounded text-xs text-slate-500 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500" aria-label={group.domain.title + " 전체 보기"}>전체 보기 <ChevronRight className="size-3" /></Link> : <span className="shrink-0 text-xs text-slate-500">추천 읽기 순서</span>}
               </div>
             ) : null}
             <ul className="divide-y divide-slate-100 overflow-hidden rounded-xl border border-slate-200 bg-white">
               {group.topics.map((topic) => (
                 <li key={topic.id}>
                   <button type="button" onPointerEnter={() => warmArticle(topic.slug)} onFocus={() => warmArticle(topic.slug)} onPointerDown={() => warmArticle(topic.slug)} onClick={() => openTopic(topic.id)} aria-label={topic.title + (completedIds.has(topic.id) ? " 학습하기 · 학습 완료" : " 학습하기")} className="group flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-slate-50 focus-visible:relative focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 sm:px-5">
+                    {!group.domain.slug && currentTrack ? <span aria-label="추천 순서" className="self-start pt-0.5 text-sm font-semibold tabular-nums text-teal-700">{String(currentTrack.topicSlugs.indexOf(topic.slug) + 1).padStart(2, "0")}</span> : null}
                     <span className="min-w-0 flex-1">
                       <span className="flex items-start gap-2 text-[15px] font-semibold leading-6 text-slate-900 group-hover:text-blue-700">{completedIds.has(topic.id) ? <Check aria-hidden="true" className="mt-1 size-4 shrink-0 text-emerald-700"/> : null}<span>{topic.title}</span></span>
                       <span className="mt-0.5 block truncate text-xs leading-5 text-slate-500">{topic.summary}</span>
