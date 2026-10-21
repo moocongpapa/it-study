@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "IT Atlas — 차근차근 배우는 IT",
-  description: "꼭 필요한 IT 지식만 모았어요. 비전공자는 전공자 수준까지, 전공자는 지식 정리까지.",
+  description: "컴퓨터 기초부터 AI와 프로젝트 관리까지. 쉬운 비유, 시각 자료와 실무 연습으로 차근차근 배우세요.",
 };
 
 export const viewport: Viewport = {

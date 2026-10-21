@@ -95,29 +95,29 @@ export function DashboardOverview({ domains, topics, progress: initialProgress, 
     return `/roadmap/${domain?.slug ?? ""}?topic=${topic.slug}`;
   }
 
-  return <div className="mx-auto max-w-6xl px-4 py-5 md:px-6 md:py-7">
-    {usesBrowserStorage ? <p className="mb-3 text-xs text-slate-400">이 브라우저에 저장된 기록이에요. 로그인하면 계정에 보관돼요.</p> : null}
+  return <div className="page-container">
+    {usesBrowserStorage ? <p className="mb-3 text-xs leading-6 text-slate-600">현재 브라우저의 기록이에요. 로그인 후의 계정 기록과는 별도로 보관돼요.</p> : null}
     <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
-      <div><h2 className="text-xl font-semibold tracking-tight text-slate-900 md:text-2xl">내 학습</h2></div>
+      <div><h2 className="page-title">조금씩, 내 지식이 쌓이고 있어요.</h2><p className="mt-2 text-sm leading-7 text-slate-600">배운 개념을 다시 떠올리고 다음 주제로 이어가세요.</p></div>
       <Link href="/roadmap" className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-xs font-semibold text-slate-800 hover:bg-slate-50">주제 둘러보기 <ArrowRight className="size-4" /></Link>
     </div>
 
-    <div className="mb-5 grid grid-cols-3 gap-2 sm:gap-3">
-      <Card className="flex min-w-0 items-center gap-3 p-3 sm:p-5"><div><p className="text-2xl font-bold text-slate-900">{completed.length}<span className="ml-1 text-sm font-medium text-slate-500">/ {topics.length}</span></p><p className="text-[11px] leading-5 text-slate-500">완료한 주제 · {percentage}%</p></div></Card>
-      <Card className="flex min-w-0 items-center gap-3 p-3 sm:p-5"><div><p className="text-2xl font-bold text-slate-900">{due.length}</p><p className="text-[11px] leading-5 text-slate-500">오늘 복습</p></div></Card>
-      <Card className="flex min-w-0 items-center gap-3 p-3 sm:p-5"><div><p className="text-2xl font-bold text-slate-900">{streak}<span className="ml-1 text-sm font-medium text-slate-500">일</span></p><p className="text-[11px] leading-5 text-slate-500">연속 학습</p></div></Card>
+    <div className="mb-6 grid grid-cols-3 divide-x divide-slate-200 border-y border-slate-200 py-4">
+      <Card className="flex min-w-0 items-center gap-3 rounded-none border-0 bg-transparent px-3 sm:px-5"><div><p className="text-xl font-semibold tabular-nums text-slate-900">{completed.length}<span className="ml-1 text-sm font-medium text-slate-500">/ {topics.length}</span></p><p className="text-[11px] leading-5 text-slate-500">완료한 주제 · {percentage}%</p></div></Card>
+      <Card className="flex min-w-0 items-center gap-3 rounded-none border-0 bg-transparent px-3 sm:px-5"><div><p className="text-xl font-semibold tabular-nums text-slate-900">{due.length}</p><p className="text-[11px] leading-5 text-slate-500">오늘 복습</p></div></Card>
+      <Card className="flex min-w-0 items-center gap-3 rounded-none border-0 bg-transparent px-3 sm:px-5"><div><p className="text-xl font-semibold tabular-nums text-slate-900">{streak}<span className="ml-1 text-sm font-medium text-slate-500">일</span></p><p className="text-[11px] leading-5 text-slate-500">연속 학습</p></div></Card>
     </div>
 
     <div className="grid gap-6 xl:grid-cols-[1.25fr_.75fr]">
       <section className="space-y-6">
         <Card className="p-5 sm:p-6">
-          <div className="mb-4 flex flex-wrap items-center gap-2"><RotateCcw className="size-4 text-blue-700" /><h3 className="text-sm font-bold text-slate-900">오늘 복습할 주제</h3></div>
+          <div className="mb-4 flex flex-wrap items-center gap-2"><RotateCcw className="size-4 text-brand-700" /><h3 className="text-sm font-bold text-slate-900">오늘 복습할 주제</h3></div>
           {error ? <p role="alert" className="mb-4 text-xs text-rose-700">{error}</p> : null}
           {due.length ? <div className="space-y-3">{due.map((item) => {
             const topic = byId.get(item.topic_id);
             if (!topic) return null;
             return <div key={item.topic_id} className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-              <div className="flex flex-wrap items-start justify-between gap-2"><div><Link href={topicHref(topic)} className="text-sm font-bold text-slate-900 hover:text-blue-700">{topic.title}</Link><p className="mt-1 text-[11px] text-slate-500">{domainById.get(topic.domain_id)?.title} · 복습 예정 {item.next_review_at ? dateLabel(item.next_review_at) : "오늘"}</p></div><Link href={topicHref(topic)} className="text-[11px] text-blue-700 hover:underline">아티클 다시 읽기 →</Link></div>
+              <div className="flex flex-wrap items-start justify-between gap-2"><div><Link href={topicHref(topic)} className="text-sm font-bold text-slate-900 hover:text-brand-700">{topic.title}</Link><p className="mt-1 text-[11px] text-slate-500">{domainById.get(topic.domain_id)?.title} · 복습 예정 {item.next_review_at ? dateLabel(item.next_review_at) : "오늘"}</p></div><Link href={topicHref(topic)} className="text-[11px] text-brand-700 hover:underline">아티클 다시 읽기 →</Link></div>
               <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-slate-200 pt-3">
                 <span className="mr-1 text-[11px] font-medium text-slate-500">자가 복습 평가:</span>
                 {[
@@ -137,13 +137,13 @@ export function DashboardOverview({ domains, topics, progress: initialProgress, 
                 ))}
               </div>
             </div>;
-          })}</div> : <div className="rounded-xl border border-dashed border-emerald-200 bg-emerald-50 p-7 text-center"><CheckCircle2 className="mx-auto size-7 text-emerald-700" /><p className="mt-3 text-sm font-bold text-slate-800">오늘 예정된 복습이 없습니다</p><p className="mt-1 text-xs text-slate-500">새 토픽을 학습하거나 내일 다시 확인하세요.</p></div>}
+          })}</div> : <div className="rounded-xl bg-brand-50 p-6"><BookOpenCheck className="size-6 text-brand-700" /><p className="mt-3 text-base font-semibold text-slate-800">{completed.length ? "오늘의 복습은 여유로워요." : "첫 주제를 함께 시작해 볼까요?"}</p><p className="mt-2 text-sm leading-6 text-slate-600">{completed.length ? "배운 내용을 실무 연습에 적용해 보세요." : "글을 읽고 학습 완료를 누르면 복습할 때를 알려드려요."}</p><Link href={completed.length ? "/practice" : "/roadmap"} className="mt-3 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-brand-800">{completed.length ? "실무 연습실로" : "첫 주제 고르기"}<ArrowRight className="size-4"/></Link></div>}
         </Card>
 
-        <Card className="p-5 sm:p-6"><div className="mb-5 flex items-center gap-2"><Layers3 className="size-4 text-blue-700" /><h3 className="text-sm font-bold text-slate-900">분야별 학습 현황</h3></div><div className="grid gap-3 sm:grid-cols-2">{domains.map((domain) => {
+        <Card className="p-5 sm:p-6"><div className="mb-5 flex items-center gap-2"><Layers3 className="size-4 text-brand-700" /><h3 className="text-sm font-bold text-slate-900">분야별 학습 현황</h3></div><div className="grid gap-x-6 sm:grid-cols-2">{domains.map((domain) => {
           const done = topics.filter((topic) => topic.domain_id === domain.id && completedIds.has(topic.id)).length;
           const percent = domain.topicCount ? Math.round(done / domain.topicCount * 100) : 0;
-          return <Link key={domain.id} href={`/roadmap/${domain.slug}`} className="rounded-xl border border-slate-200 bg-slate-50 p-4 transition-colors hover:border-blue-300 hover:bg-blue-50"><div className="mb-3 flex items-start justify-between gap-2"><span className="text-xs font-bold leading-5 text-slate-800">{domain.title}</span><span className="text-[11px] tabular-nums text-blue-700">{done}/{domain.topicCount}</span></div><Progress value={percent} /><span className="mt-2 block text-right text-[10px] text-slate-500">{percent}%</span></Link>;
+          return <Link key={domain.id} href={`/roadmap/${domain.slug}`} className="border-b border-slate-100 px-1 py-4 transition-colors hover:bg-brand-50"><div className="mb-3 flex items-start justify-between gap-2"><span className="text-xs font-bold leading-5 text-slate-800">{domain.title}</span><span className="text-[11px] tabular-nums text-brand-700">{done}/{domain.topicCount}</span></div><Progress value={percent} /></Link>;
         })}</div></Card>
       </section>
 

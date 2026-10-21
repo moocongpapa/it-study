@@ -1,11 +1,31 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+@theme {
+  --color-brand-50: #f0f7f4;
+  --color-brand-100: #e2efea;
+  --color-brand-200: #bdd8cc;
+  --color-brand-600: #237461;
+  --color-brand-700: #176451;
+  --color-brand-800: #174e42;
+  --color-brand-900: #143d35;
+  --color-slate-50: #f7f8f5;
+  --color-slate-100: #eff2ee;
+  --color-slate-200: #dfe5df;
+  --color-slate-300: #c4cec6;
+  --color-slate-400: #82928a;
+  --color-slate-500: #64746c;
+  --color-slate-600: #4e6058;
+  --color-slate-700: #384d44;
+  --color-slate-800: #263c33;
+  --color-slate-900: #182d25;
+}
+
 :root {
   color-scheme: light;
-  background: #fafafa;
-  color: #0f172a;
-  font-family: "Pretendard", "Inter", "Noto Sans KR", ui-sans-serif, system-ui, sans-serif;
+  background: #f7f8f5;
+  color: #182d25;
+  font-family: "Pretendard", "Noto Sans KR", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
 }
 
 * { box-sizing: border-box; }
@@ -21,7 +41,16 @@ body {
   padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 button { cursor: pointer; }
-::selection { background: #bfdbfe; color: #0f172a; }
+button:disabled { cursor: default; }
+::selection { background: #cfe6da; color: #143d35; }
+:where(a, button, summary, input, textarea, select):focus-visible { outline: 2px solid #237461; outline-offset: 3px; }
+:where(h1, h2, h3) { word-break: keep-all; text-wrap: pretty; }
+.skip-link { position: fixed; left: 1rem; top: 1rem; z-index: 100; transform: translateY(-200%); border-radius: .5rem; background: #143d35; color: white; padding: .75rem 1rem; }
+.skip-link:focus { transform: translateY(0); }
+.page-container { width: 100%; max-width: 1280px; margin-inline: auto; padding: 28px 32px 48px; }
+.page-title { font-size: clamp(1.5rem, 2.4vw, 2rem); font-weight: 700; line-height: 1.4; letter-spacing: -.035em; color: #182d25; }
+.field-control { height: 44px; min-width: 0; border: 1px solid #c4cec6; border-radius: .5rem; background: white; padding-inline: .75rem; font-size: .8125rem; color: #384d44; }
+@media (max-width: 639px) { .page-container { padding: 22px 16px 36px; } .field-control { font-size: 1rem; } }
 
 .sheet-viewport {
   height: 100dvh;
@@ -33,10 +62,10 @@ button { cursor: pointer; }
 
 /* Reading uses one scroll area; only the compact toolbar and stage tabs stay put. */
 .reader-article {
-  --tw-prose-body: #334155;
-  --tw-prose-headings: #0f172a;
-  --tw-prose-bold: #0f172a;
-  --tw-prose-quotes: #334155;
+  --tw-prose-body: #384d44;
+  --tw-prose-headings: #182d25;
+  --tw-prose-bold: #182d25;
+  --tw-prose-quotes: #384d44;
   font-size: 1rem;
   line-height: 1.85;
   overflow-wrap: anywhere;
@@ -61,7 +90,6 @@ button { cursor: pointer; }
 ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
 kbd {
-  display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 6px;
@@ -121,8 +149,8 @@ kbd {
   color: #1d4ed8;
 }
 .reader-prose :where(blockquote) {
-  border-left: 3px solid #2563eb;
-  background: #eff6ff;
+  border-left: 2px solid #237461;
+  background: #f0f7f4;
   border-radius: 0 10px 10px 0;
   padding: 0.75rem 1rem;
   margin: 1.25rem 0;

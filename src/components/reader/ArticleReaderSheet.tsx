@@ -90,9 +90,9 @@ export function ArticleReaderSheet({ open, onOpenChange, topic, status, prerequi
   const isLocked = missing.length > 0;
 
   return <Sheet open={open} onOpenChange={onOpenChange}>
-    <SheetContent className="max-w-[720px]" showCloseButton={false}>
+    <SheetContent className="max-w-[820px]" showCloseButton={false}>
       {topic ? <>
-        <header data-testid="reader-toolbar" className="flex min-h-14 shrink-0 items-center gap-1 border-b border-slate-200 px-3">
+        <header data-testid="reader-toolbar" className="flex min-h-12 shrink-0 items-center gap-1 border-b border-slate-200 px-3">
           <SheetTitle className="sr-only">{topic.title}</SheetTitle>
           <SheetDescription className="sr-only">4단계로 읽고 퀴즈로 확인하는 학습 글. {topic.summary}</SheetDescription>
           <span aria-hidden="true" className="min-w-0 flex-1 truncate pl-1 text-sm font-semibold text-slate-800">{topic.title}</span>
@@ -102,20 +102,20 @@ export function ArticleReaderSheet({ open, onOpenChange, topic, status, prerequi
         </header>
 
         <Tabs value={level} onValueChange={changeLevel} className="flex min-h-0 flex-1 flex-col">
-          <TabsList ref={tabsRef} aria-label="학습 단계" className="grid shrink-0 grid-cols-4 gap-0 rounded-none border-b border-slate-200 bg-white px-2 py-1">
-            {levels.map((item) => <TabsTrigger key={item.value} value={item.value} data-level={item.value} className="flex min-h-11 min-w-0 items-center justify-center gap-1 rounded-md px-1 py-2 text-[13px] font-medium data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 data-[state=active]:shadow-none"><span className="text-[10px] opacity-70">{item.value}</span>{item.short}</TabsTrigger>)}
+          <TabsList ref={tabsRef} aria-label="학습 단계" className="grid shrink-0 grid-cols-4 gap-0 rounded-none border-b border-slate-200 bg-white px-3 py-0">
+            {levels.map((item) => <TabsTrigger key={item.value} value={item.value} data-level={item.value} className="flex min-h-11 min-w-0 items-center justify-center gap-1 rounded-none border-b-2 border-transparent px-1 py-2 text-[13px] font-medium data-[state=active]:border-brand-700 data-[state=active]:bg-white data-[state=active]:text-brand-800 data-[state=active]:shadow-none"><span className="text-[10px] opacity-70">{item.value}</span>{item.short}</TabsTrigger>)}
           </TabsList>
 
-          <div ref={scrollRef} data-testid="reader-scroll" className="min-h-0 flex-1 overflow-y-auto overscroll-contain bg-[#fffefa] px-4 pb-6 pt-3 [overflow-anchor:none] sm:px-8 sm:pt-4">
+          <div ref={scrollRef} data-testid="reader-scroll" className="min-h-0 flex-1 overflow-y-auto overscroll-contain bg-[#fefefb] px-5 pb-8 pt-3 [overflow-anchor:none] sm:px-12 sm:pt-4">
             <div className="mb-4 flex flex-wrap items-start gap-2">
-            <details className="group min-w-0 flex-1 rounded-lg border border-slate-200 bg-slate-50 text-xs text-slate-600 open:basis-full">
-              <summary className="flex min-h-11 cursor-pointer list-none items-center gap-1.5 rounded-lg px-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 [&::-webkit-details-marker]:hidden"><BookOpen className="size-3.5 shrink-0" /><span className="flex-1 whitespace-nowrap">수업 안내</span><ChevronDown className="size-3.5 shrink-0 transition-transform group-open:rotate-180" /></summary>
+            <details className="group min-w-0 flex-1 rounded-lg text-xs text-slate-600 open:basis-full open:bg-slate-50">
+              <summary className="flex min-h-11 cursor-pointer list-none items-center gap-1.5 rounded-lg px-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 [&::-webkit-details-marker]:hidden"><BookOpen className="size-3.5 shrink-0" /><span className="flex-1 whitespace-nowrap">수업 안내</span><ChevronDown className="size-3.5 shrink-0 transition-transform group-open:rotate-180" /></summary>
               <div className="border-t border-slate-200 px-3 pb-3 pt-2 leading-6">
                 <p className="mb-2 inline-flex items-center gap-1 text-slate-500"><Clock3 className="size-3.5"/>전체 학습 약 {topic.estimated_minutes}분{isCompleted ? " · 학습 완료" : ""}</p>
                 <p>처음이라면 그림 수업부터 시작해요. 한 번에 다 읽지 않아도 괜찮아요. {active.description}</p>
                 {prerequisites.length ? <>
                   <p className="mt-2 font-medium">먼저 알면 좋은 개념</p>
-                  <ul className="mt-1 space-y-1">{prerequisites.map((item) => <li key={item.id}><button type="button" onClick={() => onNext(item)} className="flex min-h-11 w-full items-center gap-2 rounded px-2 text-left hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"><span className={completedIds.has(item.id) ? "text-emerald-700" : "text-slate-400"}>{completedIds.has(item.id) ? "✓" : "○"}</span><span className="flex-1">{item.title}</span><ArrowRight className="size-3.5 shrink-0" /></button></li>)}</ul>
+                  <ul className="mt-1 space-y-1">{prerequisites.map((item) => <li key={item.id}><button type="button" onClick={() => onNext(item)} className="flex min-h-11 w-full items-center gap-2 rounded px-2 text-left hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600"><span className={completedIds.has(item.id) ? "text-emerald-700" : "text-slate-400"}>{completedIds.has(item.id) ? "✓" : "○"}</span><span className="flex-1">{item.title}</span><ArrowRight className="size-3.5 shrink-0" /></button></li>)}</ul>
                   {isLocked ? <p className="mt-2 text-amber-800">읽기는 자유롭게 할 수 있습니다. 퀴즈 제출은 먼저 알면 좋은 개념 {missing.length}개를 완료한 뒤 열립니다.</p> : null}
                 </> : null}
               </div>
@@ -135,7 +135,7 @@ export function ArticleReaderSheet({ open, onOpenChange, topic, status, prerequi
 
             {selectedText ? <div className="mt-5 rounded-xl border border-blue-200 bg-blue-50 p-3"><p className="line-clamp-2 text-xs leading-6 text-slate-600">“{selectedText}”</p><Button className="mt-2 h-11 gap-1.5" size="sm" variant="secondary" onClick={() => setTutorOpen(true)}><Bot className="size-4" />이 문장 질문하기</Button></div> : null}
 
-            <div ref={quizRef} tabIndex={-1} aria-label="퀴즈 영역" className="scroll-mt-3 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
+            <div ref={quizRef} tabIndex={-1} aria-label="퀴즈 영역" className="scroll-mt-3 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-brand-600">
               <QuizSession key={`${topic.id}:${level}`} topic={topic} level={Number(level) as 1 | 2 | 3 | 4} locked={isLocked} isDemo={isDemo} requiresLogin={!isDemo && usesBrowserStorage} onAvailability={setQuizBacked} onProgressUpdate={(progress) => onQuizProgress(topic, progress)} />
             </div>
 

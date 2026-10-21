@@ -1,9 +1,9 @@
 "use client";
 
-import { useCallback, useMemo, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { ArrowRight, Check, ChevronRight, Clock3, SearchX } from "lucide-react";
+import { ArrowRight, BookOpen, BrainCircuit, Check, ChevronRight, ClipboardList, Clock3, Search, SearchX, X } from "lucide-react";
 import { ArticleReaderSheet } from "@/components/reader/ArticleReaderSheet";
 import { DEMO_STORAGE_KEY, useRoadmapFilters } from "@/components/layout/DashboardShell";
 import { CURATED_TRACKS } from "@/lib/curated-tracks";
@@ -11,6 +11,8 @@ import { MilestoneCelebrationModal } from "@/components/common/MilestoneCelebrat
 import { DEMO_LEARNING_KEY, getDemoProgressRows, setBrowserTopicCompletion } from "@/lib/demo-learning";
 import { buildTopicLearningStates } from "@/lib/learning-state";
 import { warmArticle } from "@/lib/article-resource";
+import { DomainIcon } from "@/components/layout/DomainIcon";
+import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { Difficulty, Domain, Topic, TopicPrerequisite, UserNodeProgress, TopicProgressResult } from "@/types/roadmap";
@@ -55,6 +57,20 @@ export function TopicList({ domain, allDomains, allTopics, allPrerequisites, ini
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { query, difficulty, setQuery, setDifficulty, selectedTrack, setSelectedTrack } = useRoadmapFilters();
+  const searchRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    function onKey(event: KeyboardEvent) {
+      const target = event.target as HTMLElement;
+      if (target.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName) || document.querySelector('[role="dialog"]')) return;
+      if (event.key === "/" || ((event.metaKey || event.ctrlKey) && event.key === "k")) { event.preventDefault(); searchRef.current?.focus(); }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+  function chooseTrack(id: string) {
+    setSelectedTrack(id); setQuery(""); setDifficulty("all");
+    if (domain) router.push("/roadmap");
+  }
   const [localProgress, setLocalProgress] = useState<UserNodeProgress[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
@@ -98,7 +114,7 @@ export function TopicList({ domain, allDomains, allTopics, allPrerequisites, ini
   const selectedTopic = allTopics.find((topic) => topic.id === activeSelectedId) ?? null;
   const selectedStatus = learningStates.get(activeSelectedId ?? "")?.status ?? "available";
   const completedIds = new Set(progress.filter((item) => item.is_completed).map((item) => item.topic_id));
-  const totalMinutes = allTopics.reduce((sum, topic) => sum + (topic.estimated_minutes ?? 0), 0);
+
   const nextTopic = selectedTopic
     ? allPrerequisites.filter((edge) => edge.from_topic_id === selectedTopic.id)
         .map((edge) => allTopics.find((topic) => topic.id === edge.to_topic_id))
@@ -157,65 +173,49 @@ export function TopicList({ domain, allDomains, allTopics, allPrerequisites, ini
   }
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-4 sm:px-6 sm:py-6">
-      {!domain && selectedTrack === "all" ? (
-        <section aria-label="학습 안내" className="mb-5 rounded-xl border border-slate-200 bg-white p-5 sm:p-6">
-          <h2 className="text-lg font-semibold leading-snug tracking-tight text-slate-900 sm:text-xl">여기 있는 주제를 모두 익히면,<br className="sm:hidden" /> 비전공자도 전공자 수준의 IT 지식을 갖출 수 있어요</h2>
-          <p className="mt-2 text-sm leading-6 text-slate-600">꼭 필요한 개념만 추려 쉬운 비유부터 실무 판단까지 한 흐름으로 담았어요.</p>
-          <ul className="mt-3 grid gap-1.5 text-sm leading-6 text-slate-600 sm:grid-cols-2">
-            <li><strong className="font-semibold text-slate-900">비전공자</strong> · 기초부터 순서대로, 전공 지식의 뼈대를 세워요</li>
-            <li><strong className="font-semibold text-slate-900">전공자</strong> · 흩어진 지식을 한눈에 정리하고 빈틈을 점검해요</li>
-          </ul>
-          <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-slate-100 pt-4 text-xs text-slate-500">
-            <span><strong className="text-sm font-semibold text-slate-900">{allTopics.length}</strong>개 주제</span>
-            <span><strong className="text-sm font-semibold text-slate-900">{allDomains.length}</strong>개 분야</span>
-            <span>약 <strong className="text-sm font-semibold text-slate-900">{Math.round(totalMinutes / 60)}</strong>시간</span>
-            <span className="text-emerald-700"><strong className="text-sm font-semibold">{completedIds.size}</strong>개 완료</span>
-            <Link href="/practice" className="ml-auto inline-flex items-center gap-1 rounded font-medium text-teal-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600">실무 연습실 <ArrowRight className="size-3.5" /></Link>
-          </div>
+    <div className="page-container">
+      {!domain ? <>
+        <section aria-label="학습 안내" className="mb-6 flex items-end justify-between gap-4">
+          <div><h2 className="page-title">오늘, 하나만 알아가도 좋아요.</h2><p className="mt-2 max-w-xl text-sm leading-7 text-slate-600">쉬운 비유로 이해하고, 직접 해보며 내 지식으로 만들어요.</p></div>
+          <Link href="/practice" className="hidden min-h-11 shrink-0 items-center gap-2 text-sm font-medium text-brand-800 hover:underline sm:inline-flex">실무 연습실<ArrowRight className="size-4"/></Link>
         </section>
-      ) : (
-        <p className="mb-4 text-sm leading-6 text-slate-500">
-          {currentTrack && currentTrack.id !== "all" ? currentTrack.description : domain?.description}
-          {domain ? <span className="ml-1 text-slate-400">· {allTopics.filter((topic) => topic.domain_id === domain.id).length}개 주제</span> : null}
-        </p>
-      )}
-      <div className="space-y-6" aria-label="학습 주제 목록">
-        {groups.map((group) => (
-          <section key={group.domain.id} aria-label={group.domain.title}>
-            {!domain ? (
-              <div className="mb-2 flex items-center justify-between gap-3 px-1">
-                <h2 className="min-w-0 text-sm font-semibold text-slate-900">{group.domain.title}</h2>
-                {group.domain.slug ? <Link href={"/roadmap/" + group.domain.slug} onClick={() => { setQuery(""); setDifficulty("all"); setSelectedTrack("all"); }} className="inline-flex shrink-0 items-center gap-0.5 rounded text-xs text-slate-500 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500" aria-label={group.domain.title + " 전체 보기"}>전체 보기 <ChevronRight className="size-3" /></Link> : <span className="shrink-0 text-xs text-slate-500">추천 읽기 순서</span>}
-              </div>
-            ) : null}
-            <ul className="divide-y divide-slate-100 overflow-hidden rounded-xl border border-slate-200 bg-white">
-              {group.topics.map((topic) => (
-                <li key={topic.id}>
-                  <button type="button" onPointerEnter={() => warmArticle(topic.slug)} onFocus={() => warmArticle(topic.slug)} onPointerDown={() => warmArticle(topic.slug)} onClick={() => openTopic(topic.id)} aria-label={topic.title + (completedIds.has(topic.id) ? " 학습하기 · 학습 완료" : " 학습하기")} className="group flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-slate-50 focus-visible:relative focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 sm:px-5">
-                    {!group.domain.slug && currentTrack ? <span aria-label="추천 순서" className="self-start pt-0.5 text-sm font-semibold tabular-nums text-teal-700">{String(currentTrack.topicSlugs.indexOf(topic.slug) + 1).padStart(2, "0")}</span> : null}
-                    <span className="min-w-0 flex-1">
-                      <span className="flex items-start gap-2 text-[15px] font-semibold leading-6 text-slate-900 group-hover:text-blue-700">{completedIds.has(topic.id) ? <Check aria-hidden="true" className="mt-1 size-4 shrink-0 text-emerald-700"/> : null}<span>{topic.title}</span></span>
-                      <span className="mt-0.5 block truncate text-xs leading-5 text-slate-500">{topic.summary}</span>
-                      <span className="mt-2 flex items-center gap-2">
-                        <Badge className={difficulties[topic.difficulty].className + " px-1.5 py-0 text-[10px] font-medium"}>{difficulties[topic.difficulty].label}</Badge>
-                        <span className="inline-flex items-center gap-1 text-[11px] text-slate-500"><Clock3 className="size-3" />{topic.estimated_minutes}분</span>
-                      </span>
-                    </span>
-                    <span className="inline-flex shrink-0 items-center gap-1 text-xs font-medium text-slate-400 group-hover:text-blue-700" aria-hidden="true"><ArrowRight className="size-4" /></span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </section>
-        ))}
-        {!groups.length ? (
-          <div className="rounded-xl border border-dashed border-slate-200 bg-white px-4 py-10 text-center">
-            <SearchX className="mx-auto size-6 text-slate-400" />
-            <p role="status" className="mt-3 text-sm font-medium text-slate-700">조건에 맞는 주제가 없습니다.</p>
-            <Button variant="ghost" size="sm" onClick={() => { setQuery(""); setDifficulty("all"); setSelectedTrack("all"); }} className="mt-2 text-blue-700">검색·필터 초기화</Button>
-          </div>
-        ) : null}
+        <section aria-label="추천 학습 과정" className="mb-7">
+          <h3 className="mb-3 text-sm font-semibold text-slate-800">처음이라면, 이 순서로</h3>
+          <div className="grid grid-cols-3 gap-2 sm:gap-3">{[
+            { id: "beginner-starter", label: "IT 기초부터", short: "IT 기초", hint: "컴퓨터의 동작 원리부터 차근차근", icon: BookOpen },
+            { id: "ai-starter", label: "AI 업무에 활용하기", short: "AI 활용", hint: "AI를 이해하고 안전하게 활용하기", icon: BrainCircuit },
+            { id: "project-delivery", label: "프로젝트 이끌기", short: "프로젝트", hint: "목표와 계획부터 출시까지", icon: ClipboardList },
+          ].map(({ id, label, short, hint, icon: Icon }) => <button key={id} type="button" aria-label={label} aria-pressed={selectedTrack === id} onClick={() => chooseTrack(selectedTrack === id ? "all" : id)} className={cn("flex min-w-0 items-center gap-3 rounded-xl border px-3 py-3 text-left transition-colors sm:p-4", selectedTrack === id ? "border-brand-600 bg-brand-50" : "border-slate-200 bg-white hover:border-brand-200")}>
+            <Icon className="hidden size-5 shrink-0 text-brand-800 min-[360px]:block sm:size-6"/><span className="min-w-0 flex-1"><span className="block whitespace-nowrap text-xs font-semibold leading-5 text-slate-900 sm:text-sm"><span className="sm:hidden">{short}</span><span className="hidden sm:inline">{label}</span></span><span className="mt-1 hidden text-xs leading-5 text-slate-500 xl:block">{hint}</span></span><ChevronRight className="hidden size-4 shrink-0 text-brand-700 sm:block"/>
+          </button>)}</div>
+        </section>
+      </> : <div className="mb-6"><div className="mb-2 flex items-center gap-3"><DomainIcon name={domain.icon_name} className="size-6 shrink-0 text-brand-700"/><h2 className="page-title">{domain.title}</h2></div><p className="max-w-2xl text-sm leading-7 text-slate-600">{domain.description}</p></div>}
+
+      <section aria-label="주제 검색과 필터" className="mb-5">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2"><h2 className="text-lg font-semibold tracking-tight">{selectedTrack === "all" ? "모든 주제" : currentTrack?.title}</h2>{selectedTrack !== "all" || query || difficulty !== "all" ? <Button variant="ghost" size="sm" onClick={() => { setQuery(""); setDifficulty("all"); setSelectedTrack("all"); }}><X className="size-3.5"/>조건 초기화</Button> : null}</div>
+        {selectedTrack !== "all" ? <p className="mb-3 text-sm leading-6 text-slate-600">{currentTrack?.description}</p> : null}
+        <div className="flex flex-wrap items-center gap-2">
+          <label className="flex h-11 w-full min-w-0 items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 focus-within:border-brand-600 focus-within:ring-1 focus-within:ring-brand-600 sm:w-auto sm:flex-1"><Search className="size-4 shrink-0 text-slate-500"/><input ref={searchRef} value={query} onChange={(event) => setQuery(event.target.value)} placeholder="주제 또는 키워드 검색" aria-label="토픽 검색" className="w-full min-w-0 bg-transparent text-base text-slate-900 outline-none placeholder:text-slate-500 focus-visible:outline-none sm:text-sm"/>{query ? <button type="button" onClick={() => { setQuery(""); searchRef.current?.focus(); }} aria-label="검색어 지우기" className="-mr-2 grid size-11 shrink-0 place-items-center rounded text-slate-500"><X className="size-4"/></button> : <kbd className="hidden sm:inline-flex">/</kbd>}</label>
+          <select aria-label="분야 선택" value={domain?.slug ?? "all"} onChange={(event) => { setSelectedTrack("all"); router.push(event.target.value === "all" ? "/roadmap" : `/roadmap/${event.target.value}`); }} className="field-control w-0 flex-1 sm:w-40 sm:flex-none"><option value="all">분야</option>{allDomains.map((item) => <option key={item.id} value={item.slug}>{item.title}</option>)}</select>
+          <select aria-label="학습 과정 필터" value={selectedTrack} onChange={(event) => chooseTrack(event.target.value)} className="field-control w-0 flex-1 sm:w-40 sm:flex-none">{CURATED_TRACKS.map((track) => <option key={track.id} value={track.id}>{track.id === "all" ? "과정" : track.title}</option>)}</select>
+          <select aria-label="난이도 필터" value={difficulty} onChange={(event) => setDifficulty(event.target.value as Difficulty | "all")} className="field-control w-0 flex-1 sm:w-28 sm:flex-none"><option value="all">난이도</option><option value="beginner">기초</option><option value="intermediate">보통</option><option value="advanced">심화</option><option value="expert">전문</option></select>
+        </div>
+      </section>
+      <div className={cn("grid items-start gap-5", !domain && selectedTrack === "all" && "xl:grid-cols-2")} aria-label="학습 주제 목록">
+        {groups.map((group) => <section key={group.domain.id} aria-label={group.domain.title} className="min-w-0 overflow-hidden rounded-xl border border-slate-200 bg-white">
+          {!domain ? <div className="flex min-h-14 items-center justify-between gap-2 border-b border-slate-200 px-4 py-3">
+            <h3 className="flex min-w-0 items-center gap-2 text-sm font-semibold leading-6 text-slate-900"><DomainIcon name={allDomains.find((item) => item.id === group.domain.id)?.icon_name} className="size-5 shrink-0 text-brand-700"/>{group.domain.title}</h3>
+            {group.domain.slug ? <Link href={"/roadmap/" + group.domain.slug} onClick={() => { setQuery(""); setDifficulty("all"); setSelectedTrack("all"); }} className="-my-2 inline-flex min-h-11 shrink-0 items-center gap-1 rounded px-1 text-xs text-slate-600 hover:text-brand-700" aria-label={group.domain.title + " 전체 보기"}><span className="hidden sm:inline">전체 보기</span><ArrowRight className="size-4"/></Link> : <span className="shrink-0 text-xs text-brand-700">읽기 순서</span>}
+          </div> : null}
+          <ul className="divide-y divide-slate-100">{group.topics.map((topic, index) => <li key={topic.id}>
+            <button type="button" onPointerEnter={() => warmArticle(topic.slug)} onFocus={() => warmArticle(topic.slug)} onPointerDown={() => warmArticle(topic.slug)} onClick={() => openTopic(topic.id)} aria-label={topic.title + (completedIds.has(topic.id) ? " 학습하기 · 학습 완료" : " 학습하기")} className="group flex w-full items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-brand-50 focus-visible:relative focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-600">
+              <span className="mt-1 w-5 shrink-0 text-xs tabular-nums text-slate-500" aria-label={!group.domain.slug ? "추천 순서" : undefined}>{completedIds.has(topic.id) ? <Check aria-hidden="true" className="size-4 text-brand-700"/> : String(!group.domain.slug && currentTrack ? currentTrack.topicSlugs.indexOf(topic.slug) + 1 : index + 1).padStart(2, "0")}</span>
+              <span className="min-w-0 flex-1 sm:grid sm:grid-cols-[minmax(0,1fr)_auto] sm:gap-x-3"><span className="block text-[15px] font-semibold leading-6 text-slate-900 group-hover:text-brand-800">{topic.title}</span><span className="mt-0.5 block truncate text-xs leading-5 text-slate-500 sm:col-start-1">{topic.summary}</span><span className="mt-1.5 flex items-center gap-2 sm:col-start-2 sm:row-span-2 sm:row-start-1 sm:mt-0 sm:flex-col sm:items-end sm:justify-center sm:gap-1"><Badge className={difficulties[topic.difficulty].className + " px-1.5 py-0 text-[11px] font-medium"}>{difficulties[topic.difficulty].label}</Badge><span className="inline-flex items-center gap-1 text-[11px] text-slate-500"><Clock3 className="size-3"/>{topic.estimated_minutes}분</span>{completedIds.has(topic.id) ? <span className="text-[11px] text-brand-700">학습 완료</span> : null}</span></span>
+              <ChevronRight aria-hidden="true" className="mt-1 size-4 shrink-0 text-slate-400 group-hover:text-brand-700"/>
+            </button>
+          </li>)}</ul>
+        </section>)}
+        {!groups.length ? <div className="col-span-full rounded-xl border border-dashed border-slate-300 bg-white px-4 py-12 text-center"><SearchX className="mx-auto size-7 text-slate-500"/><p role="status" className="mt-3 text-base font-semibold text-slate-800">조건에 맞는 주제가 없어요.</p><p className="mt-2 text-sm text-slate-600">검색어를 짧게 바꾸거나 다른 분야를 골라 보세요.</p><Button variant="secondary" onClick={() => { setQuery(""); setDifficulty("all"); setSelectedTrack("all"); }} className="mt-4">검색·필터 초기화</Button></div> : null}
       </div>
 
       <ArticleReaderSheet
