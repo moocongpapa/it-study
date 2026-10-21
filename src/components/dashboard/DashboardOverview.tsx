@@ -3,7 +3,7 @@
 import { useMemo, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowRight, BookOpenCheck, CalendarClock, CheckCircle2, Flame, Layers3, RotateCcw } from "lucide-react";
+import { ArrowRight, BookOpenCheck, CheckCircle2, Layers3, RotateCcw } from "lucide-react";
 import { reviewTopic } from "@/lib/actions/progress";
 import { DEMO_COMPLETED_KEY, DEMO_LEARNING_KEY, DEMO_PROGRESS_EVENT, getDemoProgressRows, readDemoLearning, reviewDemoTopic } from "@/lib/demo-learning";
 import { Card } from "@/components/ui/card";
@@ -96,22 +96,22 @@ export function DashboardOverview({ domains, topics, progress: initialProgress, 
   }
 
   return <div className="mx-auto max-w-6xl px-4 py-5 md:px-6 md:py-7">
-    {usesBrowserStorage ? <p className="mb-4 text-xs leading-6 text-slate-500">현재 브라우저에 저장한 학습 기록이에요. 로그인 후에는 계정에 저장한 기록을 보여드려요.</p> : null}
+    {usesBrowserStorage ? <p className="mb-3 text-xs text-slate-400">이 브라우저에 저장된 기록이에요. 로그인하면 계정에 보관돼요.</p> : null}
     <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
-      <div><h2 className="text-xl font-semibold tracking-tight text-slate-900 md:text-2xl">오늘의 학습 흐름</h2><p className="mt-1 text-sm leading-7 text-slate-500">이해한 개념을 다시 꺼내 보고, 다음 연결을 준비하세요.</p></div>
+      <div><h2 className="text-xl font-semibold tracking-tight text-slate-900 md:text-2xl">내 학습</h2></div>
       <Link href="/roadmap" className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-xs font-semibold text-slate-800 hover:bg-slate-50">주제 둘러보기 <ArrowRight className="size-4" /></Link>
     </div>
 
     <div className="mb-5 grid grid-cols-3 gap-2 sm:gap-3">
-      <Card className="flex min-w-0 items-center gap-3 p-3 sm:p-5"><span className="hidden size-11 shrink-0 place-items-center sm:grid rounded-xl bg-emerald-50 text-emerald-700"><BookOpenCheck className="size-5" /></span><div><p className="text-2xl font-bold text-slate-900">{completed.length}<span className="ml-1 text-sm font-medium text-slate-500">/ {topics.length}</span></p><p className="text-[11px] leading-5 text-slate-500">완료한 주제 · {percentage}%</p></div></Card>
-      <Card className="flex min-w-0 items-center gap-3 p-3 sm:p-5"><span className="hidden size-11 shrink-0 place-items-center sm:grid rounded-xl bg-blue-50 text-blue-700"><CalendarClock className="size-5" /></span><div><p className="text-2xl font-bold text-slate-900">{due.length}</p><p className="text-[11px] leading-5 text-slate-500">오늘 복습</p></div></Card>
-      <Card className="flex min-w-0 items-center gap-3 p-3 sm:p-5"><span className="hidden size-11 shrink-0 place-items-center sm:grid rounded-xl bg-amber-50 text-amber-700"><Flame className="size-5" /></span><div><p className="text-2xl font-bold text-slate-900">{streak}<span className="ml-1 text-sm font-medium text-slate-500">일</span></p><p className="text-[11px] leading-5 text-slate-500">연속 학습</p></div></Card>
+      <Card className="flex min-w-0 items-center gap-3 p-3 sm:p-5"><div><p className="text-2xl font-bold text-slate-900">{completed.length}<span className="ml-1 text-sm font-medium text-slate-500">/ {topics.length}</span></p><p className="text-[11px] leading-5 text-slate-500">완료한 주제 · {percentage}%</p></div></Card>
+      <Card className="flex min-w-0 items-center gap-3 p-3 sm:p-5"><div><p className="text-2xl font-bold text-slate-900">{due.length}</p><p className="text-[11px] leading-5 text-slate-500">오늘 복습</p></div></Card>
+      <Card className="flex min-w-0 items-center gap-3 p-3 sm:p-5"><div><p className="text-2xl font-bold text-slate-900">{streak}<span className="ml-1 text-sm font-medium text-slate-500">일</span></p><p className="text-[11px] leading-5 text-slate-500">연속 학습</p></div></Card>
     </div>
 
     <div className="grid gap-6 xl:grid-cols-[1.25fr_.75fr]">
       <section className="space-y-6">
         <Card className="p-5 sm:p-6">
-          <div className="mb-4 flex flex-wrap items-center gap-2"><RotateCcw className="size-4 text-blue-700" /><h3 className="text-sm font-bold text-slate-900">오늘 복습할 주제</h3><span className="ml-auto text-[11px] text-slate-500">1 → 3 → 7 → 14 → 30일</span></div>
+          <div className="mb-4 flex flex-wrap items-center gap-2"><RotateCcw className="size-4 text-blue-700" /><h3 className="text-sm font-bold text-slate-900">오늘 복습할 주제</h3></div>
           {error ? <p role="alert" className="mb-4 text-xs text-rose-700">{error}</p> : null}
           {due.length ? <div className="space-y-3">{due.map((item) => {
             const topic = byId.get(item.topic_id);

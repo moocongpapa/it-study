@@ -98,6 +98,7 @@ export function TopicList({ domain, allDomains, allTopics, allPrerequisites, ini
   const selectedTopic = allTopics.find((topic) => topic.id === activeSelectedId) ?? null;
   const selectedStatus = learningStates.get(activeSelectedId ?? "")?.status ?? "available";
   const completedIds = new Set(progress.filter((item) => item.is_completed).map((item) => item.topic_id));
+  const totalMinutes = allTopics.reduce((sum, topic) => sum + (topic.estimated_minutes ?? 0), 0);
   const nextTopic = selectedTopic
     ? allPrerequisites.filter((edge) => edge.from_topic_id === selectedTopic.id)
         .map((edge) => allTopics.find((topic) => topic.id === edge.to_topic_id))
@@ -157,13 +158,28 @@ export function TopicList({ domain, allDomains, allTopics, allPrerequisites, ini
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-4 sm:px-6 sm:py-6">
-      <p className="mb-4 text-sm leading-6 text-slate-500">
-        {currentTrack && currentTrack.id !== "all" ? currentTrack.description : domain?.description ?? "궁금한 분야의 주제를 골라 학습해 보세요."}
-      </p>
-      {!domain ? <Link href="/practice" className="mb-4 flex min-h-12 items-center justify-between gap-3 rounded-xl border border-teal-200 bg-teal-50 px-4 py-3 text-sm text-teal-900 hover:bg-teal-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600"><span><strong>실무 연습실</strong><span className="ml-2 text-teal-700">배운 내용을 작은 과제로 써보세요</span></span><ArrowRight className="size-4 shrink-0" /></Link> : null}
-      {isDemo && !domain ? (
-        <p role="status" className="mb-4 rounded-lg bg-blue-50 px-3 py-2 text-xs leading-5 text-blue-700">체험 화면이에요. 모든 그림 수업을 둘러볼 수 있고, 확인 퀴즈는 일부 샘플 주제에서 체험할 수 있어요.</p>
-      ) : null}
+      {!domain && selectedTrack === "all" ? (
+        <section aria-label="학습 안내" className="mb-5 rounded-xl border border-slate-200 bg-white p-5 sm:p-6">
+          <h2 className="text-lg font-semibold leading-snug tracking-tight text-slate-900 sm:text-xl">여기 있는 주제를 모두 익히면,<br className="sm:hidden" /> 비전공자도 전공자 수준의 IT 지식을 갖출 수 있어요</h2>
+          <p className="mt-2 text-sm leading-6 text-slate-600">꼭 필요한 개념만 추려 쉬운 비유부터 실무 판단까지 한 흐름으로 담았어요.</p>
+          <ul className="mt-3 grid gap-1.5 text-sm leading-6 text-slate-600 sm:grid-cols-2">
+            <li><strong className="font-semibold text-slate-900">비전공자</strong> · 기초부터 순서대로, 전공 지식의 뼈대를 세워요</li>
+            <li><strong className="font-semibold text-slate-900">전공자</strong> · 흩어진 지식을 한눈에 정리하고 빈틈을 점검해요</li>
+          </ul>
+          <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-slate-100 pt-4 text-xs text-slate-500">
+            <span><strong className="text-sm font-semibold text-slate-900">{allTopics.length}</strong>개 주제</span>
+            <span><strong className="text-sm font-semibold text-slate-900">{allDomains.length}</strong>개 분야</span>
+            <span>약 <strong className="text-sm font-semibold text-slate-900">{Math.round(totalMinutes / 60)}</strong>시간</span>
+            <span className="text-emerald-700"><strong className="text-sm font-semibold">{completedIds.size}</strong>개 완료</span>
+            <Link href="/practice" className="ml-auto inline-flex items-center gap-1 rounded font-medium text-teal-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600">실무 연습실 <ArrowRight className="size-3.5" /></Link>
+          </div>
+        </section>
+      ) : (
+        <p className="mb-4 text-sm leading-6 text-slate-500">
+          {currentTrack && currentTrack.id !== "all" ? currentTrack.description : domain?.description}
+          {domain ? <span className="ml-1 text-slate-400">· {allTopics.filter((topic) => topic.domain_id === domain.id).length}개 주제</span> : null}
+        </p>
+      )}
       <div className="space-y-6" aria-label="학습 주제 목록">
         {groups.map((group) => (
           <section key={group.domain.id} aria-label={group.domain.title}>
@@ -176,7 +192,7 @@ export function TopicList({ domain, allDomains, allTopics, allPrerequisites, ini
             <ul className="divide-y divide-slate-100 overflow-hidden rounded-xl border border-slate-200 bg-white">
               {group.topics.map((topic) => (
                 <li key={topic.id}>
-                  <button type="button" onPointerEnter={() => warmArticle(topic.slug)} onFocus={() => warmArticle(topic.slug)} onPointerDown={() => warmArticle(topic.slug)} onClick={() => openTopic(topic.id)} aria-label={topic.title + (completedIds.has(topic.id) ? " 학습하기 · 학습 완료" : " 학습하기")} className="group flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-slate-50 focus-visible:relative focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 sm:px-5">
+                  <button type="button" onPointerEnter={() => warmArticle(topic.slug)} onFocus={() => warmArticle(topic.slug)} onPointerDown={() => warmArticle(topic.slug)} onClick={() => openTopic(topic.id)} aria-label={topic.title + (completedIds.has(topic.id) ? " 학습하기 · 학습 완료" : " 학습하기")} className="group flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-slate-50 focus-visible:relative focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 sm:px-5">
                     {!group.domain.slug && currentTrack ? <span aria-label="추천 순서" className="self-start pt-0.5 text-sm font-semibold tabular-nums text-teal-700">{String(currentTrack.topicSlugs.indexOf(topic.slug) + 1).padStart(2, "0")}</span> : null}
                     <span className="min-w-0 flex-1">
                       <span className="flex items-start gap-2 text-[15px] font-semibold leading-6 text-slate-900 group-hover:text-blue-700">{completedIds.has(topic.id) ? <Check aria-hidden="true" className="mt-1 size-4 shrink-0 text-emerald-700"/> : null}<span>{topic.title}</span></span>
@@ -184,10 +200,9 @@ export function TopicList({ domain, allDomains, allTopics, allPrerequisites, ini
                       <span className="mt-2 flex items-center gap-2">
                         <Badge className={difficulties[topic.difficulty].className + " px-1.5 py-0 text-[10px] font-medium"}>{difficulties[topic.difficulty].label}</Badge>
                         <span className="inline-flex items-center gap-1 text-[11px] text-slate-500"><Clock3 className="size-3" />{topic.estimated_minutes}분</span>
-                        {completedIds.has(topic.id) ? <span className="text-[11px] font-medium text-emerald-700">학습 완료</span> : null}
                       </span>
                     </span>
-                    <span className="inline-flex shrink-0 items-center gap-1 text-xs font-medium text-slate-400 group-hover:text-blue-700" aria-hidden="true"><span className="hidden sm:inline">학습하기</span><ArrowRight className="size-4" /></span>
+                    <span className="inline-flex shrink-0 items-center gap-1 text-xs font-medium text-slate-400 group-hover:text-blue-700" aria-hidden="true"><ArrowRight className="size-4" /></span>
                   </button>
                 </li>
               ))}

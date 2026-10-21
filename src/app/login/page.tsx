@@ -3,7 +3,7 @@
 import { FormEvent, Suspense, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { ArrowLeft, GitBranch, Mail, Sparkles } from "lucide-react";
+import { ArrowLeft, GitBranch, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { isSupabaseConfigured } from "@/lib/env";
@@ -43,9 +43,8 @@ function LoginForm() {
   return (
     <Card className="w-full max-w-md border-blue-200 bg-white p-8 shadow-sm">
       <div className="mb-7 flex items-center gap-3"><span className="grid size-11 place-items-center rounded-xl bg-blue-600 text-white"><GitBranch className="size-5" /></span><span className="text-xl font-bold text-slate-900">IT Atlas</span></div>
-      <Sparkles className="mb-4 size-5 text-blue-700" />
-      <h1 className="text-2xl font-bold tracking-tight text-slate-900">학습의 다음 장으로</h1>
-      <p className="mt-2 text-sm leading-6 text-slate-500">이메일 링크로 로그인하면 완료한 개념과 다음 학습 경로가 저장됩니다.</p>
+      <h1 className="text-2xl font-bold tracking-tight text-slate-900">로그인하고 이어서 배우기</h1>
+      <p className="mt-2 text-sm leading-6 text-slate-500">비전공자는 전공자 수준까지, 전공자는 지식 정리까지. 학습 기록이 계정에 저장돼요.</p>
       {isSupabaseConfigured ? (
         <form onSubmit={submit} className="mt-7 space-y-4">
           <label className="block text-xs font-semibold text-slate-500" htmlFor="email">이메일 주소</label>
