@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { ArrowLeft, ArrowRight, Check, ChevronRight, CircleHelp, Eye, GraduationCap, Lightbulb, Pause, Play, Search, ShieldCheck, Sparkles, Wrench } from "lucide-react";
+import { useId, useState } from "react";
+import { ArrowRight, Check, CircleHelp, Eye, GraduationCap, Sparkles } from "lucide-react";
 import type { Lesson, LessonReference } from "@/lib/lesson-schema";
 import { AttentionLab, KanbanLab, NetworkLab, ScheduleLab } from "./AppliedLabs";
 import { BitsLab, DistributionLab, GateLab, GrowthLab, QueueLab, ThresholdLab, VectorLab } from "./SpecialLabs";
@@ -11,35 +11,12 @@ function Teacher({children}:{children:React.ReactNode}) {
   return <div className="mt-4 flex items-start gap-2.5 rounded-2xl bg-white/80 p-3 text-sm leading-7 text-slate-700"><span aria-hidden="true" className="mt-1 grid size-7 shrink-0 place-items-center rounded-full bg-amber-100 text-amber-900"><GraduationCap className="size-4"/></span><div>{children}</div></div>;
 }
 function Sequence({lesson}:{lesson:Lesson}) {
-  const [step,setStep]=useState(0),[playing,setPlaying]=useState(false),[reduced,setReduced]=useState(false);
-  useEffect(()=>{
-    if(!playing)return;
-    const timer=window.setTimeout(()=>{if(step===lesson.steps.length-1)setPlaying(false);else setStep(s=>s+1);},3200);
-    return ()=>window.clearTimeout(timer);
-  },[playing,step,lesson.steps.length]);
-  useEffect(()=>{
-    if(!playing)return;
-    const preference=window.matchMedia("(prefers-reduced-motion: reduce)");
-    const stop=(event:MediaQueryListEvent)=>{if(event.matches){setPlaying(false);setReduced(true);}};
-    preference.addEventListener("change",stop);
-    return ()=>preference.removeEventListener("change",stop);
-  },[playing]);
-  function play() {
-    if(playing){setPlaying(false);return;}
-    if(window.matchMedia("(prefers-reduced-motion: reduce)").matches){setReduced(true);return;}
-    setReduced(false);
-    if(step===lesson.steps.length-1)setStep(0);
-    setPlaying(true);
-  }
-  function go(next:number){setPlaying(false);setStep(next);}
-  return <div>
-    <div className="my-4 grid grid-cols-3 gap-2" aria-label="과정의 세 장면">{lesson.steps.map((item,i)=><button key={item.label} type="button" aria-pressed={step===i} aria-label={`${i+1}장면 ${item.label}`} onClick={()=>go(i)} className={`relative flex min-h-28 min-w-0 flex-col items-center justify-center gap-2 rounded-2xl border-2 px-2 py-3 text-center transition-colors ${step===i?"border-teal-600 bg-teal-50 text-teal-950":"border-white bg-white/70 text-slate-600"}`}><span aria-hidden="true" className={`grid size-9 place-items-center rounded-full text-base font-bold ${step===i?"bg-teal-700 text-white":"bg-slate-100 text-slate-500"}`}>{i+1}</span><span className="text-xs font-semibold leading-5 break-keep">{item.label}</span>{i<2?<ChevronRight aria-hidden="true" className="absolute -right-3 top-5 z-10 size-5 rounded-full bg-amber-50 text-teal-700"/>:null}</button>)}</div>
-    <svg aria-hidden="true" viewBox="0 0 320 24" className="mb-3 w-full"><path d="M53 12H267" stroke="#cbe4dd" strokeWidth="3" strokeLinecap="round"/>{[53,160,267].map(x=><circle key={x} cx={x} cy="12" r="5" fill="#cbe4dd"/>)}<circle cx="53" cy="12" r="8" fill="#0f766e" style={{transform:`translateX(${step*107}px)`,transition:"transform 500ms ease"}}/></svg>
-    <div className="lesson-scene relative overflow-hidden rounded-2xl border border-teal-100 bg-white p-4"><div aria-hidden="true" className="absolute inset-x-0 top-0 h-1 bg-teal-50"><div key={`${step}:${playing}`} className={playing?"lesson-scene-progress h-full bg-teal-600":"h-full bg-teal-300"} style={{width:playing?undefined:`${(step+1)/3*100}%`}}/></div><p className="mb-2 text-xs font-semibold text-teal-800">장면 {step+1} · {lesson.steps[step].label}</p><p role="status" className="min-h-14 text-sm leading-7 text-slate-800">{lesson.steps[step].body}</p></div>
-    <div className="mt-3 flex flex-wrap items-center gap-2"><button type="button" className={control} aria-pressed={playing} onClick={play}>{playing?<Pause className="size-4"/>:<Play className="size-4"/>}{playing?"일시정지":"모션으로 보기"}</button><button type="button" className={control} disabled={step===0} onClick={()=>go(step-1)} aria-label="이전 장면"><ArrowLeft className="size-4"/></button><button type="button" className={control} disabled={step===2} onClick={()=>go(step+1)} aria-label="다음 장면"><ArrowRight className="size-4"/></button><span className="text-xs tabular-nums text-slate-500">{step+1} / 3</span></div>
-    {reduced?<p role="status" className="mt-2 text-xs leading-6 text-slate-600">움직임 줄이기 설정이 켜져 있어요. 이전·다음 버튼으로 편하게 넘겨 보세요.</p>:null}
-    <Teacher>다음에 어떤 일이 생길지 먼저 예상해 볼까요? 언제든 멈추고 앞 장면으로 돌아갈 수 있어요.</Teacher>
-  </div>;
+  return <ol aria-label="작동 순서" className="space-y-4">
+    {lesson.steps.map((step, index) => <li key={step.label} className="flex items-start gap-3">
+      <span aria-hidden="true" className="mt-1 grid size-7 shrink-0 place-items-center rounded-full bg-teal-100 text-xs font-semibold text-teal-900">{index + 1}</span>
+      <div className="min-w-0"><h4 className="text-sm font-semibold text-slate-900">{step.label}</h4><p className="mt-1 text-sm leading-7 text-slate-700">{step.body}</p></div>
+    </li>)}
+  </ol>;
 }
 function ComparisonDrawing({slug,selected}:{slug:string;selected:number}) {
   if(slug==="processes-threads")return <svg viewBox="0 0 320 145" role="img" aria-label={selected===0?"분리된 두 주소 공간 안의 작업자":"하나의 주소 공간과 공유 자료 안에 있는 두 스레드"} className="my-3 w-full rounded-xl bg-white">{selected===0?[15,170].map((x,i)=><g key={x}><rect x={x} y="15" width="135" height="112" rx="12" fill="#e0f2fe" stroke="#7dd3fc"/><text x={x+67} y="40" textAnchor="middle" fontSize="12" fill="#075985">주소 공간 {i+1}</text><circle cx={x+67} cy="68" r="13" fill="#0f766e"/><rect x={x+29} y="92" width="77" height="19" rx="5" fill="#bae6fd"/><text x={x+67} y="105" textAnchor="middle" fontSize="10" fill="#075985">각자의 자료</text></g>):<><rect x="15" y="15" width="290" height="112" rx="12" fill="#e0f2fe" stroke="#7dd3fc"/><text x="160" y="38" textAnchor="middle" fontSize="12" fill="#075985">하나의 프로세스 주소 공간</text><circle cx="105" cy="65" r="13" fill="#0f766e"/><circle cx="215" cy="65" r="13" fill="#0f766e"/><rect x="60" y="90" width="200" height="22" rx="5" fill="#bae6fd"/><text x="160" y="105" textAnchor="middle" fontSize="11" fill="#075985">함께 쓰는 힙 · 각자의 스택</text></>}</svg>;
@@ -59,23 +36,33 @@ function Compare({lesson}:{lesson:Lesson}) {
 function Sorting({lesson}:{lesson:Lesson}) {
   const [index,setIndex]=useState(0),[choice,setChoice]=useState<number|null>(null);
   const item=lesson.items![index],correct=choice===item.bucket;
-  return <div><p className="text-xs font-medium text-teal-800">분류 카드 {index+1} / {lesson.items!.length}</p><div className="my-4 grid min-h-28 place-items-center rounded-2xl border-2 border-dashed border-amber-300 bg-amber-50 p-4 text-center text-base font-semibold leading-7 text-slate-800">{item.text}</div><p className="mb-2 text-sm text-slate-600">어느 쪽에 가까울까요?</p><div className="grid grid-cols-2 gap-2">{lesson.buckets!.map((b,i)=><button key={b} type="button" className={`${control} min-h-14 justify-center whitespace-normal text-center`} aria-pressed={choice===i} onClick={()=>setChoice(i)}>{choice===i?(correct?<Check className="size-4 shrink-0"/>:<CircleHelp className="size-4 shrink-0"/>):null}{b}</button>)}</div>{choice!==null?<div role="status" className="lesson-result mt-4"><p className="mb-1 font-semibold">{correct?"맞아요. 이유도 같이 볼까요?":"괜찮아요. 이 단서를 보고 다시 골라봐요."}</p><p className="text-sm leading-7">{item.explanation}</p></div>:null}<div className="mt-3 flex justify-end"><button type="button" className={control} onClick={()=>{setIndex((index+1)%lesson.items!.length);setChoice(null);}}>{index===lesson.items!.length-1?"처음 카드":"다음 카드"}<ArrowRight className="size-4"/></button></div><p className="mt-3 text-xs leading-6 text-slate-500">편하게 연습하는 카드예요. 이 활동은 학습 진도나 시험 점수를 바꾸지 않아요.</p></div>;
+  return <div>{lesson.slug === "ai-ml-dl" ? <div role="img" aria-label="AI 안에 머신러닝이, 머신러닝 안에 딥러닝이 포함됩니다" className="mb-5 rounded-xl border border-brand-300 bg-white p-3 text-sm text-brand-900"><p className="font-semibold">AI · 지능적 과제를 다루는 넓은 분야</p><div className="ml-3 mt-3 rounded-lg border border-brand-200 bg-brand-50 p-3"><p className="font-semibold">머신러닝 · 데이터로 학습하는 방법</p><div className="ml-3 mt-3 rounded border border-brand-200 bg-brand-100 p-3">딥러닝 · 여러 층의 신경망으로 학습</div></div></div> : null}<p className="text-xs font-medium text-teal-800">분류 카드 {index+1} / {lesson.items!.length}</p><div className="my-4 grid min-h-28 place-items-center rounded-2xl border-2 border-dashed border-amber-300 bg-amber-50 p-4 text-center text-base font-semibold leading-7 text-slate-800">{item.text}</div><p className="mb-2 text-sm text-slate-600">어느 쪽에 가까울까요?</p><div className="grid grid-cols-2 gap-2">{lesson.buckets!.map((b,i)=><button key={b} type="button" className={`${control} min-h-14 justify-center whitespace-normal text-center`} aria-pressed={choice===i} onClick={()=>setChoice(i)}>{choice===i?(correct?<Check className="size-4 shrink-0"/>:<CircleHelp className="size-4 shrink-0"/>):null}{b}</button>)}</div>{choice!==null?<div role="status" className="lesson-result mt-4"><p className="mb-1 font-semibold">{correct?"맞아요. 이유도 같이 볼까요?":"괜찮아요. 이 단서를 보고 다시 골라봐요."}</p><p className="text-sm leading-7">{item.explanation}</p></div>:null}<div className="mt-3 flex justify-end"><button type="button" className={control} onClick={()=>{setIndex((index+1)%lesson.items!.length);setChoice(null);}}>{index===lesson.items!.length-1?"처음 카드":"다음 카드"}<ArrowRight className="size-4"/></button></div><p className="mt-3 text-xs leading-6 text-slate-500">편하게 연습하는 카드예요. 이 활동은 학습 진도나 시험 점수를 바꾸지 않아요.</p></div>;
 }
 function Words({lesson}:{lesson:Lesson}) {
-  const [index,setIndex]=useState(0);
-  return <section aria-label="처음 만나는 단어 카드" className="rounded-2xl border border-amber-200 bg-amber-50/70 p-4"><p className="mb-3 flex items-center gap-2 text-xs font-semibold text-amber-900"><Lightbulb className="size-4"/>어려운 말은 카드로 풀어봐요</p><div className="flex flex-wrap gap-2">{lesson.terms.map(([word],i)=><button key={word} type="button" className={`${control} text-xs`} aria-pressed={index===i} onClick={()=>setIndex(i)}>{word}</button>)}</div><p role="status" className="mt-3 rounded-xl bg-white p-3 text-sm leading-7 text-slate-700"><strong>{lesson.terms[index][0]}</strong> · {lesson.terms[index][1]}</p></section>;
+  return <section aria-label="핵심 용어 풀이" className="border-l-2 border-brand-200 pl-4">
+    <dl className="space-y-3">{lesson.terms.map(([word, meaning]) => <div key={word}><dt className="text-sm font-semibold text-slate-900">{word}</dt><dd className="mt-1 text-sm leading-7 text-slate-700">{meaning}</dd></div>)}</dl>
+  </section>;
 }
 function GlossaryHint({lesson}:{lesson:Lesson}) {
   return <details className="mt-4 rounded-xl border border-teal-100 bg-white/70"><summary className="cursor-pointer px-3 py-3 text-xs font-medium text-teal-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600">낯선 단어의 뜻을 같이 볼까요?</summary><div className="px-2 pb-2"><Words lesson={{...lesson,terms:lesson.advancedTerms}}/></div></details>;
 }
 function Recall({lesson}:{lesson:Lesson}) {
   const [open,setOpen]=useState(false);
-  return <section aria-label="잠깐 생각해 보기" className="rounded-2xl border border-sky-200 bg-sky-50/70 p-4"><p className="mb-2 flex items-center gap-2 text-xs font-semibold text-sky-900"><CircleHelp className="size-4"/>잠깐, 네 생각은 어때요?</p><p className="text-sm font-medium leading-7 text-slate-800">{lesson.question}</p><button type="button" aria-expanded={open} className={`${control} mt-3`} onClick={()=>setOpen(!open)}><Eye className="size-4"/>{open?"설명 접기":"생각했어요. 같이 확인하기"}</button>{open?<Teacher>{lesson.answer}</Teacher>:null}</section>;
+  const inputId=useId();
+  return <section aria-label="내 말로 설명해 보기" className="rounded-2xl border border-sky-200 bg-sky-50/70 p-4">
+    <h4 className="mb-2 flex items-center gap-2 text-sm font-semibold text-sky-900"><CircleHelp className="size-4"/>내 말로 설명해 보기</h4>
+    <p className="text-sm font-medium leading-7 text-slate-800">{lesson.question}</p>
+    <label htmlFor={inputId} className="mt-3 block text-xs text-slate-600">내 설명 (선택)</label>
+    <textarea id={inputId} rows={3} maxLength={600} placeholder="짧게 적거나 소리 내어 설명해 보세요." className="mt-2 w-full resize-y rounded-lg border border-slate-300 bg-white p-3 text-base leading-7 text-slate-800 focus-visible:outline-2 focus-visible:outline-brand-600"/>
+    <p className="text-xs leading-6 text-slate-500">이 메모는 채점하거나 저장하지 않아요.</p>
+    <button type="button" aria-expanded={open} className={`${control} mt-3`} onClick={()=>setOpen(!open)}><Eye className="size-4"/>{open?"예시 답안 접기":"예시 답안과 비교하기"}</button>
+    {open?<Teacher><p>{lesson.answer}</p><p className="mt-2">표현은 달라도 괜찮아요. 설명에서 빠진 부분이 있다면 위의 작은 예와 용어 풀이를 다시 읽어 보세요.</p></Teacher>:null}
+  </section>;
 }
 function Debug({lesson}:{lesson:Lesson}) {
-  const [index,setIndex]=useState(0);
-  const labels=["증상","증거","가설","수정","재확인"],icons=[Search,Eye,Lightbulb,Wrench,ShieldCheck];
-  return <div><div className="grid grid-cols-5 gap-1" aria-label="문제 해결 단서">{labels.map((label,i)=>{const Icon=icons[i];return <button key={label} type="button" aria-pressed={index===i} onClick={()=>setIndex(i)} className={`flex min-h-20 flex-col items-center justify-center gap-2 rounded-xl border px-1 py-2 text-[11px] font-medium ${index===i?"border-violet-300 bg-violet-50 text-violet-900":"border-white bg-white text-slate-600"}`}><Icon className="size-5"/>{i+1} {label}</button>;})}</div><div role="status" className="mt-3 rounded-2xl border border-violet-100 bg-white p-4"><p className="mb-2 text-xs font-semibold text-violet-800">단서 {index+1} · {labels[index]}</p><p className="text-sm leading-7 text-slate-800">{lesson.debug[index]}</p></div><div className="mt-3 flex justify-between gap-2"><button type="button" className={control} disabled={!index} onClick={()=>setIndex(index-1)}><ArrowLeft className="size-4"/>앞 단서</button><button type="button" className={control} disabled={index===4} onClick={()=>setIndex(index+1)}>다음 단서<ArrowRight className="size-4"/></button></div><Teacher>눈으로 확인한 사실과 아직 확인하지 않은 추측은 달라요. “왜 그렇게 생각했어?”라고 스스로에게 물어보세요.</Teacher></div>;
+  const labels=["어떤 문제가 생겼나요?","무엇을 확인하나요?","원인은 무엇일까요?","어떻게 고치나요?","고친 뒤 무엇을 보나요?"];
+  if (!lesson.debug) return <p className="text-sm leading-7 text-slate-700">아래 상세 사례에서 증상과 확인 방법을 함께 읽어 주세요.</p>;
+  return <ol aria-label="문제 해결 과정" className="space-y-4">{lesson.debug.map((body,i)=><li key={labels[i]} className="border-l-2 border-violet-200 pl-3"><h4 className="text-sm font-semibold text-violet-900">{i+1}. {labels[i]}</h4><p className="mt-1 text-sm leading-7 text-slate-800">{body}</p></li>)}</ol>;
 }
 function Decide({lesson}:{lesson:Lesson}) {
   const [index,setIndex]=useState(0),option=lesson.options[index];
@@ -109,7 +96,7 @@ export default function LessonVisual({source,lesson}:{source:string;lesson?:Less
   }catch{return <p role="status" className="not-prose rounded-xl bg-amber-50 p-3 text-sm">그림 참조를 확인하지 못했어요. 아래 설명을 읽어 주세요.</p>;}
   if(!lesson||lesson.slug!==ref.slug)return <p role="status" className="not-prose rounded-xl bg-amber-50 p-3 text-sm">이 주제의 그림을 준비하고 있어요.</p>;
   if(ref.view==="words")return <div className="not-prose my-5" data-lesson-view="words"><Words key={ref.slug} lesson={lesson}/></div>;
-  if(ref.view==="recall")return <div className="not-prose my-5" data-lesson-view="recall"><Recall key={ref.slug} lesson={lesson}/></div>;
-  const subtitle=ref.view==="debug"?"단서를 눌러 함께 찾아봐요":ref.view==="decide"?"조건을 생각하며 골라봐요":ref.view==="trace"?"한 장면씩, 직접 재생해 봐요":"손으로 바꾸면 더 잘 보여요";
-  return <section aria-label={`${lesson.title} 시각 수업`} data-lesson-kind={lesson.kind} data-lesson-view={ref.view} className="lesson-board not-prose my-5 overflow-hidden rounded-3xl border border-teal-100 bg-[#f4faf8] p-4 sm:p-5"><header className="mb-4 flex items-center gap-2 text-xs font-semibold text-teal-900"><span aria-hidden="true" className="grid size-7 place-items-center rounded-xl bg-teal-100"><GraduationCap className="size-4"/></span>{subtitle}</header>{ref.view==="trace"?<Sequence key={ref.slug} lesson={lesson}/>:ref.view==="debug"?<Debug key={ref.slug} lesson={lesson}/>:ref.view==="decide"?<Decide key={ref.slug} lesson={lesson}/>:<Explore key={ref.slug} lesson={lesson}/>} {ref.view!=="explore"?<GlossaryHint lesson={lesson}/>:null}</section>;
+  if(ref.view==="recall")return <div tabIndex={-1} className="not-prose my-5 scroll-mt-4 rounded-2xl focus-visible:outline-2 focus-visible:outline-brand-600" data-lesson-view="recall"><Recall key={ref.slug} lesson={lesson}/></div>;
+  const subtitle=ref.view==="debug"?"증상부터 해결까지":ref.view==="decide"?"방법별 이득과 부담":ref.view==="trace"||lesson.kind==="sequence"?"순서대로 이해하기":"예시를 바꿔 확인하기";
+  return <section aria-label={`${lesson.title} 개념 확인 활동`} data-lesson-kind={lesson.kind} data-lesson-view={ref.view} className="lesson-board not-prose my-5 overflow-hidden rounded-3xl border border-teal-100 bg-[#f4faf8] p-4 sm:p-5"><header className="mb-4 flex items-center gap-2 text-xs font-semibold text-teal-900"><span aria-hidden="true" className="grid size-7 place-items-center rounded-xl bg-teal-100"><GraduationCap className="size-4"/></span>{subtitle}</header>{ref.view==="trace"?<Sequence key={ref.slug} lesson={lesson}/>:ref.view==="debug"?<Debug key={ref.slug} lesson={lesson}/>:ref.view==="decide"?<Decide key={ref.slug} lesson={lesson}/>:<Explore key={ref.slug} lesson={lesson}/>} {ref.view!=="explore"?<GlossaryHint lesson={lesson}/>:null}</section>;
 }

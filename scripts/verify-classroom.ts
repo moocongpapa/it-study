@@ -4,6 +4,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { z } from "zod";
+import { annotateGlossaryTerms } from "../src/lib/render-glossary.tsx";
 import LessonVisual from "../src/components/learning/LessonVisual.tsx";
 import { LessonSchema, LessonReferenceSchema, type Lesson } from "../src/lib/lesson-schema.ts";
 import { splitClassroomReference } from "../src/lib/classroom-markdown.ts";
@@ -40,12 +41,14 @@ async function main(){
     for(const [index,key]of keys.entries()){
       assert(row[key].length>=300,lesson.slug+": short chapter");
       const references=[...row[key].matchAll(/```learning\n([\s\S]*?)```/g)].map(m=>LessonReferenceSchema.parse(JSON.parse(m[1])));
-      assert(references.length>0,lesson.slug+": visual missing");
+      // A technical failure case should not acquire fabricated interactive clues.
+      // Concept, principle, and choice chapters still include learning aids.
+      assert(references.length>0 || (index===2 && !lesson.debug),lesson.slug+": learning aid missing");
       for(const reference of references){
         assert.equal(reference.slug,lesson.slug);blocks++;
         const html=renderLesson(JSON.stringify(reference),lesson);
         assert(!html.includes("그림 참조를 확인하지 못했어요")&&!html.includes("이 주제의 그림을 준비하고 있어요"),lesson.slug+": SSR fallback");
-        assert(html.includes("<button")||html.includes("type=\"range\""),lesson.slug+": static-only lesson");
+        assert(html.includes("<button")||html.includes("<ol")||html.includes("<dl")||html.includes("type=\"range\""),lesson.slug+": learning aid has no content");
         ssrViews++;
       }
       if(index){
@@ -53,7 +56,21 @@ async function main(){
         retainedReferences++;
       }
     }
+    const intro=row.level_1_mental_model;
+    assert(intro.indexOf(lesson.takeaway)<intro.indexOf('"view":"explore"'),lesson.slug+": activity precedes explanation");
+    assert(intro.indexOf(lesson.example)<intro.indexOf('"view":"explore"'),lesson.slug+": activity precedes concrete example");
+    assert(intro.includes(lesson.activity),lesson.slug+": activity has no observation guidance");
+    assert(!intro.includes("먼저 그림을 눌러"),lesson.slug+": asks learner to guess before teaching");
+    assert(!row.level_3_troubleshooting.includes('"view":"debug"') || lesson.debug,lesson.slug+": fabricated debug sequence");
   }
+  const glossaryHtml=renderToStaticMarkup(createElement("p",null,annotateGlossaryTerms("pthread_join processing cache_key Thread 스레드는 Cache")));
+  assert.equal((glossaryHtml.match(/<button/g)??[]).length,3,"English glossary aliases split programming identifiers");
+  assert(glossaryHtml.includes("pthread_join processing cache_key"));
+  const process=lessons.find(l=>l.slug==="processes-threads")!;
+  assert(!process.hook.includes("주방"),"Process analogy changes setting");
+  assert(!process.options[1].gain.includes("종료"),"Thread failure is mislabeled as a benefit");
+  const ai=lessons.find(l=>l.slug==="ai-ml-dl")!;
+  assert(ai.example.includes("딥러닝은 머신러닝의 한 종류"),"AI inclusion relationship is missing");
   assert.equal(Object.keys(distribution).length,14,"All fourteen visual formats must have real lessons");
   for(const row of library){
     const digest=createHash("sha256").update(JSON.stringify(row.quizzes)).digest("hex");

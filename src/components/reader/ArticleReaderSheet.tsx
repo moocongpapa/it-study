@@ -13,10 +13,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Topic, TopicProgressResult, TopicStatus } from "@/types/roadmap";
 
 const levels = [
-  { value: "1", short: "그림 수업", title: "비유로 이해하기", description: "필요한 이유와 일상 비유를 읽고 작은 예로 확인합니다.", field: "level_1_mental_model" },
-  { value: "2", short: "원리 실험", title: "작동 원리 따라가기", description: "용어 풀이와 길잡이를 읽고 예제의 입력과 결과를 따라갑니다.", field: "level_2_core_engineering" },
-  { value: "3", short: "문제 탐정", title: "문제 원인 찾기", description: "증상을 살펴보고 원인 확인과 해결 순서를 배웁니다.", field: "level_3_troubleshooting" },
-  { value: "4", short: "선택 연습", title: "설계 선택 비교하기", description: "각 방법의 이득과 부담을 비교해 상황에 맞는 선택을 생각합니다.", field: "level_4_architecture_tradeoffs" },
+  { value: "1", short: "개념 이해", title: "개념 이해", description: "무엇인지, 왜 필요한지 작은 예로 이해합니다. 처음에는 이 단계만 읽어도 괜찮아요.", field: "level_1_mental_model" },
+  { value: "2", short: "작동 원리", title: "작동 원리", description: "입력부터 결과까지의 흐름과 실제 코드·자료를 살펴봅니다.", field: "level_2_core_engineering" },
+  { value: "3", short: "문제 해결", title: "문제 해결", description: "실패 사례에서 증거를 확인하고 원인과 해결 방법을 연결합니다.", field: "level_3_troubleshooting" },
+  { value: "4", short: "실무 선택", title: "실무 선택", description: "상황에 맞는 방법을 고르고 장점과 부담을 비교합니다.", field: "level_4_architecture_tradeoffs" },
 ] as const;
 
 interface ArticleReaderSheetProps {
@@ -79,8 +79,9 @@ export function ArticleReaderSheet({ open, onOpenChange, topic, status, prerequi
 
   function jumpToQuiz() {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    quizRef.current?.scrollIntoView({ block: "start", behavior: reducedMotion ? "instant" : "smooth" });
-    quizRef.current?.focus({ preventScroll: true });
+    const destination = level === "1" ? scrollRef.current?.querySelector<HTMLElement>('[data-lesson-view="recall"]') ?? quizRef.current : quizRef.current;
+    destination?.scrollIntoView({ block: "start", behavior: reducedMotion ? "instant" : "smooth" });
+    destination?.focus({ preventScroll: true });
   }
 
   const active = levels.find((item) => item.value === level) ?? levels[0];
@@ -112,7 +113,7 @@ export function ArticleReaderSheet({ open, onOpenChange, topic, status, prerequi
               <summary className="flex min-h-11 cursor-pointer list-none items-center gap-1.5 rounded-lg px-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 [&::-webkit-details-marker]:hidden"><BookOpen className="size-3.5 shrink-0" /><span className="flex-1 whitespace-nowrap">수업 안내</span><ChevronDown className="size-3.5 shrink-0 transition-transform group-open:rotate-180" /></summary>
               <div className="border-t border-slate-200 px-3 pb-3 pt-2 leading-6">
                 <p className="mb-2 inline-flex items-center gap-1 text-slate-500"><Clock3 className="size-3.5"/>전체 학습 약 {topic.estimated_minutes}분{isCompleted ? " · 학습 완료" : ""}</p>
-                <p>처음이라면 그림 수업부터 시작해요. 한 번에 다 읽지 않아도 괜찮아요. {active.description}</p>
+                <p>처음에는 ‘개념 이해’를 읽고 내 말로 설명해 보세요. 익숙해지면 작동 원리, 문제 해결, 실무 선택으로 깊이를 넓힐 수 있어요.</p>
                 {prerequisites.length ? <>
                   <p className="mt-2 font-medium">먼저 알면 좋은 개념</p>
                   <ul className="mt-1 space-y-1">{prerequisites.map((item) => <li key={item.id}><button type="button" onClick={() => onNext(item)} className="flex min-h-11 w-full items-center gap-2 rounded px-2 text-left hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600"><span className={completedIds.has(item.id) ? "text-emerald-700" : "text-slate-400"}>{completedIds.has(item.id) ? "✓" : "○"}</span><span className="flex-1">{item.title}</span><ArrowRight className="size-3.5 shrink-0" /></button></li>)}</ul>
@@ -120,16 +121,16 @@ export function ArticleReaderSheet({ open, onOpenChange, topic, status, prerequi
                 </> : null}
               </div>
             </details>
-              <CompletionButton compact completed={isCompleted} saving={saving} onToggle={() => void onSetCompleted(topic, !isCompleted)}/>
-              <button type="button" className="inline-flex min-h-11 shrink-0 items-center gap-1 rounded-lg px-2 text-xs font-medium text-teal-800 hover:bg-teal-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600" onClick={jumpToQuiz}>퀴즈<ArrowDown className="size-3.5"/></button>
+              <button type="button" className="inline-flex min-h-11 shrink-0 items-center gap-1 rounded-lg px-2 text-xs font-medium text-teal-800 hover:bg-teal-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600" onClick={jumpToQuiz}>{level === "1" ? "이해 확인" : "채점 퀴즈"}<ArrowDown className="size-3.5"/></button>
             </div>
             {saveError ? <p role="alert" className="mb-4 rounded-lg bg-rose-50 p-3 text-xs leading-6 text-rose-700">{saveError}</p> : null}
 
             {levels.map((item) => <TabsContent key={item.value} value={item.value} className="outline-none">
               <h3 className="sr-only">{item.value}단계 · {item.title}</h3>
+              <p className="mb-4 text-xs leading-6 text-slate-600">{item.description}</p>
               {!result ? <div role="status" className="space-y-3 py-6" aria-label="아티클 불러오는 중"><div className="h-6 w-3/4 animate-pulse rounded bg-slate-100" /><div className="h-4 w-full animate-pulse rounded bg-slate-100" /><div className="h-4 w-2/3 animate-pulse rounded bg-slate-100" /></div>
                 : result.error ? <div role="alert" className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700"><p>{result.error}</p><Button variant="secondary" className="mt-3 h-11" onClick={() => { setResult(null); setLoadAttempt((attempt) => attempt + 1); }}>다시 불러오기</Button></div>
-                : body ? <ArticleMarkdown body={body} lesson={result.lesson} referenceTitle={level === "2" ? "코드·템플릿과 원리 더 살펴보기" : level === "3" ? "장애 사례와 해결 방법 더 살펴보기" : "상세 비교표와 출처 살펴보기"} largeFont={isLargeFont} onSelectText={setSelectedText} />
+                : body ? <ArticleMarkdown key={`${topic.id}:${level}`} body={body} lesson={result.lesson} referenceExpanded referenceTitle={level === "2" ? "예제·코드와 자세한 원리" : level === "3" ? "실패 사례와 확인 방법" : "상세 비교표와 출처"} largeFont={isLargeFont} onSelectText={setSelectedText} />
                 : <div className="rounded-xl border border-dashed border-slate-200 p-5 text-sm leading-7 text-slate-600"><BookOpen className="mb-2 size-5" /><h4 className="font-semibold text-slate-900">이 단계의 글을 준비하고 있어요</h4><p>다른 단계를 읽거나 이미 아는 내용의 이해도를 아래에 기록해 보세요.</p></div>}
             </TabsContent>)}
 

@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-19T23:39:39.069Z",
+  "checkedAt": "2026-10-27T03:02:36.316Z",
   "articles": 128,
   "levels": 512,
   "quizzes": 512,
@@ -22,9 +22,9 @@
   },
   "references": [],
   "minLevelCharacters": [
-    632,
-    857,
-    671,
-    838
+    791,
+    823,
+    634,
+    873
   ]
 }

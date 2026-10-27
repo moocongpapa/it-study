@@ -15,12 +15,13 @@ export const LessonSpecSchema = z.object({
 });
 export const LessonSchema = z.object({
   slug: text, title: text, hook: text, story: text, takeaway: text, why: text, limit: text,
+  example: text, activity: text,
   kind: LessonKindSchema,
   steps: z.array(z.object({ label: text, body: text })).length(3),
   terms: z.array(z.tuple([text, text])).min(3).max(6),
   advancedTerms: z.array(z.tuple([text,text])).min(3).max(16),
   question: text, answer: text,
-  debug: z.array(text).length(5),
+  debug: z.array(text).length(5).optional(),
   options: z.array(z.object({ label: text, gain: text, cost: text })).min(2).max(5),
   panels: z.array(z.object({ label: text, meaning: text, caution: text })).length(2).optional(),
   buckets: z.array(text).length(2).optional(),

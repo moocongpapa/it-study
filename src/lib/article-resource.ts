@@ -28,7 +28,7 @@ export function createArticleResource(fetcher: typeof fetch = fetch, now: () => 
       if (!response.ok) throw new Error(response.status === 404 ? "아직 공개된 학습 글이 없습니다." : "학습 글을 불러오지 못했습니다. 다시 시도해 주세요.");
       const payload = await response.json() as ArticlePayload;
       if (!payload.article?.is_published) throw new Error("공개된 학습 글을 확인하지 못했습니다.");
-      if (payload.lesson && payload.lesson.slug !== slug) throw new Error("그림 수업 정보를 확인하지 못했습니다.");
+      if (payload.lesson && payload.lesson.slug !== slug) throw new Error("개념 설명과 연습 정보를 확인하지 못했습니다.");
       // Count edge-cache age too, so a second cache does not extend freshness.
       const age = Math.max(0, Number(response.headers.get("age")) || 0) * 1000;
       saved.set(slug, { payload, expires: now() + Math.max(0, ttl - age) });

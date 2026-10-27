@@ -20,10 +20,25 @@ function tableOptions(source: string) {
   }
   return rows.slice(0, 5).map((row) => ({ label: row[0], gain: row[1], cost: row.slice(2).join(". ") }));
 }
-function coreDebug(source: string, bridge: string, steps: string[]) {
-  const paragraphs = clean(source).replace(/^# [^\n]+\n/, "").split(/\n\s*\n/).filter((s) => !s.startsWith("```") && !s.startsWith("|")).map(plain).filter(Boolean);
-  const marked = (pattern: RegExp) => paragraphs.find((s) => pattern.test(s));
-  return [paragraphs[0], bridge, "지금은 원인을 단정하지 말아요. 입력과 실행 조건을 고정하고, 아래 원리의 어느 지점이 어긋났는지 한 가지씩 확인해 봐요. " + steps[0], marked(/^수정[:：]/) ?? "상세 사례의 진단 순서를 따라 작은 변경부터 적용해 봐요. 바뀐 결과와 그대로인 결과를 함께 기록하는 것이 중요해요.", marked(/^재검증[:：]|^수정 후 확인/) ?? "처음 문제가 생긴 조건과 경계값에서 다시 확인해요. 기대한 결과뿐 아니라 오류와 성능이 나빠지지 않았는지도 살펴봐요."];
+function activityFor(lesson: { kind: string; labels: string[]; panels?: {label: string}[]; buckets?: string[] }) {
+  if (lesson.kind === "compare") return `${lesson.panels![0].label}과 ${lesson.panels![1].label}을 번갈아 선택하세요. 바로 아래 설명에서 무엇을 공유하고 무엇이 달라지는지 비교합니다. 버튼을 누르는 것보다 차이를 한 가지 말해 보는 것이 목표예요.`;
+  if (lesson.kind === "sort") return `사례가 ${lesson.buckets![0]}과 ${lesson.buckets![1]} 중 어디에 해당하는지 골라 보세요. 고른 뒤 나오는 이유를 읽고, 같은 기준으로 다음 사례를 판단합니다.`;
+  if (lesson.kind === "sequence") return `${lesson.labels.join(" → ")} 순서로 읽어 보세요. 뒤의 과정에서 필요한 것이 앞에서 어떻게 준비되는지 찾습니다. 숫자는 읽는 순서이며 모든 상황이 정확히 세 단계라는 뜻은 아닙니다.`;
+  const instructions: Record<string,string> = {
+    bits: "비트를 하나씩 바꾸며 오른쪽의 숫자가 어떻게 달라지는지 보세요. 각 자리의 값과 부호를 읽는 규칙을 구분합니다.",
+    gate: "입력을 하나씩 바꾸며 출력을 보세요. AND와 OR에서 같은 입력이 다른 결과를 만드는 경우를 찾습니다.",
+    capacity: "들어오는 양과 처리하는 양을 다르게 설정한 뒤 한 차례 진행하세요. 처리하지 못한 요청이 대기열에 남는지 확인합니다. 실제 시스템의 시간을 예측하는 측정 도구는 아닙니다.",
+    growth: "입력 크기를 바꾸며 각 곡선이 늘어나는 모양을 비교하세요. 세로 값은 단순화한 연산 수이며 실제 실행 시간은 아닙니다.",
+    distribution: "한 점수만 크게 바꿔 보세요. 평균과 중앙값 중 어느 값이 더 크게 움직이는지 비교합니다.",
+    threshold: "판정 기준을 움직이며 맞게 찾은 것, 잘못 표시한 것, 놓친 것의 수를 비교하세요. 정밀도와 재현율이 답하는 질문은 서로 다릅니다.",
+    vector: "방향을 바꾸며 어떤 벡터의 유사도가 높아지는지 보세요. 가까운 방향이 이 예시의 유사함을 뜻하며 사실성이나 품질 점수는 아닙니다.",
+    network: "입력을 바꾼 뒤 ‘한 번 학습’을 눌러 예측이 어떻게 움직이는지 보세요. 학습 버튼은 정한 목표와의 차이를 줄이려 가중치를 조정합니다. 실제 대형 모델을 그대로 재현한 것은 아닙니다.",
+    attention: "토큰을 하나 골라 다른 토큰에 주는 가중치를 비교하세요. 예시로 정한 숫자이며 실제 모델의 판단 원인을 증명하는 값은 아닙니다.",
+    kanban: "진행 중 작업의 제한을 바꾼 뒤 새 작업을 시작해 보세요. 제한에 걸릴 때는 진행 중인 일을 먼저 끝내야 합니다.",
+    schedule: "한 작업의 소요 시간을 바꾸고 전체 완료일을 보세요. 작업 하나가 빨라져도 전체 일정은 그대로인 경우를 찾아봅니다.",
+  };
+  if (!instructions[lesson.kind]) throw new Error("Activity guidance missing: " + lesson.kind);
+  return instructions[lesson.kind];
 }
 const visual = (slug: string, view: string) => "```learning\n" + JSON.stringify({ slug, view }) + "\n```";
 const notes = (s: string) => "<!-- classroom-reference:start -->\n" + clean(s).replace(/^# [^\n]+\n/, "").trim() + "\n<!-- classroom-reference:end -->";
@@ -32,6 +47,8 @@ async function main() {
   const catalog = await load("src/lib/demo-catalog.json") as {topics: {slug: string; title: string}[]};
   const refs = z.array(sourceSchema).parse(await load("content/classroom/reference-library.json"));
   const specs = z.array(LessonSpecSchema).parse(await load("content/classroom/lesson-specs.json"));
+  const examples = z.record(z.string(), z.string().min(50).max(2000)).parse(await load("content/classroom/worked-examples.json"));
+  const overrides = await load("content/classroom/teaching-overrides.json");
   const guides = (await Promise.all((await readdir("content/readability-guides")).filter((f) => f.endsWith(".json")).map((f) => load("content/readability-guides/" + f)))).flat();
   const expansion = (await Promise.all((await readdir("content/expansion")).filter((f) => f.endsWith(".json")).map((f) => load("content/expansion/" + f)))).flatMap((d) => d.topics);
   const specBySlug = new Map(specs.map((s) => [s.slug, s]));
@@ -44,7 +61,7 @@ async function main() {
     const g = guides.find((g) => g.slug === topic.slug), e = expansion.find((e) => e.slug === topic.slug);
     if (!g && !e) throw new Error("Missing editorial source: " + topic.slug);
     const steps: string[] = g?.steps ?? e.steps;
-    const options = e ? e.options.map(([label,gain,cost]:string[])=>({label,gain,cost})) : tableOptions(ref.level_4_architecture_tradeoffs);
+    const options = overrides[topic.slug]?.options ?? (e ? e.options.map(([label,gain,cost]:string[])=>({label,gain,cost})) : tableOptions(ref.level_4_architecture_tradeoffs));
     const extraWords:Record<string,string>={
       "BOLA/IDOR":"요청의 식별자를 바꿔 다른 사람의 자료에 접근하는 등, 자료별 권한 검사가 빠져 생기는 문제예요.",
       RLS:"데이터베이스가 행마다 누가 읽고 바꿀 수 있는지 검사하는 정책이에요.",
@@ -69,15 +86,17 @@ async function main() {
       limit: g?.limit ?? e.boundary, steps: spec.labels.map((label, i) => ({label, body: steps[i]})),
       terms, advancedTerms,
       question: g?.question ?? e.quizzes[0][0], answer: g?.answer ?? e.quizzes[0][1] + " — " + e.quizzes[0][5],
-      debug: e?.incident ?? coreDebug(ref.level_3_troubleshooting, g.bridges["3"], steps),
-      options,
+      example: g?.example ?? examples[topic.slug], activity: activityFor(spec),
+      ...(e ? { debug: e.incident } : {}),
+      options, ...overrides[topic.slug],
     });
     lessons.push(lesson);
+    const glossary = visual(topic.slug,"words");
     const bodies = [
-      `# ${topic.title}\n\n> **오늘의 질문** · ${lesson.hook}\n\n먼저 그림을 눌러 바꿔 볼까요? 답이 달라지는 모습을 천천히 관찰해 보세요.\n\n${visual(topic.slug,"explore")}\n\n## 익숙한 장면과 연결해요\n\n${lesson.story}\n\n## 선생님과 한 번 정리해요\n\n${lesson.why}\n\n**한 줄로 말하면:** ${lesson.takeaway}\n\n${visual(topic.slug,"words")}\n\n**비유의 한계도 알아둘까요?** ${lesson.limit}\n\n${visual(topic.slug,"recall")}`,
-      `# 한 장면씩 원리를 따라가요\n\n이번에는 **${lesson.steps.map((s) => s.label).join(" → ")}** 순서로 살펴볼게요. 먼저 다음에 무슨 일이 생길지 생각하고, 그림을 한 칸씩 넘겨 보세요.\n\n${visual(topic.slug,"trace")}\n\n## 여기서 연결해 봐요\n\n${lesson.takeaway}\n\n왜 이런 순서가 필요한지 말로 설명할 수 있으면 좋아요. 코드와 자세한 설명은 아래에 준비했어요. 낯선 기호는 입력·바뀌는 값·결과로 나눠 읽어 봐요.\n\n${notes(ref.level_2_core_engineering)}`,
-      `# 오늘은 문제를 찾는 탐정이에요\n\n정답을 급하게 고치기 전에 **무엇을 봤는지**와 **왜 그랬을 것 같은지**를 나눠 볼까요? 아래는 학습용 가상·재현 사례예요. 카드를 차례로 눌러 단서를 확인해 보세요.\n\n${visual(topic.slug,"debug")}\n\n## 해결 뒤에도 한 번 더\n\n고친 다음 원래 입력으로 다시 확인하는 일을 **재검증**이라고 해요. 한 번 성공한 것만 보고 끝내지 않고, 비슷한 실패 조건에서도 괜찮은지 확인해요.\n\n${notes(ref.level_3_troubleshooting)}`,
-      `# 이번에는 네가 설계자예요\n\n아래 방법 중 하나를 골라 볼까요? 선택한 방법에서 **얻는 것**과 **감수할 것**을 함께 확인해 보세요. 같은 기술도 상황과 제약이 바뀌면 다른 선택을 할 수 있어요.\n\n${visual(topic.slug,"decide")}\n\n## 이유까지 말하면 더 좋아요\n\n“나는 이 방법을 골랐어. 중요한 조건은 이것이고, 대신 이런 부담은 감수할게.”처럼 설명해 보세요. 그러고 나서 조건을 하나 바꾸면 같은 선택을 할지도 생각해 봐요.\n\n${notes(ref.level_4_architecture_tradeoffs)}`,
+      `# ${topic.title}\n\n> **먼저 한 문장:** ${lesson.takeaway}\n\n${lesson.why}\n\n## 먼저 알아둘 말\n\n${glossary}\n\n## 작은 예로 이해하기\n\n${lesson.example}\n\n## 익숙한 장면과 연결하기\n\n${lesson.story}\n\n**비유의 한계 — 이 점은 달라요:** ${lesson.limit}\n\n## 직접 확인하기\n\n${lesson.activity}\n\n${visual(topic.slug,"explore")}\n\n${visual(topic.slug,"recall")}`,
+      `# ${topic.title} · 작동 원리\n\n${g?.bridges["2"] ?? e.explanation}\n\n## 전체 흐름부터 보기\n\n${visual(topic.slug,"trace")}\n\n## 예제와 내부 동작\n\n아래 자료를 읽을 때 **입력 → 바뀌는 값이나 상태 → 결과**를 찾아보세요. 모르는 말은 밑줄 표시를 눌러 뜻을 확인할 수 있어요.\n\n${notes(ref.level_2_core_engineering)}`,
+      `# ${topic.title} · 문제 해결\n\n${g?.bridges["3"] ?? "아래는 학습용 가상 사례입니다. 확인한 사실과 아직 확인하지 않은 원인 후보를 나눠 읽어 보세요."}\n\n${lesson.debug ? visual(topic.slug,"debug") + "\n\n" : ""}## 구체적인 사례와 확인 방법\n\n같은 증상에도 원인이 여럿일 수 있어요. 먼저 발생 조건을 기록하고 증상을 재현할 수 있는지 확인하세요. **관찰한 증상 → 확인할 자료 → 수정 → 수정 후 확인(같은 조건으로 재검증)**을 연결해서 읽습니다.\n\n${notes(ref.level_3_troubleshooting)}`,
+      `# ${topic.title} · 실무 선택\n\n${g?.bridges["4"] ?? e.decision}\n\n## 선택지를 비교해 보기\n\n방법을 하나 고르면 이득과 부담을 함께 볼 수 있어요. 어떤 조건을 중요하게 보는지에 따라 선택이 달라집니다.\n\n${visual(topic.slug,"decide")}\n\n## 판단 근거와 상세 비교\n\n“이 조건에서는 이 방법을 쓰고, 대신 이 부담을 감수한다”라고 설명할 수 있는지 확인해 보세요.\n\n${notes(ref.level_4_architecture_tradeoffs)}`,
     ];
     const row = {slug: topic.slug, ...Object.fromEntries(keys.map((key, i) => [key, bodies[i]]))};
     articles.push(row);

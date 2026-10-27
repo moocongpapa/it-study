@@ -7,8 +7,8 @@ import { PGlite } from "@electric-sql/pglite";
 
 const keys=["level_1_mental_model","level_2_core_engineering","level_3_troubleshooting","level_4_architecture_tradeoffs"] as const;
 async function main(){
-  const {sqlDir}=new Command().requiredOption("--sql-dir <path>","Guarded SQL exported by content:export-revisions").parse().opts<{sqlDir:string}>();
-  const source=JSON.parse(await readFile("content/classroom/reference-library.json","utf8"));
+  const {sqlDir,sourceFile}=new Command().requiredOption("--sql-dir <path>","Guarded SQL exported by content:export-revisions").option("--source-file <path>","Original article bodies for this revision", "content/classroom/reference-library.json").parse().opts<{sqlDir:string;sourceFile:string}>();
+  const source=JSON.parse(await readFile(sourceFile,"utf8"));
   const edited=JSON.parse(await readFile("content/readable-library.json","utf8"));
   const catalog=JSON.parse(await readFile("src/lib/demo-catalog.json","utf8"));
   const db=new PGlite();

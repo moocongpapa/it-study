@@ -34,7 +34,7 @@ export function GateLab() {
       <text x="14" y={kind==="NOT"?80:52} fill="#334155" fontSize="17">{Number(a)}</text>{kind!=="NOT"?<text x="14" y="104" fill="#334155" fontSize="17">{Number(b)}</text>:null}<text x="145" y="81" fill="#115e59" fontSize="16" fontWeight="700">{kind}</text><text x="285" y="82" fill="#92400e" fontSize="24" fontWeight="700">{Number(out)}</text>
     </svg>
     <div className="grid grid-cols-2 gap-2"><button type="button" className={button} aria-pressed={a} onClick={()=>setA(!a)}>입력 A · {a?"켜짐 1":"꺼짐 0"}</button><button type="button" className={button} disabled={kind==="NOT"} aria-pressed={b} onClick={()=>setB(!b)}>입력 B · {b?"켜짐 1":"꺼짐 0"}</button></div>
-    <p role="status" className="lesson-result mt-4">{kind==="AND"?"둘 다 1일 때만":kind==="OR"?"하나라도 1이면":"A를 반대로 바꾸면"} 결과는 <strong>{Number(out)}</strong>이에요.</p>
+    <p role="status" className="lesson-result mt-4">{kind==="AND"?"AND는 두 입력이 모두 1이면 1, 나머지는 0이에요.":kind==="OR"?"OR는 입력 중 하나라도 1이면 1, 모두 0이면 0이에요.":"NOT은 입력 1을 0으로, 0을 1로 바꿔요."}<br/>지금은 A가 {Number(a)}{kind!=="NOT"?`, B가 ${Number(b)}`:""}이므로 결과는 <strong>{Number(out)}</strong>이에요.</p>
     <LabNote>NOT은 입력 A 하나만 써요. 여기서는 안정된 0과 1의 규칙을 보며 실제 회로의 전압·지연은 생략했어요.</LabNote>
   </div>;
 }

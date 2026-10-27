@@ -61,10 +61,10 @@ export async function POST(request: Request) {
   const originalSource = article?.[fields[level - 1]] ?? topic.summary;
   const lesson=lessons.find((item)=>item.slug===topic.slug);
   const visualContext=lesson ? [
-    lesson.hook,lesson.takeaway,lesson.story,
+    lesson.takeaway,lesson.example,lesson.story,
     ...lesson.steps.map(step=>step.label+": "+step.body),
     ...lesson.terms.map(([term,meaning])=>term+": "+meaning),
-    ...(level===3?lesson.debug:[]),
+    ...(level===3?(lesson.debug ?? []):[]),
     ...(level===4?lesson.options.map(option=>option.label+": "+option.gain+" / "+option.cost):[]),
     lesson.limit,
   ].join("\n") : "";

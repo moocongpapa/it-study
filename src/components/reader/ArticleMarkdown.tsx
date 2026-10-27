@@ -12,7 +12,7 @@ import { splitClassroomReference } from "@/lib/classroom-markdown";
 import type { Lesson } from "@/lib/lesson-schema";
 
 const LessonVisual = dynamic(() => import("@/components/learning/LessonVisual"), {
-  loading: () => <div role="status" className="not-prose my-5 grid min-h-60 place-items-center rounded-3xl bg-teal-50 text-sm text-teal-800">그림 수업을 펼치고 있어요…</div>,
+  loading: () => <div role="status" className="not-prose my-5 grid min-h-60 place-items-center rounded-3xl bg-teal-50 text-sm text-teal-800">개념 확인 활동을 불러오고 있어요…</div>,
 });
 
 function plainText(children: ReactNode): string {
@@ -58,9 +58,9 @@ function CodeBlock({ children, language }: { children: ReactNode; language: stri
   </div>;
 }
 
-export function ArticleMarkdown({ body, lesson, largeFont, onSelectText, referenceTitle = "코드·사례·출처 자세히 보기" }: { body: string; lesson?: Lesson|null; largeFont: boolean; onSelectText: (text: string) => void; referenceTitle?: string }) {
+export function ArticleMarkdown({ body, lesson, largeFont, onSelectText, referenceExpanded = false, referenceTitle = "코드·사례·출처 자세히 보기" }: { body: string; lesson?: Lesson|null; largeFont: boolean; onSelectText: (text: string) => void; referenceExpanded?: boolean; referenceTitle?: string }) {
   const articleRef = useRef<HTMLDivElement>(null);
-  const [referenceOpen, setReferenceOpen] = useState(false);
+  const [referenceOpen, setReferenceOpen] = useState(referenceExpanded);
   useEffect(() => {
     function captureSelection() {
       const selection = window.getSelection();
@@ -74,7 +74,7 @@ export function ArticleMarkdown({ body, lesson, largeFont, onSelectText, referen
   const parts = splitClassroomReference(body);
   return <div ref={articleRef} className={`reader-prose reader-article prose max-w-none ${largeFont ? "reader-article-large" : ""}`}>
     <MarkdownContent body={parts.before} lesson={lesson}/>
-    {parts.reference ? <details onToggle={(event) => setReferenceOpen(event.currentTarget.open)} className="classroom-reference group not-prose my-6 overflow-hidden rounded-2xl border border-slate-200 bg-white">
+    {parts.reference ? <details open={referenceOpen} onToggle={(event) => setReferenceOpen(event.currentTarget.open)} className="classroom-reference group not-prose my-6 overflow-hidden rounded-2xl border border-slate-200 bg-white">
       <summary className="flex min-h-12 cursor-pointer list-none items-center gap-2 px-4 py-3 text-sm font-medium text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 [&::-webkit-details-marker]:hidden"><BookOpen className="size-4 shrink-0 text-teal-700"/><span className="flex-1">{referenceTitle}</span><ChevronDown className="size-4 shrink-0 transition-transform group-open:rotate-180"/></summary>
       {referenceOpen ? <div className="reader-prose prose max-w-none border-t border-slate-100 px-4 pb-4 pt-3 text-sm"><MarkdownContent body={parts.reference} lesson={lesson}/></div> : null}
     </details> : null}
