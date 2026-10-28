@@ -22,7 +22,10 @@
     "content:rewrite-readable": "node --import tsx scripts/rewrite-readable-content.ts",
     "content:export-revisions": "node --import tsx scripts/export-readable-revisions.ts",
     "content:build-classroom": "node --import tsx scripts/build-classroom.ts",
-    "content:verify-classroom": "node --import tsx scripts/verify-classroom.ts"
+    "content:verify-classroom": "node --import tsx scripts/verify-classroom.ts",
+    "harness": "node scripts/harness.mjs",
+    "harness:full": "node scripts/harness.mjs --full",
+    "harness:deploy": "node scripts/harness-deploy-check.mjs"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "1.3.1",
