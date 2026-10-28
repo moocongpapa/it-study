@@ -18,7 +18,7 @@ const status = spawnSync("git", ["status", "--porcelain"], { encoding: "utf8" })
 const touchesCode = status.split("\n").some((line) => /\s(src|scripts|content|supabase)\//.test(line) || /package(-lock)?\.json|\.tsx?$/.test(line));
 if (!touchesCode) allow();
 
-const run = spawnSync("node", ["scripts/harness.mjs", "--quiet"], { encoding: "utf8", timeout: 110_000 });
+const run = spawnSync("node", ["scripts/harness.mjs", "--fast", "--quiet"], { encoding: "utf8", timeout: 110_000 });
 if (run.status === 0) allow();
 
 let reason = "하네스(quick)가 실패했습니다. 오류를 고친 뒤 `npm run harness`로 다시 확인하세요.";

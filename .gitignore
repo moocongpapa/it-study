@@ -11,3 +11,5 @@ node_modules/
 
 # harness
 .agents/harness-last.json
+test-results/
+playwright-report/
