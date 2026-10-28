@@ -155,7 +155,7 @@ export async function reviewTopic(topicId: string, quality: number): Promise<Use
   }
   const { supabase, userId } = await authenticatedClient();
   const { data: existing, error: readError } = await supabase.from("user_node_progress")
-    .select("topic_id,is_completed,current_level,self_assessment,completed_at,last_reviewed_at,next_review_at,review_interval_days,ease_factor,review_count")
+    .select("topic_id,is_completed,completion_source,current_level,self_assessment,completed_at,last_reviewed_at,next_review_at,review_interval_days,ease_factor,review_count")
     .eq("user_id", userId).eq("topic_id", topicId).maybeSingle();
   if (readError || !existing?.is_completed) throw new Error("완료한 토픽만 복습할 수 있습니다.");
   const schedule = calculateNextReview({
@@ -171,9 +171,38 @@ export async function reviewTopic(topicId: string, quality: number): Promise<Use
     ease_factor: schedule.easeFactor,
     review_count: schedule.reviewCount,
   }).eq("user_id", userId).eq("topic_id", topicId).eq("review_count", existing.review_count)
-    .select("topic_id,is_completed,current_level,self_assessment,completed_at,last_reviewed_at,next_review_at,review_interval_days,ease_factor,review_count")
+    .select("topic_id,is_completed,completion_source,current_level,self_assessment,completed_at,last_reviewed_at,next_review_at,review_interval_days,ease_factor,review_count")
     .maybeSingle();
   if (error || !data) throw new Error("복습 상태가 바뀌었습니다. 다시 시도해 주세요.");
   revalidatePath("/dashboard");
   return data as UserNodeProgress;
+}
+
+export async function importGuestTopics(topicIds: string[]): Promise<UserNodeProgress[]> {
+  if (!Array.isArray(topicIds) || topicIds.length === 0 || topicIds.length > 150) {
+    throw new Error("가져올 학습 기록이 올바르지 않습니다.");
+  }
+  const uniqueIds = [...new Set(topicIds.filter((id) => typeof id === "string" && uuidPattern.test(id)))];
+  if (!uniqueIds.length) throw new Error("계정에 연결할 수 있는 토픽 ID가 없습니다.");
+  const { supabase, userId } = await authenticatedClient();
+  const { data: existingRows, error: readError } = await supabase.from("user_node_progress")
+    .select("topic_id,is_completed,completion_source,current_level,self_assessment,completed_at,last_reviewed_at,next_review_at,review_interval_days,ease_factor,review_count")
+    .eq("user_id", userId);
+  if (readError) throw new Error("기존 계정 기록을 확인하지 못했습니다.");
+  const existingDone = new Set((existingRows ?? []).filter((row) => row.is_completed).map((row) => row.topic_id));
+  const imported: UserNodeProgress[] = [];
+  for (const topicId of uniqueIds) {
+    if (existingDone.has(topicId)) continue;
+    const { data, error } = await supabase.rpc("set_topic_completion", {
+      p_topic_id: topicId,
+      p_completed: true,
+      p_self_assessment: null,
+    });
+    if (!error && data && typeof data === "object") {
+      imported.push(data as unknown as UserNodeProgress);
+    }
+  }
+  revalidatePath("/roadmap", "layout");
+  revalidatePath("/dashboard");
+  return imported;
 }

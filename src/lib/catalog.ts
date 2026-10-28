@@ -77,7 +77,7 @@ export const getCatalog = cache(async (): Promise<Catalog> => {
     if (userId) {
       const result = await supabase
         .from("user_node_progress")
-        .select("topic_id,is_completed,current_level,self_assessment,completed_at,last_reviewed_at,next_review_at,review_interval_days,ease_factor,review_count")
+        .select("topic_id,is_completed,completion_source,current_level,self_assessment,completed_at,last_reviewed_at,next_review_at,review_interval_days,ease_factor,review_count")
         .eq("user_id", userId);
       if (result.error) throw new Error(`학습 상태를 불러오지 못했습니다: ${result.error.message}`);
       progress = (result.data ?? []) as UserNodeProgress[];

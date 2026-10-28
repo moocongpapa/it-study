@@ -30,11 +30,23 @@ for (const path of pages) {
   });
 }
 
-test("주제를 열면 학습 패널이 나타난다", async ({ page }) => {
+test("주제를 열면 학습 패널이 나타나고 키보드로 단계 전환·접근성 검사를 통과한다", async ({ page }) => {
   const errors = collectErrors(page);
   await page.goto("/roadmap", { waitUntil: "networkidle" });
   await page.getByRole("button", { name: /학습하기/ }).first().click();
-  await expect(page.getByRole("dialog")).toBeVisible();
-  await expect(page.getByRole("dialog").locator("h2").first()).not.toBeEmpty();
+  const dialog = page.getByRole("dialog");
+  await expect(dialog).toBeVisible();
+  await expect(dialog.locator("h2").first()).not.toBeEmpty();
+
+  const levelTabs = dialog.getByRole("tab");
+  await expect(levelTabs).toHaveCount(4);
+  await levelTabs.first().focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(levelTabs.nth(1)).toHaveAttribute("aria-selected", "true");
+
+  const { violations } = await new AxeBuilder({ page }).include("[role='dialog']").withTags(["wcag2a", "wcag2aa"]).analyze();
+  const serious = violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+  expect(serious.map((v) => `${v.id}: ${v.help} (${v.nodes.length}곳)`), "reader dialog axe").toEqual([]);
   expect(errors, errors.join("\n")).toEqual([]);
 });
+

@@ -32,6 +32,7 @@ try {
     "supabase/migrations/20261013062613_content_batch_atomic_write.sql",
     "supabase/migrations/20261014000000_content_batch_guarded_write.sql",
     "supabase/migrations/20261016141247_manual_topic_completion.sql",
+    "supabase/migrations/20261028000000_review_improvements.sql",
     "supabase/seed.sql",
     "supabase/quiz_seed.sql",
   ]) {
@@ -41,11 +42,19 @@ try {
     "supabase/migrations/20261013060132_interactive_learning.sql",
     "supabase/migrations/20261014000000_content_batch_guarded_write.sql",
     "supabase/migrations/20261016141247_manual_topic_completion.sql",
+    "supabase/migrations/20261028000000_review_improvements.sql",
     "supabase/seed.sql",
     "supabase/quiz_seed.sql",
   ]) {
     await db.exec(await readFile(path, "utf8"));
   }
+
+  const fkIndexes = await db.query(`
+    select indexname from pg_indexes
+    where schemaname = 'public'
+      and indexname in ('user_node_progress_topic_id_idx', 'user_quiz_passes_quiz_id_idx')
+  `);
+  assert(fkIndexes.rows.length === 2, "FK covering indexes missing");
 
   const counts = await db.query(`select
     (select count(*)::int from public.domains) as domains,
@@ -69,6 +78,13 @@ try {
   const quizzes = (await db.query("select id, level, question_type, answer_index, accepted_answers from public.quizzes where topic_id = $1 order by level, question_type", [goldenId])).rows;
 
   await db.exec(`set role authenticated; set request.jwt.claim.sub = '${learnerId}';`);
+  const q1 = (await db.query("select public.consume_ai_tutor_quota(3, 2) as quota")).rows[0].quota;
+  assert(q1.allowed === true && q1.remaining_daily === 2, "First AI tutor quota call should succeed");
+  const q2 = (await db.query("select public.consume_ai_tutor_quota(3, 2) as quota")).rows[0].quota;
+  assert(q2.allowed === true && q2.remaining_daily === 1, "Second AI tutor quota call should succeed");
+  const q3 = (await db.query("select public.consume_ai_tutor_quota(3, 2) as quota")).rows[0].quota;
+  assert(q3.allowed === false && q3.reason === "minute_limit", "Third AI tutor call within minute window should be rate-limited");
+
   let locked = false;
   try { await db.query("select * from public.submit_quiz_answer($1, 0, null)", [quizzes[0].id]); }
   catch { locked = true; }
@@ -131,7 +147,7 @@ try {
   const originalPayload = JSON.stringify([
     { level: 1, question: "Test Question 1 for TCP?", choices: ["A", "B", "C", "D"], answer_index: 0, explanation: "Exp 1" },
     { level: 2, question: "Test Question 2 for TCP?", choices: ["A", "B", "C", "D"], answer_index: 1, explanation: "Exp 2" },
-    { level: 3, question: "Test Question 3 for TCP?", choices: ["A", "B", "C", "D"], answer_index: 2, explanation: "Exp 3" },
+    { level: 3, question: "Test Question 3 for TCP?", choices: ["A", "B", "C", "D"], answer_index: 2, explanation: "Exp 2" },
     { level: 4, question: "Test Question 4 for TCP?", choices: ["A", "B", "C", "D"], answer_index: 3, explanation: "Exp 4" }
   ]);
   const insertResult = await db.query(`
@@ -169,7 +185,7 @@ try {
   assert(Number(await scalar("select count(*) from public.articles where topic_id = $1", [invalidTopic.id])) === 0,
     "Rejected content left a partial article");
 
-  console.log(`SQL verified: ${count.domains} domains, ${count.topics} topics, ${count.edges} edges, ${count.quizzes} quizzes; RLS, mastery guard, and guarded atomic content insert passed.`);
+  console.log(`SQL verified: ${count.domains} domains, ${count.topics} topics, ${count.edges} edges, ${count.quizzes} quizzes; FK indexes, AI tutor quota RPC, RLS, mastery guard, and guarded atomic content insert passed.`);
 } finally {
   await db.close();
 }

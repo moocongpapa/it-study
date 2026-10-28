@@ -83,6 +83,19 @@ export function completeDemoTopic(topicId: string, selfAssessment: number) {
   return setBrowserTopicCompletion(topicId, true, selfAssessment);
 }
 
+export function clearDemoCompletedTopics(topicIds?: string[]) {
+  if (typeof window === "undefined") return;
+  const state = readDemoLearning();
+  if (!topicIds) {
+    state.progress = {};
+  } else {
+    for (const id of topicIds) {
+      delete state.progress[id];
+    }
+  }
+  writeDemoLearning(state);
+}
+
 export function markDemoQuizPassed(quizId: string) {
   const state = readDemoLearning();
   if (state.passedQuizIds.includes(quizId)) return;

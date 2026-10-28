@@ -113,7 +113,9 @@ export function TopicList({ domain, allDomains, allTopics, allPrerequisites, ini
   const openTopic = useCallback((topicId: string) => { setSaveError(null); setSelectedId(topicId); }, []);
   const selectedTopic = allTopics.find((topic) => topic.id === activeSelectedId) ?? null;
   const selectedStatus = learningStates.get(activeSelectedId ?? "")?.status ?? "available";
-  const completedIds = new Set(progress.filter((item) => item.is_completed).map((item) => item.topic_id));
+  const completedByTopic = useMemo(() => new Map(progress.filter((item) => item.is_completed).map((item) => [item.topic_id, item.completion_source ?? "manual"] as const)), [progress]);
+  const completedIds = useMemo(() => new Set(completedByTopic.keys()), [completedByTopic]);
+  const selectedCompletionSource = selectedTopic ? completedByTopic.get(selectedTopic.id) ?? null : null;
 
   const nextTopic = selectedTopic
     ? allPrerequisites.filter((edge) => edge.from_topic_id === selectedTopic.id)
@@ -151,6 +153,7 @@ export function TopicList({ domain, allDomains, allTopics, allPrerequisites, ini
     setLocalProgress((current) => [...current.filter((item) => item.topic_id !== topic.id), {
       topic_id: topic.id,
       is_completed: result.isCompleted,
+      completion_source: result.isCompleted ? "quiz" : null,
       current_level: result.currentLevel,
       self_assessment: null,
       completed_at: result.isCompleted ? new Date().toISOString() : null,
@@ -210,7 +213,7 @@ export function TopicList({ domain, allDomains, allTopics, allPrerequisites, ini
           <ul className="divide-y divide-slate-100">{group.topics.map((topic, index) => <li key={topic.id}>
             <button type="button" onPointerEnter={() => warmArticle(topic.slug)} onFocus={() => warmArticle(topic.slug)} onPointerDown={() => warmArticle(topic.slug)} onClick={() => openTopic(topic.id)} aria-label={topic.title + (completedIds.has(topic.id) ? " 학습하기 · 학습 완료" : " 학습하기")} className="group flex w-full items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-brand-50 focus-visible:relative focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-600">
               <span className="mt-1 w-5 shrink-0 text-xs tabular-nums text-slate-500" aria-label={!group.domain.slug ? "추천 순서" : undefined}>{completedIds.has(topic.id) ? <Check aria-hidden="true" className="size-4 text-brand-700"/> : String(!group.domain.slug && currentTrack ? currentTrack.topicSlugs.indexOf(topic.slug) + 1 : index + 1).padStart(2, "0")}</span>
-              <span className="min-w-0 flex-1 sm:grid sm:grid-cols-[minmax(0,1fr)_auto] sm:gap-x-3"><span className="block text-[15px] font-semibold leading-6 text-slate-900 group-hover:text-brand-800">{topic.title}</span><span className="mt-0.5 block truncate text-xs leading-5 text-slate-500 sm:col-start-1">{topic.summary}</span><span className="mt-1.5 flex items-center gap-2 sm:col-start-2 sm:row-span-2 sm:row-start-1 sm:mt-0 sm:flex-col sm:items-end sm:justify-center sm:gap-1"><Badge className={difficulties[topic.difficulty].className + " px-1.5 py-0 text-[11px] font-medium"}>{difficulties[topic.difficulty].label}</Badge><span className="inline-flex items-center gap-1 text-[11px] text-slate-500"><Clock3 className="size-3"/>{topic.estimated_minutes}분</span>{completedIds.has(topic.id) ? <span className="text-[11px] text-brand-700">학습 완료</span> : null}</span></span>
+              <span className="min-w-0 flex-1 sm:grid sm:grid-cols-[minmax(0,1fr)_auto] sm:gap-x-3"><span className="block text-[15px] font-semibold leading-6 text-slate-900 group-hover:text-brand-800">{topic.title}</span><span className="mt-0.5 block truncate text-xs leading-5 text-slate-500 sm:col-start-1">{topic.summary}</span><span className="mt-1.5 flex items-center gap-2 sm:col-start-2 sm:row-span-2 sm:row-start-1 sm:mt-0 sm:flex-col sm:items-end sm:justify-center sm:gap-1"><Badge className={difficulties[topic.difficulty].className + " px-1.5 py-0 text-[11px] font-medium"}>{difficulties[topic.difficulty].label}</Badge><span className="inline-flex items-center gap-1 text-[11px] text-slate-500"><Clock3 className="size-3"/>{topic.estimated_minutes}분</span>{completedIds.has(topic.id) ? <span className="text-[11px] text-brand-700">{completedByTopic.get(topic.id) === "quiz" ? "퀴즈 통과" : "학습 완료"}</span> : null}</span></span>
               <ChevronRight aria-hidden="true" className="mt-1 size-4 shrink-0 text-slate-400 group-hover:text-brand-700"/>
             </button>
           </li>)}</ul>
@@ -229,6 +232,7 @@ export function TopicList({ domain, allDomains, allTopics, allPrerequisites, ini
         }}
         topic={selectedTopic}
         status={selectedStatus}
+        completionSource={selectedCompletionSource}
         prerequisites={allPrerequisites.filter((edge) => edge.to_topic_id === selectedTopic?.id).map((edge) => allTopics.find((topic) => topic.id === edge.from_topic_id)).filter((topic): topic is Topic => Boolean(topic))}
         completedIds={completedIds}
         nextTopic={nextTopic}

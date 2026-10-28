@@ -54,7 +54,7 @@ function CodeBlock({ children, language }: { children: ReactNode; language: stri
       </button>
     </div>
     {error ? <p role="status" className="px-3 pt-2 text-xs text-rose-700">복사 권한을 확인하거나 코드를 직접 선택해 주세요.</p> : null}
-    <pre className="overflow-x-auto p-4 text-[13px] leading-6 text-slate-800">{children}</pre>
+    <pre tabIndex={0} className="overflow-x-auto p-4 text-[13px] leading-6 text-slate-800">{children}</pre>
   </div>;
 }
 
@@ -86,6 +86,7 @@ function MarkdownContent({body,lesson}:{body:string;lesson?:Lesson|null}) {
   return <ReactMarkdown skipHtml remarkPlugins={[remarkGfm]} rehypePlugins={[[rehypeHighlight, {ignoreMissing:true}]]} components={{
     p: ({ children }) => <p>{withGlossary(children)}</p>,
     li: ({ children }) => <li>{withGlossary(children)}</li>,
+    table: ({ children }) => <table tabIndex={0}>{children}</table>,
     pre: ({ node, children }) => {
       const code = node?.children.find((child) => child.type === "element" && child.tagName === "code");
       const classes = code?.type === "element" && Array.isArray(code.properties.className) ? code.properties.className : [];
@@ -97,3 +98,4 @@ function MarkdownContent({body,lesson}:{body:string;lesson?:Lesson|null}) {
     a: ({ href, children }) => <a href={href} target="_blank" rel="noopener noreferrer">{children}</a>,
   }}>{body}</ReactMarkdown>;
 }
+

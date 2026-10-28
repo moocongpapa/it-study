@@ -24,6 +24,7 @@ interface ArticleReaderSheetProps {
   onOpenChange: (open: boolean) => void;
   topic: Topic | null;
   status: TopicStatus;
+  completionSource?: "manual" | "quiz" | null;
   prerequisites: Topic[];
   completedIds: Set<string>;
   nextTopic: Topic | null;
@@ -36,7 +37,7 @@ interface ArticleReaderSheetProps {
   usesBrowserStorage: boolean;
 }
 
-export function ArticleReaderSheet({ open, onOpenChange, topic, status, prerequisites, completedIds, nextTopic, onSetCompleted, onNext, saving, saveError, isDemo, usesBrowserStorage, onQuizProgress }: ArticleReaderSheetProps) {
+export function ArticleReaderSheet({ open, onOpenChange, topic, status, completionSource = null, prerequisites, completedIds, nextTopic, onSetCompleted, onNext, saving, saveError, isDemo, usesBrowserStorage, onQuizProgress }: ArticleReaderSheetProps) {
   const [level, setLevel] = useState("1");
   const [result, setResult] = useState<(Partial<ArticlePayload> & { error: string | null }) | null>(() => {
     const cached = topic ? articleResource.peek(topic.slug) : undefined;
@@ -89,6 +90,7 @@ export function ArticleReaderSheet({ open, onOpenChange, topic, status, prerequi
   const missing = prerequisites.filter((item) => !completedIds.has(item.id));
   const isCompleted = status === "completed";
   const isLocked = missing.length > 0;
+  const completionLabel = isCompleted ? (completionSource === "quiz" ? " · 퀴즈 통과 완료" : " · 직접 완료 표시") : "";
 
   return <Sheet open={open} onOpenChange={onOpenChange}>
     <SheetContent className="max-w-[820px]" showCloseButton={false}>
@@ -112,8 +114,9 @@ export function ArticleReaderSheet({ open, onOpenChange, topic, status, prerequi
             <details className="group min-w-0 flex-1 rounded-lg text-xs text-slate-600 open:basis-full open:bg-slate-50">
               <summary className="flex min-h-11 cursor-pointer list-none items-center gap-1.5 rounded-lg px-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 [&::-webkit-details-marker]:hidden"><BookOpen className="size-3.5 shrink-0" /><span className="flex-1 whitespace-nowrap">수업 안내</span><ChevronDown className="size-3.5 shrink-0 transition-transform group-open:rotate-180" /></summary>
               <div className="border-t border-slate-200 px-3 pb-3 pt-2 leading-6">
-                <p className="mb-2 inline-flex items-center gap-1 text-slate-500"><Clock3 className="size-3.5"/>전체 학습 약 {topic.estimated_minutes}분{isCompleted ? " · 학습 완료" : ""}</p>
+                <p className="mb-2 inline-flex items-center gap-1 text-slate-500"><Clock3 className="size-3.5"/>전체 학습 약 {topic.estimated_minutes}분{completionLabel}</p>
                 <p>처음에는 ‘개념 이해’를 읽고 내 말로 설명해 보세요. 익숙해지면 작동 원리, 문제 해결, 실무 선택으로 깊이를 넓힐 수 있어요.</p>
+                <p className="mt-1 text-[11px] text-slate-500">검토 기준일: 2026-10-27 · 코드·다이어그램 자동 검증 완료 (예제 수치는 학습용 모형입니다)</p>
                 {prerequisites.length ? <>
                   <p className="mt-2 font-medium">먼저 알면 좋은 개념</p>
                   <ul className="mt-1 space-y-1">{prerequisites.map((item) => <li key={item.id}><button type="button" onClick={() => onNext(item)} className="flex min-h-11 w-full items-center gap-2 rounded px-2 text-left hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600"><span className={completedIds.has(item.id) ? "text-emerald-700" : "text-slate-400"}>{completedIds.has(item.id) ? "✓" : "○"}</span><span className="flex-1">{item.title}</span><ArrowRight className="size-3.5 shrink-0" /></button></li>)}</ul>
@@ -142,7 +145,7 @@ export function ArticleReaderSheet({ open, onOpenChange, topic, status, prerequi
 
             <section aria-label="학습 마무리" className="mt-6 border-t border-slate-200 pt-4 text-sm leading-6 text-slate-600">
               <CompletionButton completed={isCompleted} saving={saving} onToggle={() => void onSetCompleted(topic, !isCompleted)}/>
-              <p role="status" className="mt-2 text-xs leading-6">{isCompleted ? "학습 완료로 표시했어요. 다시 누르면 취소할 수 있어요." : "이 주제를 충분히 살펴봤다면 완료로 표시해 보세요."}</p>
+              <p role="status" className="mt-2 text-xs leading-6">{isCompleted ? (completionSource === "quiz" ? "4단계 퀴즈를 모두 통과해 완료되었어요. 직접 완료 표시를 해제하려면 버튼을 누르세요." : "직접 학습 완료로 표시했어요. 다시 누르면 취소할 수 있어요.") : "이 주제를 충분히 살펴봤다면 완료로 표시해 보세요."}</p>
               <p className="mt-1 text-xs leading-6 text-slate-500">{usesBrowserStorage ? "로그인 전 기록은 현재 브라우저에 저장돼요. 계정 기록과는 별도로 보관돼요." : "계정에 저장되어 다른 기기에서도 이어볼 수 있어요."}{quizBacked ? " 퀴즈는 별도로 풀 수 있고, 통과 기록도 따로 남아요." : ""}</p>
               {nextTopic && isCompleted ? <Button variant="secondary" onClick={() => onNext(nextTopic)} className="mt-3 h-auto min-h-11 w-full justify-between whitespace-normal py-3 text-left"><span>다음 주제 · {nextTopic.title}</span><ArrowRight className="size-4 shrink-0" /></Button> : null}
             </section>

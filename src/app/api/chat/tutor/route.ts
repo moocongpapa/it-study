@@ -27,6 +27,34 @@ function normalizeQuote(value: string) {
   return value.replace(/[#*_`>\[\]()]/g, "").replace(/\s+/g, " ").trim();
 }
 
+const activeUserStreams = new Set<string>();
+const fallbackWindow = new Map<string, { startedAt: number; count: number; dailyDate: string; dailyCount: number }>();
+
+function checkInMemoryQuota(userId: string, dailyLimit = 60, minuteLimit = 8) {
+  const now = Date.now();
+  const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Seoul" }).format(new Date(now));
+  const current = fallbackWindow.get(userId);
+  if (!current || current.dailyDate !== today) {
+    fallbackWindow.set(userId, { startedAt: now, count: 1, dailyDate: today, dailyCount: 1 });
+    return { allowed: true as const, retryAfterSeconds: 0 };
+  }
+  if (current.dailyCount >= dailyLimit) {
+    return { allowed: false as const, reason: "daily_limit", retryAfterSeconds: 3600 };
+  }
+  if (now - current.startedAt < 60_000) {
+    if (current.count >= minuteLimit) {
+      return { allowed: false as const, reason: "minute_limit", retryAfterSeconds: Math.max(1, Math.ceil((current.startedAt + 60_000 - now) / 1000)) };
+    }
+    current.count += 1;
+    current.dailyCount += 1;
+    return { allowed: true as const, retryAfterSeconds: 0 };
+  }
+  current.startedAt = now;
+  current.count = 1;
+  current.dailyCount += 1;
+  return { allowed: true as const, retryAfterSeconds: 0 };
+}
+
 export async function POST(request: Request) {
   if (!isSupabaseConfigured) return NextResponse.json({ error: "Supabase 로그인을 설정해야 AI 튜터를 사용할 수 있습니다." }, { status: 503 });
   if (!process.env.AI_GATEWAY_API_KEY && !process.env.VERCEL_OIDC_TOKEN) {
@@ -48,7 +76,35 @@ export async function POST(request: Request) {
 
   const supabase = await createClient();
   const { data: claimsData, error: authError } = await supabase.auth.getClaims();
-  if (authError || !claimsData?.claims?.sub) return NextResponse.json({ error: "로그인이 필요합니다." }, { status: 401 });
+  const userId = claimsData?.claims?.sub;
+  if (authError || !userId) return NextResponse.json({ error: "로그인이 필요합니다." }, { status: 401 });
+
+  if (activeUserStreams.has(userId)) {
+    return NextResponse.json(
+      { error: "이전 질문에 대한 답변을 작성하고 있어요. 잠시만 기다려 주세요." },
+      { status: 429, headers: { "Retry-After": "5" } },
+    );
+  }
+
+  const { data: quotaData, error: quotaError } = await supabase.rpc("consume_ai_tutor_quota", {
+    p_daily_limit: 60,
+    p_minute_limit: 8,
+  });
+  const quota = !quotaError && quotaData && typeof quotaData === "object"
+    ? (quotaData as { allowed?: boolean; reason?: string; retry_after_seconds?: number })
+    : (() => {
+        const fallback = checkInMemoryQuota(userId, 60, 8);
+        return { allowed: fallback.allowed, reason: fallback.reason, retry_after_seconds: fallback.retryAfterSeconds };
+      })();
+
+  if (quota.allowed === false) {
+    const retryAfter = String(quota.retry_after_seconds ?? 60);
+    const message = quota.reason === "daily_limit"
+      ? "오늘의 AI 튜터 질문 한도(60회)를 모두 사용했어요. 내일 다시 질문해 주세요."
+      : `질문이 너무 빠르게 이어졌어요. ${retryAfter}초 뒤에 다시 시도해 주세요.`;
+    return NextResponse.json({ error: message }, { status: 429, headers: { "Retry-After": retryAfter } });
+  }
+
   const { data: topic, error: topicError } = await supabase.from("topics")
     .select("id,slug,title,summary").eq("slug", body.topicSlug).maybeSingle();
   if (topicError || !topic || topic.title !== body.currentTopicTitle) {
@@ -84,13 +140,29 @@ export async function POST(request: Request) {
     selectedQuote ? `학습자가 선택한 문장:\n<selected_quote>\n${selectedQuote}\n</selected_quote>` : "",
   ].filter(Boolean).join("\n\n");
 
-  const result = streamText({
-    model: process.env.AI_TUTOR_MODEL || "openai/gpt-5.4-mini",
-    instructions,
-    messages: (body.messages as TutorMessage[]).map((message) => ({ role: message.role, content: message.content.trim() })),
-    maxOutputTokens: 900,
-    abortSignal: request.signal,
-    onError({ error }) { console.error("AI tutor stream failed", error); },
-  });
-  return result.toTextStreamResponse({ headers: { "Cache-Control": "private, no-store" } });
+  activeUserStreams.add(userId);
+  const release = () => { activeUserStreams.delete(userId); };
+  const timeoutSignal = AbortSignal.timeout(30_000);
+  const combinedSignal = AbortSignal.any([request.signal, timeoutSignal]);
+  combinedSignal.addEventListener("abort", release, { once: true });
+
+  try {
+    const result = streamText({
+      model: process.env.AI_TUTOR_MODEL || "openai/gpt-5.4-mini",
+      instructions,
+      messages: (body.messages as TutorMessage[]).map((message) => ({ role: message.role, content: message.content.trim() })),
+      maxOutputTokens: 900,
+      abortSignal: combinedSignal,
+      onFinish() { release(); },
+      onError({ error }) {
+        release();
+        console.error("AI tutor stream failed", error);
+      },
+    });
+    return result.toTextStreamResponse({ headers: { "Cache-Control": "private, no-store" } });
+  } catch (error) {
+    release();
+    console.error("AI tutor invocation failed", error);
+    return NextResponse.json({ error: "일시적인 오류로 튜터 응답을 시작하지 못했습니다. 잠시 후 다시 시도해 주세요." }, { status: 503 });
+  }
 }
